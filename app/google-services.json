@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "434052730158",
+    "project_id": "firebase-wloczykij"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434052730158:android:3eb1aa88891a68fd",
+        "android_client_info": {
+          "package_name": "pl.elfdump.wloczykij"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434052730158-f1gkdguc0bp7efntbftlq0spesstcuh4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.elfdump.wloczykij",
+            "certificate_hash": "9DA897AD674544541CF2175A06474B1A4B68591A"
+          }
+        },
+        {
+          "client_id": "434052730158-8dqkj0f5h1i70v1kna9fqo741r4lr3ra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoFjPXQuPGrPPdDweh1giyooctH6olD14"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
