@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity
             mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             updateUI(true);
 
-            new AuthorizationTask(acct.getIdToken(), this).execute();
+            new AuthorizationTask(LoginServiceProvider.GOOGLE, acct.getIdToken(), this).execute();
 
         } else {
             updateUI(false);

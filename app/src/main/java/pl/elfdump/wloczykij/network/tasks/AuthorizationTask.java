@@ -12,10 +12,12 @@ import pl.elfdump.wloczykij.network.api.AuthorizationService;
 
 public class AuthorizationTask extends NetworkTask {
 
+    private LoginServiceProvider provider;
     private String providerToken;
     private Context context;
 
-    public AuthorizationTask(String token, Context context){
+    public AuthorizationTask(LoginServiceProvider provider, String token, Context context){
+        this.provider = provider;
         this.providerToken = token;
         this.context = context;
     }
@@ -23,7 +25,7 @@ public class AuthorizationTask extends NetworkTask {
     @Override
     protected Object doInBackground(Object... objects) {
         AuthorizationService authService = new AuthorizationService();
-        Token token = authService.authorize(LoginServiceProvider.GOOGLE, providerToken);
+        Token token = authService.authorize(provider, providerToken);
 
         if(token != null){
             Session.authToken = token;
