@@ -2,6 +2,7 @@ package pl.elfdump.wloczykij.network.tasks;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 import pl.elfdump.wloczykij.activity.MapsActivity;
 import pl.elfdump.wloczykij.models.Token;
@@ -10,7 +11,7 @@ import pl.elfdump.wloczykij.network.LoginServiceProvider;
 import pl.elfdump.wloczykij.network.api.AuthorizationService;
 import pl.elfdump.wloczykij.utils.APICallback;
 
-public class AuthorizationTask extends NetworkTask {
+public class AuthorizationTask extends AsyncTask<Object, Void, Object> {
 
     private LoginServiceProvider provider;
     private String providerToken;
