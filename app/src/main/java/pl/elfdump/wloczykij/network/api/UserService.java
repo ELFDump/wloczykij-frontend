@@ -12,7 +12,7 @@ public class UserService {
     public User getMe(){
         APIResponse response;
         try {
-            response = APIManager.newCall().request("/me/");
+            response = APIManager.newCall().get("/me/");
         } catch (RequestException e) {
             Log.e(APIManager.TAG, e.getMessage());
             return null;
@@ -24,7 +24,7 @@ public class UserService {
     public User getUser(int id){
         APIResponse response;
         try {
-            response = APIManager.newCall().request("/users/%d/", id);
+            response = APIManager.newCall().get("/users/%d/", id);
         } catch (RequestException e) {
             Log.e(APIManager.TAG, e.getMessage());
             return null;

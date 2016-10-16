@@ -33,7 +33,7 @@ public class AuthorizationService {
     private Token authorizeGoogle(String token) throws IOException{
         APIResponse response;
         try {
-            response = APIManager.newCall().request("/token/google/?token=%s", token);
+            response = APIManager.newCall().get("/token/google/?token=%s", token);
         } catch (RequestException e) {
             Log.e(APIManager.TAG, e.getMessage());
             return null;

@@ -2,10 +2,7 @@ package pl.elfdump.wloczykij.network;
 
 import android.util.Log;
 import com.squareup.moshi.Json;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import okhttp3.*;
 import pl.elfdump.wloczykij.Session;
 import pl.elfdump.wloczykij.exceptions.RequestException;
 import pl.elfdump.wloczykij.models.APIError;
@@ -23,22 +20,62 @@ public class APICall {
         this.session = session;
     }
 
-    public APIResponse request(String URL, Object... params) throws RequestException{
-        return requestWithToken(String.format(URL, params), APIManager.getSession().authToken);
+    public APIResponse get(String URL, Object... params) throws RequestException{
+        return getRequest(String.format(URL, params));
     }
 
-    public APIResponse request(String URL, Token token, Object... params) throws RequestException{
-        return requestWithToken(String.format(URL, params), token);
+    public APIResponse put(String URL, Object object, Object... params) throws RequestException{
+        String json = JsonUtils.serialize(object);
+        return put(URL, json, params);
     }
 
-    public APIResponse requestWithToken(String URL, Token token) throws RequestException{
-        OkHttpClient client = new OkHttpClient();
+    public APIResponse put(String URL, String json, Object... params) throws RequestException{
+        return putRequest(String.format(URL, params), json);
+    }
 
+    public APIResponse post(String URL, Object object, Object... params) throws RequestException{
+        String json = JsonUtils.serialize(object);
+        return post(URL, json, params);
+    }
+
+    public APIResponse post(String URL, String json, Object... params) throws RequestException{
+        return postRequest(String.format(URL, params), json);
+    }
+
+
+    private APIResponse getRequest(String URL) throws RequestException{
         Request.Builder builder = new Request.Builder()
                 .url(APIManager.defaultServer + URL);
 
-        if(token != null){
-            builder.addHeader("Authorization", "Token " + token.token);
+        return sendRequest(builder);
+    }
+
+    private APIResponse putRequest(String URL, String json) throws RequestException{
+        Request.Builder builder = new Request.Builder()
+                .url(APIManager.defaultServer + URL)
+                .put(createBody(json));
+
+        return sendRequest(builder);
+    }
+
+    private APIResponse postRequest(String URL, String json) throws RequestException{
+        Request.Builder builder = new Request.Builder()
+                .url(APIManager.defaultServer + URL)
+                .post(createBody(json));
+
+        return sendRequest(builder);
+    }
+
+    private RequestBody createBody(String json){
+        MediaType jsonType = MediaType.parse("application/json; charset=utf-8");
+        return RequestBody.create(jsonType, json);
+    }
+
+    public APIResponse sendRequest(Request.Builder builder) throws RequestException{
+        OkHttpClient client = new OkHttpClient();
+
+        if(session.authToken != null){
+            builder.addHeader("Authorization", "Token " + session.authToken.token);
         }
 
         Request request = builder.build();
@@ -71,5 +108,4 @@ public class APICall {
 
         return new APIResponse(statusCode, json);
     }
-
 }
