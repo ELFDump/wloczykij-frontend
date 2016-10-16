@@ -31,7 +31,7 @@ public class AuthorizationService {
     }
 
     private Token authorizeGoogle(String token) throws IOException{
-        APIResponse response = APICall.request("/token/google/?token=" + token);
+        APIResponse response = APICall.request("/token/google/?token=%s", token);
 
         if(response.code() != 200){
             return null;
