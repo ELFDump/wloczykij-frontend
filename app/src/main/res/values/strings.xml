@@ -5,7 +5,7 @@
     <string name="title_activity_login">Zaloguj się</string>
     <string name="title_text">Włóczykij</string>
 
-    <string name="app_description">Opis aplikacji</string>
+    <string name="app_description">Twoja wycieczka, Twój plan.\n Zwiedzaj po swojemu</string>
 
     <!-- Sign-in status messages -->
     <string name="signed_in_fmt">Signed in as: %s</string>

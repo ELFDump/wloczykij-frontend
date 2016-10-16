@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
+    private boolean openNextActivity = true;
 
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
@@ -58,6 +60,12 @@ public class LoginActivity extends AppCompatActivity
         signInButton.setColorScheme(SignInButton.COLOR_AUTO);
         signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setScopes(gso.getScopeArray());
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        openNextActivity = false;
     }
 
     @Override
@@ -98,7 +106,9 @@ public class LoginActivity extends AppCompatActivity
             mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             updateUI(true);
 
-            new AuthorizationTask(LoginServiceProvider.GOOGLE, acct.getIdToken(), this).execute();
+            if(openNextActivity){
+                new AuthorizationTask(LoginServiceProvider.GOOGLE, acct.getIdToken(), this).execute();
+            }
 
         } else {
             updateUI(false);
@@ -167,6 +177,7 @@ public class LoginActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
+                openNextActivity = true;
                 signIn();
                 break;
             case R.id.sign_out_button:
