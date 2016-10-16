@@ -18,14 +18,8 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import pl.elfdump.wloczykij.network.tasks.AuthorizationTask;
-import pl.elfdump.wloczykij.network.tasks.NetworkTask;
 import pl.elfdump.wloczykij.R;
-import pl.elfdump.wloczykij.Session;
-import pl.elfdump.wloczykij.models.Token;
 import pl.elfdump.wloczykij.network.LoginServiceProvider;
-import pl.elfdump.wloczykij.network.api.AuthorizationService;
-
-import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
