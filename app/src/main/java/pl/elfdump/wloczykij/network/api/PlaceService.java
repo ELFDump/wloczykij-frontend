@@ -1,7 +1,13 @@
 package pl.elfdump.wloczykij.network.api;
 
 import android.util.Log;
+
+import com.squareup.moshi.Types;
+
+import java.util.List;
+
 import pl.elfdump.wloczykij.exceptions.RequestException;
+import pl.elfdump.wloczykij.models.Place;
 import pl.elfdump.wloczykij.models.User;
 import pl.elfdump.wloczykij.network.APIManager;
 import pl.elfdump.wloczykij.network.APIResponse;
