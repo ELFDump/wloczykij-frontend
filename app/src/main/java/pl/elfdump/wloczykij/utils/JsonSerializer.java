@@ -4,6 +4,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 class JsonSerializer {
 
@@ -14,7 +15,7 @@ class JsonSerializer {
         return jsonAdapter.toJson(object);
     }
 
-    protected static <T> T deserialize(String json, Class<T> clazz){
+    protected static <T> T deserialize(String json, Type clazz){
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<T> jsonAdapter = moshi.adapter(clazz);
         Object result = null;

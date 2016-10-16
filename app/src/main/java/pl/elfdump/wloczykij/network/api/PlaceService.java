@@ -8,6 +8,10 @@ import java.util.List;
 
 import pl.elfdump.wloczykij.exceptions.RequestException;
 import pl.elfdump.wloczykij.models.Place;
+<<<<<<< HEAD
+=======
+import pl.elfdump.wloczykij.models.User;
+>>>>>>> origin/master
 import pl.elfdump.wloczykij.network.APIManager;
 import pl.elfdump.wloczykij.network.APIResponse;
 import pl.elfdump.wloczykij.utils.JsonUtils;
