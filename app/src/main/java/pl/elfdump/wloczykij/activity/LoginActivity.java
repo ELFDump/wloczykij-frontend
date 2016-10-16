@@ -17,7 +17,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import pl.elfdump.wloczykij.network.tasks.AuthorizationTask;
+import pl.elfdump.wloczykij.network.tasks.NetworkTask;
 import pl.elfdump.wloczykij.R;
+import pl.elfdump.wloczykij.Session;
+import pl.elfdump.wloczykij.models.Token;
+import pl.elfdump.wloczykij.network.LoginServiceProvider;
+import pl.elfdump.wloczykij.network.api.AuthorizationService;
+
+import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -96,8 +104,8 @@ public class LoginActivity extends AppCompatActivity
             mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             updateUI(true);
 
-            Intent intent = new Intent(this, MapsActivity.class);
-            startActivity(intent);
+            new AuthorizationTask(acct.getIdToken(), this).execute();
+
         } else {
             updateUI(false);
         }
