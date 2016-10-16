@@ -1,33 +1,40 @@
 package pl.elfdump.wloczykij.network;
 
 import android.util.Log;
+import com.squareup.moshi.Json;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import pl.elfdump.wloczykij.Session;
+import pl.elfdump.wloczykij.exceptions.RequestException;
+import pl.elfdump.wloczykij.models.APIError;
 import pl.elfdump.wloczykij.models.Token;
+import pl.elfdump.wloczykij.utils.JsonUtils;
 
 import java.io.IOException;
 
 public class APICall {
 
-    public static final String TAG = "Wloczykij";
-    private static final String defaultServer = "http://dom.krzysh.pl:8000";
+    private Session session;
 
-    public static APIResponse request(String URL, Object... params){
-        return requestWithToken(String.format(URL, params), Session.authToken);
+    public APICall(Session session){
+        this.session = session;
     }
 
-    public static APIResponse request(String URL, Token token, Object... params){
+    public APIResponse request(String URL, Object... params) throws RequestException{
+        return requestWithToken(String.format(URL, params), APIManager.getSession().authToken);
+    }
+
+    public APIResponse request(String URL, Token token, Object... params) throws RequestException{
         return requestWithToken(String.format(URL, params), token);
     }
 
-    public static APIResponse requestWithToken(String URL, Token token){
+    public APIResponse requestWithToken(String URL, Token token) throws RequestException{
         OkHttpClient client = new OkHttpClient();
 
         Request.Builder builder = new Request.Builder()
-                .url(defaultServer + URL);
+                .url(APIManager.defaultServer + URL);
 
         if(token != null){
             builder.addHeader("Authorization", "Token " + token.token);
@@ -41,7 +48,7 @@ public class APICall {
             response = client.newCall(request).execute();
             body = response.body();
         }catch (IOException e){
-            Log.e(TAG, "Failed to send API request", e);
+            Log.e(APIManager.TAG, "Failed to send API request", e);
             return null;
         }
 
@@ -51,8 +58,13 @@ public class APICall {
         try {
             json = body.string();
         }catch (IOException e){
-            Log.e(TAG, "Failed to decode API response", e);
+            Log.e(APIManager.TAG, "Failed to decode API response", e);
             return null;
+        }
+
+        if(response.code() != 200){
+            String error = JsonUtils.deserialize(json, APIError.class).detail;
+            throw new RequestException(statusCode, error);
         }
 
         return new APIResponse(statusCode, json);

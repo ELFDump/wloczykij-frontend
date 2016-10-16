@@ -1,48 +1,36 @@
 package pl.elfdump.wloczykij.network.api;
 
 import android.util.Log;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
+import pl.elfdump.wloczykij.exceptions.RequestException;
 import pl.elfdump.wloczykij.models.User;
-import pl.elfdump.wloczykij.network.APICall;
+import pl.elfdump.wloczykij.network.APIManager;
 import pl.elfdump.wloczykij.network.APIResponse;
-
-import java.io.IOException;
+import pl.elfdump.wloczykij.utils.JsonUtils;
 
 public class UserService {
 
     public User getMe(){
-        APIResponse response = APICall.request("/me/");
-
-        if(response.code() != 200){
+        APIResponse response;
+        try {
+            response = APIManager.newCall().request("/me/");
+        } catch (RequestException e) {
+            Log.e(APIManager.TAG, e.getMessage());
             return null;
         }
 
-        return deserializeUser(response.json());
+        return JsonUtils.deserialize(response.json(), User.class);
     }
 
     public User getUser(int id){
-        APIResponse response = APICall.request("/users/%d/", id);
-
-        if(response.code() != 200){
+        APIResponse response;
+        try {
+            response = APIManager.newCall().request("/users/%d/", id);
+        } catch (RequestException e) {
+            Log.e(APIManager.TAG, e.getMessage());
             return null;
         }
 
-        return deserializeUser(response.json());
-    }
-
-    private User deserializeUser(String json){
-        Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<User> jsonAdapter = moshi.adapter(User.class);
-
-        User user = null;
-        try {
-            user = jsonAdapter.fromJson(json);
-        }catch (IOException e){
-            Log.e(APICall.TAG, "Failed to deserialize User", e);
-        }
-
-        return user;
+        return JsonUtils.deserialize(response.json(), User.class);
     }
 
 }

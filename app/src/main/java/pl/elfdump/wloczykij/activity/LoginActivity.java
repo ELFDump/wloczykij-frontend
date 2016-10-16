@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -18,9 +17,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import pl.elfdump.wloczykij.Wloczykij;
+import pl.elfdump.wloczykij.network.APICall;
 import pl.elfdump.wloczykij.network.tasks.AuthorizationTask;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.network.LoginServiceProvider;
+import pl.elfdump.wloczykij.utils.APICallback;
 
 public class LoginActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -35,6 +37,8 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Wloczykij.onStart();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -102,12 +106,33 @@ public class LoginActivity extends AppCompatActivity
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-            updateUI(true);
+            final GoogleSignInAccount acct = result.getSignInAccount();
 
             if(openNextActivity){
-                new AuthorizationTask(LoginServiceProvider.GOOGLE, acct.getIdToken(), this).execute();
+                APICallback callback = new APICallback() {
+                    @Override
+                    public void success(){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
+                                updateUI(true);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void failed(){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mStatusTextView.setText(getString(R.string.api_signed_in_failed));
+                            }
+                        });
+                    }
+                };
+
+                new AuthorizationTask(LoginServiceProvider.GOOGLE, acct.getIdToken(), this, callback).execute();
             }
 
         } else {

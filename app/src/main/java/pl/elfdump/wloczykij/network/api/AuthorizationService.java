@@ -1,12 +1,12 @@
 package pl.elfdump.wloczykij.network.api;
 
 import android.util.Log;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
+import pl.elfdump.wloczykij.exceptions.RequestException;
 import pl.elfdump.wloczykij.models.Token;
-import pl.elfdump.wloczykij.network.APICall;
+import pl.elfdump.wloczykij.network.APIManager;
 import pl.elfdump.wloczykij.network.APIResponse;
 import pl.elfdump.wloczykij.network.LoginServiceProvider;
+import pl.elfdump.wloczykij.utils.JsonUtils;
 
 import java.io.IOException;
 
@@ -24,23 +24,22 @@ public class AuthorizationService {
                     break;
             }
         }catch (IOException e){
-            Log.e(APICall.TAG, "Failed to deserialize Token", e);
+            Log.e(APIManager.TAG, "Failed to deserialize Token", e);
         }
 
         return apiToken;
     }
 
     private Token authorizeGoogle(String token) throws IOException{
-        APIResponse response = APICall.request("/token/google/?token=%s", token);
-
-        if(response.code() != 200){
+        APIResponse response;
+        try {
+            response = APIManager.newCall().request("/token/google/?token=%s", token);
+        } catch (RequestException e) {
+            Log.e(APIManager.TAG, e.getMessage());
             return null;
         }
 
-        Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<Token> jsonAdapter = moshi.adapter(Token.class);
-
-        return jsonAdapter.fromJson(response.json());
+        return JsonUtils.deserialize(response.json(), Token.class);
     }
 
 }
