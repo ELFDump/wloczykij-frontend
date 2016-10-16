@@ -14,18 +14,13 @@ public class APICall {
 
     public static final String TAG = "Wloczykij";
     private static final String defaultServer = "http://dom.krzysh.pl:8000";
-    private static Token token = null;
-
-    public APICall(Session session){
-        token = session.authToken;
-    }
 
     public static APIResponse request(String URL, Object... params){
-        return requestWithToken(String.format(URL, params), token);
+        return requestWithToken(String.format(URL, params), Session.authToken);
     }
 
-    public static APIResponse request(String URL, String token, Object... params){
-        return requestWithToken(String.format(URL, params), new Token(token));
+    public static APIResponse request(String URL, Token token, Object... params){
+        return requestWithToken(String.format(URL, params), token);
     }
 
     public static APIResponse requestWithToken(String URL, Token token){
