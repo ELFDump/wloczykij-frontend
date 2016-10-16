@@ -13,6 +13,7 @@ import pl.elfdump.wloczykij.models.Token;
 import pl.elfdump.wloczykij.utils.JsonUtils;
 
 import java.io.IOException;
+import java.net.ConnectException;
 
 public class APICall {
 
@@ -45,11 +46,12 @@ public class APICall {
         Response response;
         ResponseBody body;
         try {
-            response = client.newCall(request).execute();
+            response = client.newCall(request).execute(); // TODO (Adikso): Crashes when there is problem with connection
             body = response.body();
+        }catch (ConnectException e){
+            throw new RequestException(0, "Unable to connect to backend");
         }catch (IOException e){
-            Log.e(APIManager.TAG, "Failed to send API request", e);
-            return null;
+            throw new RequestException(0, "Failed to send API request");
         }
 
         int statusCode = response.code();
