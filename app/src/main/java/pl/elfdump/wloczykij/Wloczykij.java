@@ -1,11 +1,26 @@
 package pl.elfdump.wloczykij;
 
-import pl.elfdump.wloczykij.network.APIManager;
+import android.content.Context;
+import android.content.SharedPreferences;
+import pl.elfdump.wloczykij.utils.UserSettings;
 
 public class Wloczykij {
 
-    public static void onStart(){
-        APIManager.setup(new Session());
+    private static Session session;
+
+    public static void onStart(Context context){
+        session = new Session();
+
+        SharedPreferences sharedPreference = context.getSharedPreferences("pl.elfdump.wloczykij.USER", Context.MODE_PRIVATE);
+        session.settings = new UserSettings(sharedPreference);
+    }
+
+    public static UserSettings getSettings(){
+        return session.settings;
+    }
+
+    public static Session getSession(){
+        return session;
     }
 
 }

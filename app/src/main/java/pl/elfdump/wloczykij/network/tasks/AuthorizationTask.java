@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import pl.elfdump.wloczykij.activity.MapsActivity;
+import pl.elfdump.wloczykij.Wloczykij;
+import pl.elfdump.wloczykij.activity.MapViewActivity;
 import pl.elfdump.wloczykij.models.Token;
 import pl.elfdump.wloczykij.network.APIManager;
-import pl.elfdump.wloczykij.network.LoginServiceProvider;
+import pl.elfdump.wloczykij.network.login.LoginServiceProvider;
 import pl.elfdump.wloczykij.network.api.AuthorizationService;
 import pl.elfdump.wloczykij.utils.APICallback;
 
@@ -31,12 +32,9 @@ public class AuthorizationTask extends AsyncTask<Object, Void, Object> {
         Token token = authService.authorize(provider, providerToken);
 
         if(token != null){
+            Wloczykij.getSession().authToken = token;
             callback.success();
-            APIManager.getSession().authToken = token;
             Log.d(APIManager.TAG, token.token);
-
-            Intent intent = new Intent(context, MapsActivity.class);
-            context.startActivity(intent);
         }else{
             callback.failed();
         }

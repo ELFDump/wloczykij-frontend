@@ -67,7 +67,7 @@
                 android:textSize="14sp" />
 
             <com.google.android.gms.common.SignInButton
-                android:id="@+id/sign_in_button"
+                android:id="@+id/google_sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -81,8 +81,8 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/sign_out_and_disconnect"
-                    android:layout_width="fill_parent"
+                    android:id="@+id/google_sign_out_layout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:orientation="horizontal"
@@ -93,25 +93,19 @@
                     android:gravity="bottom">
 
                     <Button
-                        android:id="@+id/sign_out_button"
+                        android:id="@+id/google_sign_out_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/sign_out"/>
 
-                    <Button
-                        android:id="@+id/disconnect_button"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/disconnect"/>
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Status"
+                    android:text=""
                     android:textColor="@android:color/white"
                     android:id="@+id/status"
                     android:layout_gravity="center_horizontal"

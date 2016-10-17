@@ -1,16 +1,16 @@
 package pl.elfdump.wloczykij.network;
 
 import android.util.Log;
-import com.squareup.moshi.Json;
 import okhttp3.*;
 import pl.elfdump.wloczykij.Session;
 import pl.elfdump.wloczykij.exceptions.RequestException;
 import pl.elfdump.wloczykij.models.APIError;
-import pl.elfdump.wloczykij.models.Token;
 import pl.elfdump.wloczykij.utils.JsonUtils;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class APICall {
 
@@ -45,14 +45,14 @@ public class APICall {
 
     private APIResponse getRequest(String URL) throws RequestException{
         Request.Builder builder = new Request.Builder()
-                .url(APIManager.defaultServer + URL);
+                .url(getURL(URL));
 
         return sendRequest(builder);
     }
 
     private APIResponse putRequest(String URL, String json) throws RequestException{
         Request.Builder builder = new Request.Builder()
-                .url(APIManager.defaultServer + URL)
+                .url(getURL(URL))
                 .put(createBody(json));
 
         return sendRequest(builder);
@@ -60,7 +60,7 @@ public class APICall {
 
     private APIResponse postRequest(String URL, String json) throws RequestException{
         Request.Builder builder = new Request.Builder()
-                .url(APIManager.defaultServer + URL)
+                .url(getURL(URL))
                 .post(createBody(json));
 
         return sendRequest(builder);
@@ -69,6 +69,21 @@ public class APICall {
     private RequestBody createBody(String json){
         MediaType jsonType = MediaType.parse("application/json; charset=utf-8");
         return RequestBody.create(jsonType, json);
+    }
+
+    private String getURL(String url){
+        URI u;
+        try {
+            u = new URI(url);
+        } catch (URISyntaxException e) {
+            return null;
+        }
+
+        if(u.isAbsolute()){
+            return url;
+        }else{
+            return APIManager.defaultServer + url;
+        }
     }
 
     public APIResponse sendRequest(Request.Builder builder) throws RequestException{
@@ -83,7 +98,7 @@ public class APICall {
         Response response;
         ResponseBody body;
         try {
-            response = client.newCall(request).execute(); // TODO (Adikso): Crashes when there is problem with connection
+            response = client.newCall(request).execute();
             body = response.body();
         }catch (ConnectException e){
             throw new RequestException(0, "Unable to connect to backend");

@@ -11,7 +11,6 @@
     <string name="signed_in_fmt">Zalogowano jako: %s</string>
     <string name="signed_in">Zalogowano</string>
     <string name="signing_in">Logowanie…</string>
-    <string name="signed_out">Wylogowano</string>
     <string name="signed_in_err">"Error: please check logs."</string>
     <string name="api_signed_in_failed">Logowanie nie powiodło się</string>
 
@@ -45,4 +44,8 @@
     <string name="name_auth_code_activity">ServerAuthCodeActivity</string>
 
     <string name="server_client_id">434052730158-8dqkj0f5h1i70v1kna9fqo741r4lr3ra.apps.googleusercontent.com</string>
+
+    <!-- Floating menu labels -->
+    <string name="menu_add_place">Dodaj miejsce</string>
+    <string name="menu_plan_trip">Zaplanuj</string>
 </resources>

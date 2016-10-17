@@ -5,7 +5,7 @@ import pl.elfdump.wloczykij.exceptions.RequestException;
 import pl.elfdump.wloczykij.models.Token;
 import pl.elfdump.wloczykij.network.APIManager;
 import pl.elfdump.wloczykij.network.APIResponse;
-import pl.elfdump.wloczykij.network.LoginServiceProvider;
+import pl.elfdump.wloczykij.network.login.LoginServiceProvider;
 import pl.elfdump.wloczykij.utils.JsonUtils;
 
 import java.io.IOException;
