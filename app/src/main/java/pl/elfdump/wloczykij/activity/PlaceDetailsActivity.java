@@ -74,8 +74,17 @@ public class PlaceDetailsActivity extends SlidingActivity {
 
     private ArrayList<PlaceDetailsItem> generateData() {
         ArrayList<PlaceDetailsItem> models = new ArrayList<>();
+
         models.add(new PlaceDetailsItem(R.mipmap.ic_launcher, place.getAuthor()));
-        models.add(new PlaceDetailsItem(R.mipmap.ic_launcher, Arrays.toString(place.getTags())));
+
+        String tags = "";
+        boolean first = true;
+        for (String tag : place.getTags()) {
+            if (!first) tags += ", ";
+            tags += "#"+tag;
+            first = false;
+        }
+        models.add(new PlaceDetailsItem(R.drawable.ic_menu_info_details, tags));
 
         return models;
     }
