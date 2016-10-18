@@ -8,7 +8,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,7 +30,7 @@ import java.util.List;
 
 import pl.elfdump.wloczykij.network.api.models.Place;
 
-public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener {
 
     private GoogleMap mMap;
 
@@ -40,6 +43,9 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
             .findFragmentById(R.id.map);
+
+        findViewById(R.id.action_add_place).setOnClickListener(this);
+        findViewById(R.id.action_plan_trip).setOnClickListener(this);
 
         mapFragment.getMapAsync(this);
     }
@@ -65,12 +71,13 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             LatLng position = MapUtilities.getPosition(p);
             MarkerOptions markerOptions = new MarkerOptions().position(position).title(p.getName());
             Marker marker = mMap.addMarker(markerOptions);
-            marker.showInfoWindow();
+            //marker.showInfoWindow();
 
             dataManager.markerManager.references.put(marker, p);
         }
 
         mMap.setOnMarkerClickListener(this);
+        mMap.setOnMapClickListener(this);
     }
 
     @Override
@@ -93,11 +100,45 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         intent.putExtra("place", place);
         startActivity(intent);
-        return false;
+        return true;
     }
 
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    private boolean addingPlace = false;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.action_plan_trip:
+                Toast.makeText(this, "Funkcja jeszcze niedostępna", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.action_add_place:
+                addingPlace = true;
+                ((FloatingActionsMenu) findViewById(R.id.multiple_actions)).collapse();
+                Toast.makeText(this, "Teraz kliknij na wybrane miejsce na mapie", Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
+    @Override
+    public void onMapClick(LatLng coords) {
+        if (addingPlace) {
+            addingPlace = false;
+            Log.d("Wloczykij", "Map click: " + coords);
+
+            Place place = new Place();
+            place.setLat(coords.latitude);
+            place.setLng(coords.longitude);
+            /*TODO:
+            Intent intent = new Intent(this, PlaceEditActivity.class);
+            intent.putExtra("place", place);
+            startActivity(intent);
+            */
+        }
     }
 }
