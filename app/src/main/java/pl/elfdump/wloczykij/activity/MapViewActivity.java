@@ -1,8 +1,12 @@
 package pl.elfdump.wloczykij.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -10,12 +14,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import pl.elfdump.wloczykij.R;
-import pl.elfdump.wloczykij.Wloczykij;
-import pl.elfdump.wloczykij.models.Place;
-import pl.elfdump.wloczykij.network.tasks.UpdatePlacesTask;
 
 import java.util.List;
+
+import pl.elfdump.wloczykij.R;
+import pl.elfdump.wloczykij.Wloczykij;
+import pl.elfdump.wloczykij.network.api.APIRequestException;
+import pl.elfdump.wloczykij.network.api.models.Place;
 
 public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -30,6 +35,40 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+
+        findViewById(R.id.action_a).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO
+
+                Place place = new Place();
+                place.setName("Jakieś testowe miejsce");
+                place.setLat(12);
+                place.setLng(34);
+                place.addTag("test");
+
+                new AsyncTask<Place, Void, Place>() {
+                    @Override
+                    protected Place doInBackground(Place... params) {
+                        try {
+                            return Wloczykij.api.manager(Place.class).save(params[0]);
+                        } catch (APIRequestException e) {
+                            e.printStackTrace();
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(Place place) {
+                        if (place == null) {
+                            Toast.makeText(MapViewActivity.this, "Failed to add place", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MapViewActivity.this, "Place added! " + place.getResourceUrl(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }.execute(place);
+            }
+        });
     }
 
     @Override
@@ -41,7 +80,18 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lodz, 15));
 
-        new UpdatePlacesTask(Wloczykij.api) {
+        new AsyncTask<Void, Void, List<Place>>() {
+            @Override
+            protected List<Place> doInBackground(Void... params) {
+                try {
+                    return Wloczykij.api.manager(Place.class).getAll();
+                } catch (APIRequestException e) {
+                    // TODO: handle errors
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
             @Override
             protected void onPostExecute(List<Place> places) {
                 for(Place place : places) {
