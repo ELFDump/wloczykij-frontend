@@ -11,6 +11,7 @@ import com.squareup.moshi.Types;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -126,11 +127,14 @@ public class APIManager {
         }
     }
 
+    public Map<String, Bitmap> imageCache = new HashMap<String, Bitmap>();
     public Bitmap downloadImage(String url) throws APIRequestException {
-        // TODO: Cache images?
-        try (ResponseBody responseBody = internalSendRequest("GET", url, null)) {
-            return BitmapFactory.decodeStream(responseBody.byteStream());
+        if (!imageCache.containsKey(url)) {
+            try (ResponseBody responseBody = internalSendRequest("GET", url, null)) {
+                imageCache.put(url, BitmapFactory.decodeStream(responseBody.byteStream()));
+            }
         }
+        return imageCache.get(url);
     }
 
     public <T extends APIModel> APIModelManager<T> manager(Class<T> type) {
