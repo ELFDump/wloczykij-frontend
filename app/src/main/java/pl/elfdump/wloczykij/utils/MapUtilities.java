@@ -1,7 +1,7 @@
 package pl.elfdump.wloczykij.utils;
 
 import com.google.android.gms.maps.model.LatLng;
-import pl.elfdump.wloczykij.models.Place;
+import pl.elfdump.wloczykij.network.api.models.Place;
 
 public class MapUtilities {
 

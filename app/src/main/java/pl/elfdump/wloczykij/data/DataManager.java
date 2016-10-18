@@ -1,9 +1,11 @@
 package pl.elfdump.wloczykij.data;
 
+import android.os.AsyncTask;
+import android.util.Log;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.data.map.MarkerManager;
-import pl.elfdump.wloczykij.models.Place;
-import pl.elfdump.wloczykij.network.tasks.UpdatePlacesTask;
+import pl.elfdump.wloczykij.network.api.APIRequestException;
+import pl.elfdump.wloczykij.network.api.models.Place;
 
 import java.util.List;
 
@@ -16,7 +18,18 @@ public class DataManager {
         placeStorage = new PlaceStorage();
         markerManager = new MarkerManager();
 
-        new UpdatePlacesTask(Wloczykij.api) {
+        new AsyncTask<Void, Void, List<Place>>() {
+            @Override
+            protected List<Place> doInBackground(Void... params) {
+                try {
+                    return Wloczykij.api.manager(Place.class).getAll();
+                } catch (APIRequestException e) {
+                    // TODO: handle errors
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
             @Override
             protected void onPostExecute(List<Place> places) {
                 placeStorage.setPlaces(places);

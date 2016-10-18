@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.widget.ListView;
 import com.klinker.android.sliding.SlidingActivity;
 import pl.elfdump.wloczykij.R;
-import pl.elfdump.wloczykij.models.Place;
 import pl.elfdump.wloczykij.models.ui.PlaceDetailsItem;
 import pl.elfdump.wloczykij.models.ui.PlaceDetailsListAdapter;
+import pl.elfdump.wloczykij.network.api.models.Place;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +32,7 @@ public class PlaceDetailsActivity extends SlidingActivity {
     private ArrayList<PlaceDetailsItem> generateData(){
         ArrayList<PlaceDetailsItem> models = new ArrayList<>();
         models.add(new PlaceDetailsItem(R.mipmap.ic_launcher, place.getAuthor()));
-        models.add(new PlaceDetailsItem(R.mipmap.ic_launcher, Arrays.toString(place.getTags())));
+        //models.add(new PlaceDetailsItem(R.mipmap.ic_launcher, Arrays.toString(place.getTags())));
 
         return models;
     }

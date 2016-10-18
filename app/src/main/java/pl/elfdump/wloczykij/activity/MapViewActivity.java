@@ -14,14 +14,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.data.DataManager;
-import pl.elfdump.wloczykij.data.PlaceStorage;
 import pl.elfdump.wloczykij.data.map.MarkerManager;
-import pl.elfdump.wloczykij.models.Place;
-import pl.elfdump.wloczykij.network.tasks.UpdatePlacesTask;
 import pl.elfdump.wloczykij.utils.MapUtilities;
 
 import java.util.List;
-import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
 
 public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {

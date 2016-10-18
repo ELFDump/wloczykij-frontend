@@ -1,9 +1,10 @@
 package pl.elfdump.wloczykij.network.api.models;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Place extends APIModel {
+public class Place extends APIModel implements Serializable{
     private String name;
     private String author;
     private String date_created;

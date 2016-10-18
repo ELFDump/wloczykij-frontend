@@ -1,6 +1,6 @@
 package pl.elfdump.wloczykij.data;
 
-import pl.elfdump.wloczykij.models.Place;
+import pl.elfdump.wloczykij.network.api.models.Place;
 
 import java.util.ArrayList;
 import java.util.List;
