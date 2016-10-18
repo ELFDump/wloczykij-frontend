@@ -32,7 +32,7 @@ public class PlaceDetailsActivity extends SlidingActivity {
     private ArrayList<PlaceDetailsItem> generateData(){
         ArrayList<PlaceDetailsItem> models = new ArrayList<>();
         models.add(new PlaceDetailsItem(R.mipmap.ic_launcher, place.getAuthor()));
-        //models.add(new PlaceDetailsItem(R.mipmap.ic_launcher, Arrays.toString(place.getTags())));
+        models.add(new PlaceDetailsItem(R.mipmap.ic_launcher, Arrays.toString(place.getTags())));
 
         return models;
     }

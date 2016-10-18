@@ -44,7 +44,7 @@ public class Place extends APIModel implements Serializable{
     }
 
     public String[] getTags() {
-        return (String[]) tags.toArray();
+        return tags.toArray(new String[tags.size()]);
     }
 
     public void setName(String name) {
