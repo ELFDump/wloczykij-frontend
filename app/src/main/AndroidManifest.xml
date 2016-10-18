@@ -40,7 +40,7 @@
             android:taskAffinity=""
             android:theme="@style/Theme.Sliding.Light">
         </activity>
-        <activity android:name=".activity.AddPlaceActivity"
+        <activity android:name=".activity.PlaceEditActivity"
                   android:excludeFromRecents="true"
                   android:taskAffinity=""
                   android:theme="@style/Theme.Sliding.Light">

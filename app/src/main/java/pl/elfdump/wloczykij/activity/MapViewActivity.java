@@ -48,8 +48,6 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         findViewById(R.id.action_plan_trip).setOnClickListener(this);
 
         mapFragment.getMapAsync(this);
-
-        findViewById(R.id.action_a).setOnClickListener(this);
     }
 
     @Override
@@ -73,7 +71,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             LatLng position = MapUtilities.getPosition(p);
             MarkerOptions markerOptions = new MarkerOptions().position(position).title(p.getName());
             Marker marker = mMap.addMarker(markerOptions);
-            marker.showInfoWindow();
+            //marker.showInfoWindow();
 
             dataManager.markerManager.references.put(marker, p);
         }
@@ -102,18 +100,12 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         intent.putExtra("place", place);
         startActivity(intent);
-        return false;
+        return true;
     }
 
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
-    }
-
-    @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(this, AddPlaceActivity.class);
-        startActivity(intent);
     }
 
     private boolean addingPlace = false;
@@ -142,11 +134,10 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             Place place = new Place();
             place.setLat(coords.latitude);
             place.setLng(coords.longitude);
-            /*TODO:
+            
             Intent intent = new Intent(this, PlaceEditActivity.class);
             intent.putExtra("place", place);
             startActivity(intent);
-            */
         }
     }
 }
