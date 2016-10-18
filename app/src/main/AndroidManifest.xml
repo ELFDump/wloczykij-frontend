@@ -34,7 +34,13 @@
 
         <activity android:name=".activity.MapViewActivity">
         </activity>
-        <activity android:name=".activity.PlaceDetailsActivity"
+        <activity
+            android:name=".activity.PlaceDetailsActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding.Light">
+        </activity>
+        <activity android:name=".activity.AddPlaceActivity"
                   android:excludeFromRecents="true"
                   android:taskAffinity=""
                   android:theme="@style/Theme.Sliding.Light">
