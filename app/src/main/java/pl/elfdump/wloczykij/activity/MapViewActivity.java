@@ -21,6 +21,8 @@ import pl.elfdump.wloczykij.network.tasks.UpdatePlacesTask;
 import pl.elfdump.wloczykij.utils.MapUtilities;
 
 import java.util.List;
+import pl.elfdump.wloczykij.network.api.APIRequestException;
+import pl.elfdump.wloczykij.network.api.models.Place;
 
 public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 

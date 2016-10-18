@@ -1,14 +1,9 @@
-package pl.elfdump.wloczykij.models;
+package pl.elfdump.wloczykij.network.api.models;
 
-public class User {
-    private String url;
+public class User extends APIModel {
     private String username;
     private String first_name;
     private String last_name;
-
-    public String getUrl() {
-        return url;
-    }
 
     public String getUsername() {
         return username;

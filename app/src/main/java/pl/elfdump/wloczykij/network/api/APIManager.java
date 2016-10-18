@@ -17,6 +17,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import pl.elfdump.wloczykij.network.api.models.APIModel;
 import pl.elfdump.wloczykij.network.login.LoginServiceProvider;
 import pl.elfdump.wloczykij.utils.JsonUtils;
 
@@ -114,5 +115,10 @@ public class APIManager {
         } catch (JsonDataException e) {
             throw new APIRequestException("Unable to deserialize JSON response: "+responseJson, e);
         }
+    }
+
+    public <T extends APIModel> APIModelManager<T> manager(Class<T> type) {
+        // TODO: Cache APIModelManager instances?
+        return new APIModelManager<>(this, type);
     }
 }

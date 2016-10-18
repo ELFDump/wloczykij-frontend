@@ -1,6 +1,7 @@
 package pl.elfdump.wloczykij.network.login;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.api.Auth;
@@ -11,9 +12,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+
 import pl.elfdump.wloczykij.R;
+import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.activity.LoginActivity;
-import pl.elfdump.wloczykij.network.tasks.AuthorizationTask;
+import pl.elfdump.wloczykij.network.api.APIRequestException;
 
 public class GoogleLoginProvider implements LoginProvider, GoogleApiClient.OnConnectionFailedListener {
 
@@ -70,7 +73,17 @@ public class GoogleLoginProvider implements LoginProvider, GoogleApiClient.OnCon
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             final GoogleSignInAccount acct = result.getSignInAccount();
-            new AuthorizationTask(LoginServiceProvider.GOOGLE, acct.getIdToken()) {
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... params) {
+                    try {
+                        return Wloczykij.api.requestToken(LoginServiceProvider.GOOGLE, acct.getIdToken());
+                    } catch (APIRequestException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
                 @Override
                 protected void onPostExecute(String token) {
                     if (token != null) {
