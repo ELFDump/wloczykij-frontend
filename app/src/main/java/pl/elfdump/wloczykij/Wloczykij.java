@@ -2,9 +2,13 @@ package pl.elfdump.wloczykij;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.utils.UserSettings;
 
 public class Wloczykij {
+
+    public static APIManager api = new APIManager("http://dom.krzysh.pl:8000/");
 
     private static Session session;
 

@@ -2,32 +2,29 @@ package pl.elfdump.wloczykij.network.login;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.View;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.activity.LoginActivity;
 import pl.elfdump.wloczykij.network.tasks.AuthorizationTask;
-import pl.elfdump.wloczykij.utils.APICallback;
 
 public class GoogleLoginProvider implements LoginProvider, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleSignInOptions gso;
     private GoogleApiClient mGoogleApiClient;
     private LoginActivity loginActivity;
-    private APICallback callback;
+    private LoginCallback callback;
 
     public static final int RC_SIGN_IN = 9001;
 
-    public GoogleLoginProvider(LoginActivity loginActivity, APICallback callback){
+    public GoogleLoginProvider(LoginActivity loginActivity, LoginCallback callback){
         this.loginActivity = loginActivity;
         this.callback = callback;
     }
@@ -52,12 +49,12 @@ public class GoogleLoginProvider implements LoginProvider, GoogleApiClient.OnCon
     }
 
     @Override
-    public void logOut(final APICallback apiCallback) {
+    public void logOut(final LoginCallback loginCallback) {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
             new ResultCallback<Status>() {
                 @Override
-                public void onResult(Status status) {
-                    apiCallback.success();
+                public void onResult(@NonNull Status status) {
+                    loginCallback.success(null);
                 }
             });
     }
@@ -73,7 +70,16 @@ public class GoogleLoginProvider implements LoginProvider, GoogleApiClient.OnCon
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             final GoogleSignInAccount acct = result.getSignInAccount();
-            new AuthorizationTask(LoginServiceProvider.GOOGLE, acct.getIdToken(), loginActivity, callback).execute();
+            new AuthorizationTask(LoginServiceProvider.GOOGLE, acct.getIdToken()) {
+                @Override
+                protected void onPostExecute(String token) {
+                    if (token != null) {
+                        callback.success(token);
+                    } else {
+                        callback.failed();
+                    }
+                }
+            }.execute();
         } else {
             callback.failed();
         }

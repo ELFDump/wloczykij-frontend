@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import pl.elfdump.wloczykij.R;
+import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.models.Place;
 import pl.elfdump.wloczykij.network.tasks.UpdatePlacesTask;
 
@@ -40,7 +41,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lodz, 15));
 
-        new UpdatePlacesTask() {
+        new UpdatePlacesTask(Wloczykij.api) {
             @Override
             protected void onPostExecute(List<Place> places) {
                 for(Place place : places) {

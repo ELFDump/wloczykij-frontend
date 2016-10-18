@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+
+import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.login.GoogleLoginProvider;
+import pl.elfdump.wloczykij.network.login.LoginCallback;
 import pl.elfdump.wloczykij.network.login.LoginProvider;
-import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.network.login.LoginServiceProvider;
-import pl.elfdump.wloczykij.utils.APICallback;
-import pl.elfdump.wloczykij.utils.UserSettings;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,17 +37,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onStart() {
         super.onStart();
 
-        UserSettings settings = Wloczykij.getSettings();
-        if(settings.tokenExist()){
-            Wloczykij.getSession().authToken = settings.getToken();
+        String token = Wloczykij.getSettings().getToken();
+        if (token != null){
+            Wloczykij.api.setToken(token);
             nextActivity();
         }
 
     }
 
-    private void afterLogin(){
-        UserSettings settings = Wloczykij.getSettings();
-        settings.setToken(Wloczykij.getSession().authToken);
+    private void afterLogin(String token){
+        Wloczykij.getSettings().setToken(token);
 
         nextActivity();
     }
@@ -74,17 +73,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private LoginProvider getLoginProvider(LoginServiceProvider loginProvider){
         switch (loginProvider){
             case GOOGLE:
-                APICallback googleCallback = new APICallback(){
+                LoginCallback googleCallback = new LoginCallback(){
 
                     @Override
-                    public void success(){
+                    public void success(final String token){
                         runOnUiThread(new Runnable() {
                               @Override
                               public void run() {
                                   findViewById(R.id.google_sign_in_button).setVisibility(View.GONE);
                                   findViewById(R.id.google_sign_out_layout).setVisibility(View.VISIBLE);
 
-                                  afterLogin();
+                                  afterLogin(token);
                               }
                         });
 
@@ -120,13 +119,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.google_sign_out_button:
                 setProvider(LoginServiceProvider.GOOGLE);
-                this.loginProvider.logOut(new APICallback(){
+                this.loginProvider.logOut(new LoginCallback() {
                     @Override
-                    public void success() {
+                    public void success(String token) {
                         mStatusTextView.setText("");
 
                         findViewById(R.id.google_sign_in_button).setVisibility(View.VISIBLE);
                         findViewById(R.id.google_sign_out_layout).setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void failed() {
+
                     }
                 });
                 break;

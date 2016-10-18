@@ -22,11 +22,13 @@ public class Place {
         return author;
     }
 
-    public String getDate_created() {
+    // TODO: convert to Date
+    public String getDateCreated() {
         return date_created;
     }
 
-    public String getDate_modified() {
+    // TODO: convert to Date
+    public String getDateModified() {
         return date_modified;
     }
 
