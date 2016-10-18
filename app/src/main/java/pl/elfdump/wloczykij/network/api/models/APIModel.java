@@ -4,7 +4,9 @@ import android.support.annotation.Nullable;
 
 import com.squareup.moshi.Json;
 
-public abstract class APIModel {
+import java.io.Serializable;
+
+public abstract class APIModel implements Serializable {
     @Json(name = "url")
     @Nullable
     private String resourceUrl;

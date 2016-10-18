@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Place extends APIModel implements Serializable{
+public class Place extends APIModel {
     private String name;
     private String author;
     private String date_created;
