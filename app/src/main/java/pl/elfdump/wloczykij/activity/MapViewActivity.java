@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import android.view.View;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,7 +28,7 @@ import java.util.List;
 
 import pl.elfdump.wloczykij.network.api.models.Place;
 
-public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, View.OnClickListener {
 
     private GoogleMap mMap;
 
@@ -42,6 +43,8 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+
+        findViewById(R.id.action_a).setOnClickListener(this);
     }
 
     @Override
@@ -99,5 +102,11 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(this, AddPlaceActivity.class);
+        startActivity(intent);
     }
 }

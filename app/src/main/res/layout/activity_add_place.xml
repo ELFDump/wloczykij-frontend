@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pl.elfdump.wloczykij.activity.AddPlaceActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:background="@color/accent_color"
+            android:paddingLeft="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Dodawanie miejsca"
+                android:id="@+id/textView"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <com.github.florent37.materialtextfield.MaterialTextField
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                app:mtf_image="@drawable/ic_mail_grey600_24dp"
+                app:mtf_openKeyboardOnFocus="true"
+                app:mtf_labelColor="@android:color/black">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nazwa"
+                    android:textColorHint="#000"
+                    android:textSize="15sp"
+                    android:textColor="@color/abc_primary_text_material_light"/>
+
+            </com.github.florent37.materialtextfield.MaterialTextField>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Dodaj"
+                android:id="@+id/add_place_button"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
