@@ -1,6 +1,8 @@
 package pl.elfdump.wloczykij.models;
 
-public class Place {
+import java.io.Serializable;
+
+public class Place implements Serializable {
     private String url;
     private String name;
     private String author;

@@ -1,5 +1,6 @@
 package pl.elfdump.wloczykij.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,8 +13,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
+import pl.elfdump.wloczykij.data.DataManager;
+import pl.elfdump.wloczykij.data.PlaceStorage;
+import pl.elfdump.wloczykij.data.map.MarkerManager;
 import pl.elfdump.wloczykij.models.Place;
 import pl.elfdump.wloczykij.network.tasks.UpdatePlacesTask;
+import pl.elfdump.wloczykij.utils.MapUtilities;
 
 import java.util.List;
 
@@ -35,28 +40,36 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setMapToolbarEnabled(false);
 
         LatLng lodz = new LatLng(51.759248, 19.455983);
-        mMap.addMarker(new MarkerOptions().position(lodz).title("Łódź").snippet("Opis"));
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lodz, 15));
 
-        new UpdatePlacesTask(Wloczykij.api) {
-            @Override
-            protected void onPostExecute(List<Place> places) {
-                for(Place place : places) {
-                    Log.d("Place", place.getName());
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(place.getLat(), place.getLng())).title(place.getName()));
-                }
-            }
-        }.execute();
+        DataManager dataManager = Wloczykij.getSession().dataManager;
+        List<Place> places = dataManager.placeStorage.getPlaces();
+
+        for(Place p : places){
+            LatLng position = MapUtilities.getPosition(p);
+            MarkerOptions markerOptions = new MarkerOptions().position(position).title(p.getName());
+            Marker marker = mMap.addMarker(markerOptions);
+            marker.showInfoWindow();
+
+            dataManager.markerManager.references.put(marker, p);
+        }
 
         mMap.setOnMarkerClickListener(this);
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        return false; // TODO (Adikso)
+        Intent intent = new Intent(this, PlaceDetailsActivity.class);
+
+        MarkerManager markerManager = Wloczykij.getSession().dataManager.markerManager;
+        Place place = markerManager.references.get(marker);
+
+        intent.putExtra("place", place);
+        startActivity(intent);
+        return false;
     }
 
     @Override
