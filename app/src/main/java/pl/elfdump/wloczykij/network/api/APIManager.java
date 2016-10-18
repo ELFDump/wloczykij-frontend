@@ -1,5 +1,7 @@
 package pl.elfdump.wloczykij.network.api;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -69,21 +71,20 @@ public class APIManager {
         this.token = token;
     }
 
-    public String sendRequest(String method, String url, @Nullable RequestBody body) throws APIRequestException {
+    private ResponseBody internalSendRequest(String method, String url, @Nullable RequestBody body) throws APIRequestException {
         Request.Builder builder = new Request.Builder().url(url).method(method, body);
         if (token != null) {
             builder.addHeader("Authorization", "Token " + token);
         }
         Request request = builder.build();
 
-        try (Response response = httpClient.newCall(request).execute()) {
-            ResponseBody responseBody = response.body();
-
+        try {
+            Response response = httpClient.newCall(request).execute();
             int responseCode = response.code();
-            String responseString = responseBody.string();
 
             // Some endpoints return values other than 200 OK (e.g. 201 Created)
             if (responseCode < 200 || responseCode > 299) {
+                String responseString = response.body().string();
                 String errorMessage;
                 try {
                     errorMessage = JsonUtils.deserialize(responseString, APIError.class).toString();
@@ -93,11 +94,19 @@ public class APIManager {
                 throw new APIRequestException(String.format("The server responded with error %d: %s", responseCode, errorMessage));
             }
 
-            return responseString;
+            return response.body();
         } catch (ConnectException e) {
             throw new APIRequestException("Unable to connect to backend", e);
         } catch (IOException e) {
             throw new APIRequestException("Failed to send API request", e);
+        }
+    }
+
+    public String sendRequest(String method, String url, @Nullable RequestBody body) throws APIRequestException {
+        try (ResponseBody responseBody = internalSendRequest(method, url, body)) {
+            return responseBody.string();
+        } catch (IOException e) {
+            throw new APIRequestException("Failed to decode server response to string", e);
         }
     }
 
@@ -114,6 +123,13 @@ public class APIManager {
             return JsonUtils.deserialize(responseJson, responseType);
         } catch (JsonDataException e) {
             throw new APIRequestException("Unable to deserialize JSON response: "+responseJson, e);
+        }
+    }
+
+    public Bitmap downloadImage(String url) throws APIRequestException {
+        // TODO: Cache images?
+        try (ResponseBody responseBody = internalSendRequest("GET", url, null)) {
+            return BitmapFactory.decodeStream(responseBody.byteStream());
         }
     }
 

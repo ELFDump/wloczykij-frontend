@@ -48,4 +48,6 @@
     <!-- Floating menu labels -->
     <string name="menu_add_place">Dodaj miejsce</string>
     <string name="menu_plan_trip">Zaplanuj</string>
+
+    <string name="image_load_error">Błąd pobierania obrazka</string>
 </resources>
