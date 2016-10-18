@@ -9,7 +9,7 @@ public class Place extends APIModel {
     private String author;
     private String date_created;
     private String date_modified;
-    private float[] coords = new float[2]; // TODO: refactor this?
+    private double[] coords = new double[2]; // TODO: refactor this?
     private String[] photos = new String[0];
     private List<String> tags = new LinkedList<>();
 
@@ -31,11 +31,11 @@ public class Place extends APIModel {
         return date_modified;
     }
 
-    public float getLat() {
+    public double getLat() {
         return coords[0];
     }
 
-    public float getLng() {
+    public double getLng() {
         return coords[1];
     }
 
@@ -51,11 +51,11 @@ public class Place extends APIModel {
         this.name = name;
     }
 
-    public void setLat(float lat) {
+    public void setLat(double lat) {
         this.coords[0] = lat;
     }
 
-    public void setLng(float lng) {
+    public void setLng(double lng) {
         this.coords[1] = lng;
     }
 

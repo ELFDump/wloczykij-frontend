@@ -13,6 +13,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "434052730158-es6tkh6ft58c0e712ec2drirg7fcr8i5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.elfdump.wloczykij",
+            "certificate_hash": "7EF0F51B7F33C5BEA9867B172F7DF644B42ABC99"
+          }
+        },
+        {
           "client_id": "434052730158-f1gkdguc0bp7efntbftlq0spesstcuh4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
