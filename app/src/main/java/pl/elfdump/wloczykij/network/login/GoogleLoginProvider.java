@@ -36,7 +36,7 @@ public class GoogleLoginProvider implements LoginProvider, GoogleApiClient.OnCon
     public void setUp() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestIdToken(loginActivity.getString(R.string.server_client_id))
+                .requestIdToken(loginActivity.getString(R.string.google_server_client_id))
                 .build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(loginActivity)

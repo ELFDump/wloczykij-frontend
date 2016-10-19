@@ -17,4 +17,6 @@
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
     <color name="green">#4caf50</color>
     <color name="green_pressed">#66bb6a</color>
+    <color name="amber">#ffc107</color>
+    <color name="amber_pressed">#ffca28</color>
 </resources>

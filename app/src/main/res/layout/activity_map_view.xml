@@ -130,6 +130,16 @@
             fab:fab_colorPressed="@color/pink_pressed"
             />
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_title="@string/menu_refresh"
+            fab:fab_icon="@drawable/ic_refresh"
+            fab:fab_colorNormal="@color/amber"
+            fab:fab_colorPressed="@color/amber_pressed"
+            />
+
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>

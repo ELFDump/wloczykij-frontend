@@ -54,13 +54,13 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
                     @Override
                     protected void onPostExecute(Boolean success) {
                         if (success) {
-                            Toast.makeText(PlaceEditActivity.this, "Zapisano", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PlaceEditActivity.this, getString(R.string.place_saved), Toast.LENGTH_SHORT).show();
                             Intent result = new Intent();
                             result.putExtra("place", place.getResourceUrl());
                             setResult(Activity.RESULT_OK, result);
                             finish();
                         } else {
-                            Toast.makeText(PlaceEditActivity.this, "Wystąpił błąd", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PlaceEditActivity.this, getString(R.string.place_save_error), Toast.LENGTH_SHORT).show();
                             findViewById(R.id.add_place_button).setEnabled(true);
                         }
                     }
