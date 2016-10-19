@@ -12,6 +12,83 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:background="#424e9e">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/header_explore"
+                android:background="@null"
+                android:id="@+id/button_explore"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="#39469f">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@android:drawable/ic_dialog_map"
+                    android:layout_gravity="center_vertical"/>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/header_filter"
+                    android:id="@+id/button_filter"
+                    android:background="@null"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="10dp"
+                    android:drawableRight="@drawable/abc_spinner_mtrl_am_alpha"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="right"
+                android:layout_marginRight="5dp">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_saved_places"
+                    android:src="@android:drawable/ic_menu_myplaces"
+                    android:background="@null"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="5dp"/>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_settings"
+                    android:layout_gravity="center_vertical|right"
+                    android:src="@android:drawable/ic_menu_manage"
+                    android:background="@null"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:tools="http://schemas.android.com/tools"
                   android:id="@+id/map"

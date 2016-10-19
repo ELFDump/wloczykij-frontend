@@ -50,4 +50,8 @@
     <string name="menu_plan_trip">Zaplanuj</string>
 
     <string name="image_load_error">Błąd pobierania obrazka</string>
+
+    <!-- MapView header -->
+    <string name="header_explore">Eksploruj</string>
+    <string name="header_filter">Filtruj</string>
 </resources>
