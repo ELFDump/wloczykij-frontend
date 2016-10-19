@@ -10,7 +10,7 @@ public class Wloczykij {
 
     public static final String TAG = "Wloczykij";
 
-    public static APIManager api = new APIManager("http://dom.krzysh.pl:8000/");
+    public static APIManager api = new APIManager("http://api.wloczykij.eu:8000/");
 
     private static Session session;
 
