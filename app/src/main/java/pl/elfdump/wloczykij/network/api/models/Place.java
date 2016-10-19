@@ -12,6 +12,8 @@ public class Place extends APIModel {
     private String date_modified;
     private double[] coords = new double[2]; // TODO: refactor this?
     private String[] photos = new String[0];
+    private String photo_upload;
+
     private List<String> tags = new LinkedList<>();
 
     public String getName() {
@@ -42,6 +44,10 @@ public class Place extends APIModel {
 
     public String[] getPhotos() {
         return photos;
+    }
+
+    public String getPhotoUploadUrl() {
+        return photo_upload;
     }
 
     public String[] getTags() {
