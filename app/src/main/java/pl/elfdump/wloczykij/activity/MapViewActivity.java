@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 import pl.elfdump.wloczykij.R;
@@ -31,12 +30,11 @@ import pl.elfdump.wloczykij.utils.MapUtil;
 
 public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener {
 
-    private GoogleMap mMap;
-
     private static final int MAP_LOCATION_PERMISSION_REQUEST = 1234;
     private static final int PLACE_EDIT = 4321;
 
-    public HashMap<Marker, String> markers = new HashMap<>();
+    private GoogleMap mMap;
+    private HashMap<Marker, String> markers = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,31 +64,64 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             mMap.setMyLocationEnabled(true);
         }
 
-        new AsyncTask<Void, Void, Collection<Place>>() {
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnMapClickListener(this);
+
+        updateMap();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        new AsyncTask<Void, Void, Boolean>() {
             @Override
-            protected Collection<Place> doInBackground(Void... params) {
+            protected Boolean doInBackground(Void... params) {
                 try {
                     Wloczykij.api.manager(Place.class).cache().update();
-                    return Wloczykij.api.cache(Place.class).getAll();
+                    return true;
                 } catch (APIRequestException e) {
-                    // TODO: handle errors
                     e.printStackTrace();
-                    return null;
+                    return false;
                 }
             }
 
             @Override
-            protected void onPostExecute(Collection<Place> places) {
-                for (Place p : places) {
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(MapUtil.getPosition(p)).title(p.getName()));
-                    markers.put(marker, p.getResourceUrl());
+            protected void onPostExecute(Boolean success) {
+                if (success) {
+                    Log.i(Wloczykij.TAG, "Updated place cache from server");
+                    if (mMap != null) {
+                        updateMap();
+                    }
+                } else {
+                    Toast.makeText(MapViewActivity.this, getString(R.string.map_load_error), Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();
+    }
 
+    private void updateMap() {
+        Log.d(Wloczykij.TAG, "Update map markers");
 
-        mMap.setOnMarkerClickListener(this);
-        mMap.setOnMapClickListener(this);
+        // Add new markers
+        for (Place p : Wloczykij.api.cache(Place.class).getAll()) {
+            if (!markers.containsValue(p.getResourceUrl())) {
+                Marker marker = mMap.addMarker(new MarkerOptions().position(MapUtil.getPosition(p)).title(p.getName()));
+                markers.put(marker, p.getResourceUrl());
+            }
+        }
+
+        // Update/remove existing markers
+        for (Marker marker : markers.keySet()) {
+            Place p = Wloczykij.api.cache(Place.class).get(markers.get(marker));
+            if (p == null) {
+                marker.remove();
+                markers.remove(marker);
+            } else {
+                marker.setPosition(MapUtil.getPosition(p));
+                marker.setTitle(p.getName());
+            }
+        }
     }
 
     @Override
@@ -154,13 +185,8 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_EDIT) {
             if (resultCode == RESULT_OK) {
-                Place p = Wloczykij.api.cache(Place.class).get(data.getStringExtra("place"));
-                if (!markers.containsValue(p.getResourceUrl())) {
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(MapUtil.getPosition(p)).title(p.getName()));
-                    markers.put(marker, p.getResourceUrl());
-                } else {
-                    // TODO: update existing marker (after marker editing is implemented)
-                }
+                Log.i(Wloczykij.TAG, "Finished editing place " + data.getStringExtra("place"));
+                updateMap();
             }
         }
     }

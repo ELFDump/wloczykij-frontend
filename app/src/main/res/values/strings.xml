@@ -49,5 +49,9 @@
     <string name="menu_add_place">Dodaj miejsce</string>
     <string name="menu_plan_trip">Zaplanuj</string>
 
-    <string name="image_load_error">Błąd pobierania obrazka</string>
+    <string name="image_load_error">Błąd pobierania obrazka. Spróbuj ponownie później.</string>
+    <string name="map_load_error">Wystąpił błąd podczas wczytywania mapy. Spróbuj ponownie później.</string>
+
+    <string name="place_saved">Zapisano</string>
+    <string name="place_save_error">Wystąpił błąd podczas zapisywania punktu. Spróbuj ponownie później.</string>
 </resources>

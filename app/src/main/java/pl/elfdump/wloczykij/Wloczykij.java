@@ -8,6 +8,8 @@ import pl.elfdump.wloczykij.utils.UserSettings;
 
 public class Wloczykij {
 
+    public static final String TAG = "Wloczykij";
+
     public static APIManager api = new APIManager("http://dom.krzysh.pl:8000/");
 
     private static Session session;
