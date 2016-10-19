@@ -29,6 +29,14 @@
           }
         },
         {
+          "client_id": "434052730158-neei3iahtv0bft026naqisadoptbn0ll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.elfdump.wloczykij",
+            "certificate_hash": "6233F8BE037DE1EE3DDD83C9D931404097DB4F13"
+          }
+        },
+        {
           "client_id": "434052730158-8dqkj0f5h1i70v1kna9fqo741r4lr3ra.apps.googleusercontent.com",
           "client_type": 3
         }
