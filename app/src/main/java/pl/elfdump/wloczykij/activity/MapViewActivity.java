@@ -68,13 +68,15 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
 
-        updateMap();
+        refreshMap();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        refreshMap();
+        if (mMap != null) {
+            refreshMap();
+        }
     }
 
     private void refreshMap() {
@@ -94,9 +96,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             protected void onPostExecute(Boolean success) {
                 if (success) {
                     Log.i(Wloczykij.TAG, "Updated place cache from server");
-                    if (mMap != null) {
-                        updateMap();
-                    }
+                    updateMap();
                 } else {
                     Toast.makeText(MapViewActivity.this, getString(R.string.map_load_error), Toast.LENGTH_LONG).show();
                 }
