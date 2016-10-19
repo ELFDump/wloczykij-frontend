@@ -28,5 +28,9 @@
     <string name="add_title">Dodawanie miejsca</string>
     <string name="add_tag">Dodaj tag</string>
     <string name="add_image">Dodaj zdjęcie</string>
+    <string name="error_required">jest wymagane</string>
+    <string name="error_required_a">jest wymagana</string>
+    <string name="photo">Zdjęcie</string>
+    <string name="name">Nazwa</string>
     <string name="tags">Tagi</string>
 </resources>

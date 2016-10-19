@@ -2,19 +2,20 @@ package pl.elfdump.wloczykij.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.klinker.android.sliding.SlidingActivity;
 
 import java.io.File;
-import java.io.IOException;
 
+import me.gujun.android.taggroup.TagGroup;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIManager;
@@ -37,22 +38,35 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
         enableFullscreen();
 
         findViewById(R.id.add_place_button).setOnClickListener(this);
+        findViewById(R.id.button_add_image).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.add_place_button:
-                place.setName(((EditText) findViewById(R.id.place_name)).getText().toString());
-                findViewById(R.id.add_place_button).setEnabled(false);
+                String name = ((EditText) findViewById(R.id.place_name)).getText().toString();
+
                 if (photoFile == null) {
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    photoFile = new File(getExternalCacheDir(), "photo" + System.currentTimeMillis() + ".jpg");
-                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                } else {
-                    savePlace();
+                    Toast.makeText(PlaceEditActivity.this, getString(R.string.photo) + " " + getString(R.string.error_required), Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(name.isEmpty()){
+                    Toast.makeText(PlaceEditActivity.this, getString(R.string.name) + " " + getString(R.string.error_required_a), Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                findViewById(R.id.add_place_button).setEnabled(false);
+
+                place.setName(name);
+                place.setTags(((TagGroup) findViewById(R.id.tag_group)).getTags());
+
+                savePlace();
+                break;
+            case R.id.button_add_image:
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                photoFile = new File(getExternalCacheDir(), "photo" + System.currentTimeMillis() + ".jpg");
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 break;
         }
     }
@@ -61,7 +75,10 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                savePlace();
+                Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getPath());
+
+                ((ImageView) findViewById(R.id.thumb_add_image)).setImageBitmap(bitmap);
+                findViewById(R.id.button_add_image).setAlpha(0);
             } else {
                 findViewById(R.id.add_place_button).setEnabled(true);
                 photoFile.delete();
