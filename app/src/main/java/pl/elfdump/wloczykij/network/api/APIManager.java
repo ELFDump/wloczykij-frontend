@@ -94,6 +94,8 @@ public class APIManager {
                     errorMessage = JsonUtils.deserialize(responseString, APIError.class).toString();
                 } catch (JsonDataException e) {
                     errorMessage = responseString;
+                } catch (NullPointerException e){
+                    errorMessage = "Unknown error";
                 }
                 throw new APIRequestException(String.format("The server responded with error %d: %s", responseCode, errorMessage));
             }
