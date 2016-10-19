@@ -168,6 +168,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 break;
 
             case R.id.action_refresh:
+                ((FloatingActionsMenu) findViewById(R.id.multiple_actions)).collapse();
                 refreshMap();
                 break;
         }

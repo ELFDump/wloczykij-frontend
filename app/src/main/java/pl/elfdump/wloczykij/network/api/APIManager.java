@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.Types;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
@@ -72,7 +73,10 @@ public class APIManager {
     }
 
     private ResponseBody internalSendRequest(String method, String url, @Nullable RequestBody body) throws APIRequestException {
-        Request.Builder builder = new Request.Builder().url(url).method(method, body);
+        return internalSendRequest(new Request.Builder().url(url).method(method, body));
+    }
+
+    private ResponseBody internalSendRequest(@NonNull Request.Builder builder) throws APIRequestException {
         if (token != null) {
             builder.addHeader("Authorization", "Token " + token);
         }
@@ -127,6 +131,7 @@ public class APIManager {
     }
 
     public Map<String, Bitmap> imageCache = new HashMap<>();
+
     public Bitmap downloadImage(String url) throws APIRequestException {
         if (!imageCache.containsKey(url)) {
             try (ResponseBody responseBody = internalSendRequest("GET", url, null)) {
@@ -134,6 +139,14 @@ public class APIManager {
             }
         }
         return imageCache.get(url);
+    }
+
+    public void uploadImage(String url, String mediaType, File file) throws APIRequestException {
+        Request.Builder builder = new Request.Builder()
+            .url(url)
+            .method("POST", RequestBody.create(MediaType.parse(mediaType), file))
+            .addHeader("Content-Disposition", "attachment; filename="+file.getName());
+        internalSendRequest(builder);
     }
 
     public Map<Class, APIModelManager> managers = new HashMap<>();
