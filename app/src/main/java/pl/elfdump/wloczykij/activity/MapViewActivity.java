@@ -46,6 +46,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         findViewById(R.id.action_add_place).setOnClickListener(this);
         findViewById(R.id.action_plan_trip).setOnClickListener(this);
+        findViewById(R.id.action_refresh).setOnClickListener(this);
 
         mapFragment.getMapAsync(this);
     }
@@ -73,7 +74,10 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     protected void onResume() {
         super.onResume();
+        refreshMap();
+    }
 
+    private void refreshMap() {
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... params) {
@@ -154,13 +158,17 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.action_plan_trip:
-                Toast.makeText(this, "Funkcja jeszcze niedostępna", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.todo), Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.action_add_place:
                 addingPlace = true;
                 ((FloatingActionsMenu) findViewById(R.id.multiple_actions)).collapse();
-                Toast.makeText(this, "Teraz kliknij na wybrane miejsce na mapie", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.place_add_click_map), Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.action_refresh:
+                refreshMap();
                 break;
         }
     }
