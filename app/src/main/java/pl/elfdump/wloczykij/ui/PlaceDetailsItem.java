@@ -1,4 +1,4 @@
-package pl.elfdump.wloczykij.models.ui;
+package pl.elfdump.wloczykij.ui;
 
 public class PlaceDetailsItem {
 

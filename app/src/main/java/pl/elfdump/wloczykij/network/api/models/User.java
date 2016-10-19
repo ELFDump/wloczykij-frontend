@@ -1,5 +1,7 @@
 package pl.elfdump.wloczykij.network.api.models;
 
+import pl.elfdump.wloczykij.network.api.APIModel;
+
 public class User extends APIModel {
     private String username;
     private String first_name;

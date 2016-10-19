@@ -3,16 +3,16 @@ package pl.elfdump.wloczykij.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -20,21 +20,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Collection;
+import java.util.HashMap;
+
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
-import pl.elfdump.wloczykij.data.DataManager;
-import pl.elfdump.wloczykij.data.map.MarkerManager;
-import pl.elfdump.wloczykij.utils.MapUtilities;
-
-import java.util.List;
-
+import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
+import pl.elfdump.wloczykij.utils.MapUtil;
 
 public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener {
 
     private GoogleMap mMap;
 
     private static final int MAP_LOCATION_PERMISSION_REQUEST = 1234;
+    private static final int PLACE_EDIT = 4321;
+
+    public HashMap<Marker, String> markers = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +66,28 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             mMap.setMyLocationEnabled(true);
         }
 
-        DataManager dataManager = Wloczykij.getSession().dataManager;
-        List<Place> places = dataManager.placeStorage.getPlaces();
+        new AsyncTask<Void, Void, Collection<Place>>() {
+            @Override
+            protected Collection<Place> doInBackground(Void... params) {
+                try {
+                    Wloczykij.api.manager(Place.class).cache().update();
+                    return Wloczykij.api.cache(Place.class).getAll();
+                } catch (APIRequestException e) {
+                    // TODO: handle errors
+                    e.printStackTrace();
+                    return null;
+                }
+            }
 
-        for(Place p : places){
-            LatLng position = MapUtilities.getPosition(p);
-            MarkerOptions markerOptions = new MarkerOptions().position(position).title(p.getName());
-            Marker marker = mMap.addMarker(markerOptions);
-            //marker.showInfoWindow();
+            @Override
+            protected void onPostExecute(Collection<Place> places) {
+                for (Place p : places) {
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(MapUtil.getPosition(p)).title(p.getName()));
+                    markers.put(marker, p.getResourceUrl());
+                }
+            }
+        }.execute();
 
-            dataManager.markerManager.references.put(marker, p);
-        }
 
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
@@ -94,11 +107,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public boolean onMarkerClick(Marker marker) {
         Intent intent = new Intent(this, PlaceDetailsActivity.class);
-
-        MarkerManager markerManager = Wloczykij.getSession().dataManager.markerManager;
-        Place place = markerManager.references.get(marker);
-
-        intent.putExtra("place", place);
+        intent.putExtra("place", Wloczykij.api.cache(Place.class).get(markers.get(marker)));
         startActivity(intent);
         return true;
     }
@@ -137,7 +146,22 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             
             Intent intent = new Intent(this, PlaceEditActivity.class);
             intent.putExtra("place", place);
-            startActivity(intent);
+            startActivityForResult(intent, PLACE_EDIT);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_EDIT) {
+            if (resultCode == RESULT_OK) {
+                Place p = Wloczykij.api.cache(Place.class).get(data.getStringExtra("place"));
+                if (!markers.containsValue(p.getResourceUrl())) {
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(MapUtil.getPosition(p)).title(p.getName()));
+                    markers.put(marker, p.getResourceUrl());
+                } else {
+                    // TODO: update existing marker (after marker editing is implemented)
+                }
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package pl.elfdump.wloczykij.network.api.models;
+package pl.elfdump.wloczykij.network.api;
 
 import android.support.annotation.Nullable;
 

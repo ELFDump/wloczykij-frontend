@@ -1,8 +1,9 @@
 package pl.elfdump.wloczykij.network.api.models;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+
+import pl.elfdump.wloczykij.network.api.APIModel;
 
 public class Place extends APIModel {
     private String name;

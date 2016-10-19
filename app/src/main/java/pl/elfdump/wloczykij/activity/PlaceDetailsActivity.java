@@ -9,13 +9,12 @@ import android.widget.Toast;
 import com.klinker.android.sliding.SlidingActivity;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
-import pl.elfdump.wloczykij.models.ui.PlaceDetailsItem;
-import pl.elfdump.wloczykij.models.ui.PlaceDetailsListAdapter;
+import pl.elfdump.wloczykij.ui.PlaceDetailsItem;
+import pl.elfdump.wloczykij.ui.PlaceDetailsListAdapter;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class PlaceDetailsActivity extends SlidingActivity {

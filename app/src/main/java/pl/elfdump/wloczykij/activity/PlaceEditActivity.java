@@ -1,5 +1,7 @@
 package pl.elfdump.wloczykij.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -41,7 +43,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
                     @Override
                     protected Boolean doInBackground(Place... params) {
                         try {
-                            Wloczykij.api.manager(Place.class).save(place);
+                            place = Wloczykij.api.manager(Place.class).cache().save(place);
                             return true;
                         } catch (APIRequestException e) {
                             e.printStackTrace();
@@ -51,13 +53,15 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
 
                     @Override
                     protected void onPostExecute(Boolean success) {
-                        findViewById(R.id.add_place_button).setEnabled(true);
                         if (success) {
-                            // TODO: Add marker to the map immediately
                             Toast.makeText(PlaceEditActivity.this, "Zapisano", Toast.LENGTH_SHORT).show();
+                            Intent result = new Intent();
+                            result.putExtra("place", place.getResourceUrl());
+                            setResult(Activity.RESULT_OK, result);
                             finish();
                         } else {
                             Toast.makeText(PlaceEditActivity.this, "Wystąpił błąd", Toast.LENGTH_SHORT).show();
+                            findViewById(R.id.add_place_button).setEnabled(true);
                         }
                     }
                 }.execute(place);

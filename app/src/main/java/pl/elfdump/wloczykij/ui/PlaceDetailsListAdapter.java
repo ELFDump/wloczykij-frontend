@@ -1,4 +1,4 @@
-package pl.elfdump.wloczykij.models.ui;
+package pl.elfdump.wloczykij.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import pl.elfdump.wloczykij.R;
-import pl.elfdump.wloczykij.models.ui.PlaceDetailsItem;
 
 import java.util.ArrayList;
 

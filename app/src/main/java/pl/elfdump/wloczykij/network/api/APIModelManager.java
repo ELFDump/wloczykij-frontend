@@ -2,13 +2,13 @@ package pl.elfdump.wloczykij.network.api;
 
 import com.squareup.moshi.Types;
 
+import java.util.Collection;
 import java.util.List;
-
-import pl.elfdump.wloczykij.network.api.models.APIModel;
 
 public class APIModelManager<T extends APIModel> {
     private APIManager api;
     private Class<T> type;
+    private APIModelCache<T> cache;
 
     /* package-access */ APIModelManager(APIManager api, Class<T> type) {
         this.api = api;
@@ -27,7 +27,7 @@ public class APIModelManager<T extends APIModel> {
      * List all objects of given type from database
      * @return List of all objects
      */
-    public List<T> getAll() throws APIRequestException {
+    public Collection<T> getAll() throws APIRequestException {
         return api.sendJsonRequest("GET", getEndpointUrl(), null, Types.newParameterizedType(List.class, type));
     }
 
@@ -94,5 +94,16 @@ public class APIModelManager<T extends APIModel> {
         } else {
             return api.sendJsonRequest("PUT", object.getResourceUrl(), object, type);
         }
+    }
+
+    /**
+     * Get (initializing if required) APIModelCache instance associated with this APIModelManager
+     * @return APIModelCache instance
+     */
+    public APIModelCache<T> cache() {
+        if (cache == null) {
+            cache = new APIModelCache<>(this);
+        }
+        return cache;
     }
 }
