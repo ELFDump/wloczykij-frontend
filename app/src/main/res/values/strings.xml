@@ -24,4 +24,9 @@
     <!-- MapView header -->
     <string name="header_explore">Eksploruj</string>
     <string name="header_filter">Filtruj</string>
+
+    <string name="add_title">Dodawanie miejsca</string>
+    <string name="add_tag">Dodaj tag</string>
+    <string name="add_image">Dodaj zdjęcie</string>
+    <string name="tags">Tagi</string>
 </resources>

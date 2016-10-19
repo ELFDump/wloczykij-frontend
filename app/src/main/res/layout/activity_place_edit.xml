@@ -23,8 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Dodawanie miejsca"
-                android:id="@+id/textView"
+                android:text="@string/add_title"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/white"/>
         </LinearLayout>
@@ -32,32 +31,76 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp">
+            android:layout_height="match_parent">
 
-            <com.github.florent37.materialtextfield.MaterialTextField
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                app:mtf_image="@drawable/ic_mail_grey600_24dp"
-                app:mtf_openKeyboardOnFocus="true"
-                app:mtf_labelColor="@android:color/black">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:background="@android:color/darker_gray">
 
-                <EditText
-                    android:id="@+id/place_name"
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/add_image"
+                    android:id="@+id/button_add_image"
+                    android:background="@android:color/darker_gray"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/place_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:met_floatingLabel="highlight"
+                        app:met_floatingLabelText="XXX"
+                        app:met_iconLeft="@mipmap/ic_launcher"
+                        android:hint="Nazwa"/>
+                </FrameLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nazwa"
-                    android:textColorHint="#000"
-                    android:textSize="15sp"
-                    android:textColor="@color/abc_primary_text_material_light"/>
+                    android:layout_marginTop="20dp">
 
-            </com.github.florent37.materialtextfield.MaterialTextField>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="@string/tags"
+                        android:layout_marginBottom="10dp"/>
 
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Dodaj"
-                android:id="@+id/add_place_button"/>
+                    <me.gujun.android.taggroup.TagGroup
+                        android:id="@+id/tag_group"
+                        style="@style/TagGroup"
+                        app:atg_isAppendMode="true"
+                        atg_inputHint="@string/add_tag"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp">
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dodaj"
+                        android:id="@+id/add_place_button"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

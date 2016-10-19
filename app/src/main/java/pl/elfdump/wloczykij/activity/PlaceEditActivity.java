@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.klinker.android.sliding.SlidingActivity;
+import me.gujun.android.taggroup.TagGroup;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
@@ -34,6 +35,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
         switch(view.getId()) {
             case R.id.add_place_button:
                 place.setName(((EditText) findViewById(R.id.place_name)).getText().toString());
+                place.setTags(((TagGroup) findViewById(R.id.tag_group)).getTags());
                 new AsyncTask<Place, Void, Boolean>() {
                     @Override
                     protected void onPreExecute() {

@@ -1,5 +1,6 @@
 package pl.elfdump.wloczykij.network.api.models;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,6 +47,10 @@ public class Place extends APIModel {
 
     public String[] getTags() {
         return tags.toArray(new String[tags.size()]);
+    }
+
+    public void setTags(String[] tags){
+        this.tags = Arrays.asList(tags);
     }
 
     public void setName(String name) {

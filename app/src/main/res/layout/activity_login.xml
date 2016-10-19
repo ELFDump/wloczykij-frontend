@@ -82,23 +82,6 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <com.github.florent37.materialtextfield.MaterialTextField
-                    android:id="@+id/input_nickname"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    app:mtf_image="@drawable/ic_mail_grey600_24dp"
-                    android:visibility="gone">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Nazwa użytkownika"
-                        android:textColor="#333"
-                        android:textColorHint="#666"
-                        android:textSize="15sp" />
-
-                </com.github.florent37.materialtextfield.MaterialTextField>
-
                 <LinearLayout
                     android:id="@+id/google_sign_out_layout"
                     android:layout_width="wrap_content"
