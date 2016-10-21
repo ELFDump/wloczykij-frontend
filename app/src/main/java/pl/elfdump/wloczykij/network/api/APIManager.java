@@ -63,6 +63,7 @@ public class APIManager {
     }
 
     public String requestToken(@NonNull LoginServiceProvider provider, @NonNull String authToken) throws APIRequestException {
+        this.token = null;
         loadEndpoints();
         APIToken tokenObj = sendJsonRequest("GET", getEndpointUrl("token") + provider.name().toLowerCase() + "/?token=" + authToken, null, APIToken.class);
         this.token = tokenObj.toString();
