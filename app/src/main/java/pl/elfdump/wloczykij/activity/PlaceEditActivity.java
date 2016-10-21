@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -29,8 +30,10 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
     private Place place;
     private File photoFile;
 
+    private Bitmap bitmap;
+
     @Override
-    public void init(Bundle savedInstanceState) {
+    public void init(Bundle state) {
         setContent(R.layout.activity_place_edit);
         place = (Place) getIntent().getSerializableExtra("place");
 
@@ -39,6 +42,30 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
 
         findViewById(R.id.add_place_button).setOnClickListener(this);
         findViewById(R.id.button_add_image).setOnClickListener(this);
+
+        if(state != null){
+            String path = state.getString("filePath");
+            if(path != null){
+                photoFile = new File(path);
+                setThumbnail(path);
+
+                bitmap = state.getParcelable("thumbnail_bitmap");
+                if(bitmap != null){
+                    setThumbnail(path);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle state){
+        if(photoFile != null){
+            String filePath = photoFile.getPath();
+            state.putString("filePath", filePath);
+            if(bitmap != null){
+                state.putParcelable("thumbnail_bitmap", bitmap);
+            }
+        }
     }
 
     @Override
@@ -75,16 +102,32 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getPath());
-
-                ((ImageView) findViewById(R.id.thumb_add_image)).setImageBitmap(bitmap);
-                findViewById(R.id.button_add_image).setAlpha(0);
+                setThumbnail(photoFile.getPath());
             } else {
                 findViewById(R.id.add_place_button).setEnabled(true);
                 photoFile.delete();
                 photoFile = null;
             }
         }
+    }
+
+    private void setThumbnail(String path){
+        new AsyncTask<String, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(String... paths) {
+                if(bitmap == null || !photoFile.getPath().equals(paths[0])){
+                    bitmap = BitmapFactory.decodeFile(paths[0]);
+                }
+
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                ((ImageView) findViewById(R.id.thumb_add_image)).setImageBitmap(bitmap);
+                findViewById(R.id.button_add_image).setAlpha(0);
+            }
+        }.execute(path);
     }
 
     private void savePlace() {
