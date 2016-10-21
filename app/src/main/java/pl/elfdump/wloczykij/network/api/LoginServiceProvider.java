@@ -1,4 +1,4 @@
-package pl.elfdump.wloczykij.network.login;
+package pl.elfdump.wloczykij.network.api;
 
 public enum LoginServiceProvider {
     GOOGLE

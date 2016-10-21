@@ -4,7 +4,7 @@
     <string name="app_name_uppercase">WŁÓCZYKIJ</string>
     <string name="app_description">Twoja wycieczka, Twój plan\n Zwiedzaj po swojemu</string>
 
-    <string name="login_with">Zaloguj się używając..</string>
+    <string name="login_with">Zaloguj się używając...</string>
     <string name="sign_out">Wyloguj się</string>
     <string name="username_busy">Wybrana nazwa użytkownika jest zajęta</string>
     <string name="error_occurred">Wystąpił błąd</string>

@@ -11,7 +11,7 @@ public class Wloczykij extends Application {
     public static final String TAG = "Wloczykij";
 
     public static APIManager api = new APIManager("http://api.wloczykij.eu:8000/");
-    public static Session session = new Session();
+    public static Session session = new Session(api);
     public static UserSettings settings;
 
     @Override
