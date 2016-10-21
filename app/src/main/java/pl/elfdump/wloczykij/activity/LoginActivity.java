@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 
 import android.widget.Toast;
 import com.rengwuxian.materialedittext.MaterialEditText;
+
+import java.util.Arrays;
+
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIBadRequestException;
@@ -47,21 +51,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus){
-        super.onWindowFocusChanged(hasFocus);
-
-        if (hasFocus){
-            Animation move_from_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_top);
-            Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
-            Animation fade_in = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-
-            findViewById(R.id.app_icon).startAnimation(move_from_top);
-            findViewById(R.id.login_main_layout).startAnimation(fade_in);
-            findViewById(R.id.login_buttons_layout).startAnimation(move_from_bottom);
-        }
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
 
@@ -69,8 +58,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (token != null){
             Wloczykij.api.setToken(token);
             nextActivity();
+            return;
         }
 
+        Animation move_from_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_top);
+        Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
+        Animation fade_in = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+
+        findViewById(R.id.app_icon).startAnimation(move_from_top);
+        findViewById(R.id.login_main_layout).startAnimation(fade_in);
+        findViewById(R.id.login_buttons_layout).startAnimation(move_from_bottom);
     }
 
     private void afterLogin(final String token){
@@ -92,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             protected void onPostExecute(User user) {
                 if(user != null){
                     Wloczykij.getSession().loggedOnUser = user;
+                    Log.d(Wloczykij.TAG, "Followed tags: " + Arrays.toString(user.getFollowedTags()));
                     if(user.isFirstLogin()){
                         findViewById(R.id.login_with).setVisibility(View.GONE);
                         findViewById(R.id.setup_username_layout).setVisibility(View.VISIBLE);
