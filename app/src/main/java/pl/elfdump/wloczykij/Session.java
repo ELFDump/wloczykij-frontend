@@ -5,5 +5,4 @@ import pl.elfdump.wloczykij.utils.UserSettings;
 
 public class Session {
     public User loggedOnUser;
-    public UserSettings settings;
 }

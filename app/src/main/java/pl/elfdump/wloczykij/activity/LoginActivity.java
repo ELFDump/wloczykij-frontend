@@ -36,8 +36,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Wloczykij.onStart(this);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -54,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onStart() {
         super.onStart();
 
-        String token = Wloczykij.getSettings().getToken();
+        String token = Wloczykij.settings.getToken();
         if (token != null){
             Wloczykij.api.setToken(token);
             nextActivity();
@@ -88,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected void onPostExecute(User user) {
                 if(user != null){
-                    Wloczykij.getSession().loggedOnUser = user;
+                    Wloczykij.session.loggedOnUser = user;
                     Log.d(Wloczykij.TAG, "Followed tags: " + Arrays.toString(user.getFollowedTags()));
                     if(user.isFirstLogin()){
                         findViewById(R.id.login_with).setVisibility(View.GONE);
@@ -98,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
                         findViewById(R.id.setup_username_layout).startAnimation(move_from_bottom);
                     }else{
-                        Wloczykij.getSettings().setToken(token);
+                        Wloczykij.settings.setToken(token);
                         nextActivity();
                     }
                 }
@@ -199,7 +197,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     protected Integer doInBackground(String... params) {
                         User user;
                         try {
-                            user = (User) Wloczykij.getSession().loggedOnUser.clone();
+                            user = (User) Wloczykij.session.loggedOnUser.clone();
                         } catch (CloneNotSupportedException e) {
                             e.printStackTrace();
                             return REQUEST_ERROR;
