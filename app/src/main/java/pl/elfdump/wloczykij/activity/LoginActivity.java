@@ -51,21 +51,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus){
-        super.onWindowFocusChanged(hasFocus);
-
-        if (hasFocus){
-            Animation move_from_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_top);
-            Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
-            Animation fade_in = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-
-            findViewById(R.id.app_icon).startAnimation(move_from_top);
-            findViewById(R.id.login_main_layout).startAnimation(fade_in);
-            findViewById(R.id.login_buttons_layout).startAnimation(move_from_bottom);
-        }
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
 
@@ -73,8 +58,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (token != null){
             Wloczykij.api.setToken(token);
             nextActivity();
+            return;
         }
 
+        Animation move_from_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_top);
+        Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
+        Animation fade_in = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+
+        findViewById(R.id.app_icon).startAnimation(move_from_top);
+        findViewById(R.id.login_main_layout).startAnimation(fade_in);
+        findViewById(R.id.login_buttons_layout).startAnimation(move_from_bottom);
     }
 
     private void afterLogin(final String token){
