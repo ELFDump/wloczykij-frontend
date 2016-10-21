@@ -5,14 +5,18 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import android.util.Log;
 import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.Types;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -22,6 +26,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import pl.elfdump.wloczykij.network.login.LoginServiceProvider;
+import pl.elfdump.wloczykij.utils.JsonSerializer;
 import pl.elfdump.wloczykij.utils.JsonUtils;
 
 public class APIManager {
@@ -97,6 +102,16 @@ public class APIManager {
                 } catch (NullPointerException e){
                     errorMessage = "Unknown error";
                 }
+
+                if(errorMessage == null){
+                    Map<String, List<String>> errors = JsonSerializer.deserialize(responseString, Types.newParameterizedType(
+                            Map.class,
+                            String.class,
+                            Types.newParameterizedType(List.class, String.class)));
+
+                    throw new APIBadRequestException(errors);
+                }
+
                 throw new APIRequestException(String.format("The server responded with error %d: %s", responseCode, errorMessage));
             }
 

@@ -1,21 +1,21 @@
 package pl.elfdump.wloczykij.utils;
 
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
+import com.squareup.moshi.*;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Map;
 
-class JsonSerializer {
+public class JsonSerializer {
 
-    protected static String serialize(Object object){
+    public static String serialize(Object object){
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter jsonAdapter = moshi.adapter(object.getClass());
 
         return jsonAdapter.toJson(object);
     }
 
-    protected static <T> T deserialize(String json, Type clazz){
+    public static <T> T deserialize(String json, Type clazz){
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<T> jsonAdapter = moshi.adapter(clazz);
         Object result = null;

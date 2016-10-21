@@ -71,7 +71,7 @@
                         app:met_floatingLabel="highlight"
                         app:met_floatingLabelText="XXX"
                         app:met_iconLeft="@mipmap/ic_launcher"
-                        android:hint="Nazwa"/>
+                        android:hint="@string/name"/>
                 </FrameLayout>
 
                 <LinearLayout

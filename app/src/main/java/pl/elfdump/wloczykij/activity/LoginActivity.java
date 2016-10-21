@@ -1,13 +1,21 @@
 package pl.elfdump.wloczykij.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import android.widget.Toast;
+import com.rengwuxian.materialedittext.MaterialEditText;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
+import pl.elfdump.wloczykij.network.api.APIBadRequestException;
+import pl.elfdump.wloczykij.network.api.APIRequestException;
+import pl.elfdump.wloczykij.network.api.models.User;
 import pl.elfdump.wloczykij.network.login.GoogleLoginProvider;
 import pl.elfdump.wloczykij.network.login.LoginCallback;
 import pl.elfdump.wloczykij.network.login.LoginProvider;
@@ -31,6 +39,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // Button listeners
         findViewById(R.id.google_sign_in_button).setOnClickListener(this);
         findViewById(R.id.google_sign_out_button).setOnClickListener(this);
+        findViewById(R.id.submit_nickname).setOnClickListener(this);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus){
+            Animation move_from_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_top);
+            Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
+            Animation fade_in = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+
+            findViewById(R.id.app_icon).startAnimation(move_from_top);
+            findViewById(R.id.login_main_layout).startAnimation(fade_in);
+            findViewById(R.id.login_buttons_layout).startAnimation(move_from_bottom);
+        }
     }
 
     @Override
@@ -45,10 +69,45 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void afterLogin(String token){
-        Wloczykij.getSettings().setToken(token);
+    private void afterLogin(final String token){
 
-        nextActivity();
+        new AsyncTask<Void, Void, User>() {
+            @Override
+            protected User doInBackground(Void... params) {
+                User me = null;
+                try {
+                    me = Wloczykij.api.sendJsonRequest("GET", Wloczykij.api.getEndpointUrl("me"), null, User.class);
+                } catch (APIRequestException e) {
+                    e.printStackTrace();
+                }
+
+                return me;
+            }
+
+            @Override
+            protected void onPostExecute(User user) {
+                if(user != null){
+                    Wloczykij.getSession().loggedOnUser = user;
+                    if(user.isFirstLogin()){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                findViewById(R.id.login_with).setVisibility(View.GONE);
+                                findViewById(R.id.setup_username_layout).setVisibility(View.VISIBLE);
+                                findViewById(R.id.app_description).setVisibility(View.GONE);
+
+                                Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
+                                findViewById(R.id.setup_username_layout).startAnimation(move_from_bottom);
+                            }
+                        });
+                    }else{
+                        Wloczykij.getSettings().setToken(token);
+                        nextActivity();
+                    }
+                }
+            }
+        }.execute();
+
     }
 
     private void nextActivity(){
@@ -123,9 +182,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void success(String token) {
                         mStatusTextView.setText("");
-
+                        findViewById(R.id.login_with).setVisibility(View.GONE);
                         findViewById(R.id.google_sign_in_button).setVisibility(View.VISIBLE);
                         findViewById(R.id.google_sign_out_layout).setVisibility(View.GONE);
+
                     }
 
                     @Override
@@ -133,6 +193,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     }
                 });
+                break;
+            case R.id.submit_nickname:
+
+                String nickname = ((MaterialEditText) findViewById(R.id.login_username)).getText().toString();
+
+                new AsyncTask<String, Void, Integer>() {
+                    @Override
+                    protected Integer doInBackground(String... params) {
+                        User user;
+                        try {
+                            user = (User) Wloczykij.getSession().loggedOnUser.clone();
+                        } catch (CloneNotSupportedException e) {
+                            e.printStackTrace();
+                            return 0;
+                        }
+
+                        user.setUsername(params[0]);
+
+                        try {
+                            Wloczykij.api.cache(User.class).save(user);
+                        } catch (APIBadRequestException e) {
+                            if(e.getErrors().containsKey("username")){
+                                return 2;
+                            }
+                        } catch (APIRequestException e) {
+                            e.printStackTrace();
+                            return 0;
+                        }
+
+                        return 1;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Integer status) {
+
+                        if(status == 2){
+                            Toast.makeText(getApplicationContext(), R.string.username_busy, Toast.LENGTH_SHORT).show();
+                        }else if(status == 0){
+                            Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                        }else{
+                            nextActivity();
+                        }
+
+                    }
+                }.execute(nickname);
+
                 break;
         }
     }
