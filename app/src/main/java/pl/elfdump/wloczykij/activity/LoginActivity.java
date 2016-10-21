@@ -26,6 +26,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView mStatusTextView;
     private LoginProvider loginProvider;
 
+    private static final int REQUEST_ERROR = 0;
+    private static final int REQUEST_OK = 1;
+    private static final int REQUEST_ERROR_USERNAME = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Wloczykij.onStart(this);
@@ -89,17 +93,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if(user != null){
                     Wloczykij.getSession().loggedOnUser = user;
                     if(user.isFirstLogin()){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                findViewById(R.id.login_with).setVisibility(View.GONE);
-                                findViewById(R.id.setup_username_layout).setVisibility(View.VISIBLE);
-                                findViewById(R.id.app_description).setVisibility(View.GONE);
+                        findViewById(R.id.login_with).setVisibility(View.GONE);
+                        findViewById(R.id.setup_username_layout).setVisibility(View.VISIBLE);
+                        findViewById(R.id.app_description).setVisibility(View.GONE);
 
-                                Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
-                                findViewById(R.id.setup_username_layout).startAnimation(move_from_bottom);
-                            }
-                        });
+                        Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
+                        findViewById(R.id.setup_username_layout).startAnimation(move_from_bottom);
                     }else{
                         Wloczykij.getSettings().setToken(token);
                         nextActivity();
@@ -185,7 +184,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         findViewById(R.id.login_with).setVisibility(View.GONE);
                         findViewById(R.id.google_sign_in_button).setVisibility(View.VISIBLE);
                         findViewById(R.id.google_sign_out_layout).setVisibility(View.GONE);
-
                     }
 
                     @Override
@@ -206,7 +204,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             user = (User) Wloczykij.getSession().loggedOnUser.clone();
                         } catch (CloneNotSupportedException e) {
                             e.printStackTrace();
-                            return 0;
+                            return REQUEST_ERROR;
                         }
 
                         user.setUsername(params[0]);
@@ -215,22 +213,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Wloczykij.api.cache(User.class).save(user);
                         } catch (APIBadRequestException e) {
                             if(e.getErrors().containsKey("username")){
-                                return 2;
+                                return REQUEST_ERROR_USERNAME;
                             }
                         } catch (APIRequestException e) {
                             e.printStackTrace();
-                            return 0;
+                            return REQUEST_ERROR;
                         }
 
-                        return 1;
+                        return REQUEST_OK;
                     }
 
                     @Override
                     protected void onPostExecute(Integer status) {
 
-                        if(status == 2){
+                        if(status == REQUEST_ERROR_USERNAME){
                             Toast.makeText(getApplicationContext(), R.string.username_busy, Toast.LENGTH_SHORT).show();
-                        }else if(status == 0){
+                        }else if(status == REQUEST_ERROR){
                             Toast.makeText(getApplicationContext(), R.string.error_occurred, Toast.LENGTH_SHORT).show();
                         }else{
                             nextActivity();
