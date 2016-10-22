@@ -33,6 +33,8 @@ import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
 import pl.elfdump.wloczykij.utils.MapUtil;
 import pl.elfdump.wloczykij.utils.NetworkUtil;
+import pl.elfdump.wloczykij.utils.PlaceUtil;
+import pl.elfdump.wloczykij.utils.Util;
 
 public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener {
 
@@ -144,6 +146,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         for (Place p : Wloczykij.api.cache(Place.class).getAll()) {
             if (!markers.containsValue(p.getResourceUrl())) {
                 Marker marker = mMap.addMarker(new MarkerOptions().position(MapUtil.getPosition(p)).title(p.getName()));
+                marker.setIcon(PlaceUtil.getMatchingIcon(p));
                 markers.put(marker, p.getResourceUrl());
             }
         }
@@ -156,6 +159,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 markers.remove(marker);
             } else {
                 marker.setPosition(MapUtil.getPosition(p));
+                marker.setIcon(PlaceUtil.getMatchingIcon(p));
                 marker.setTitle(p.getName());
             }
         }
