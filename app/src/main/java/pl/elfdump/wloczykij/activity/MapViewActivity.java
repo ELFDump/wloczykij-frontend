@@ -1,7 +1,6 @@
 package pl.elfdump.wloczykij.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -47,12 +46,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     private BroadcastReceiver broadcast = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
-            Activity currentActivity = Wloczykij.getCurrentActivity();
-            if(currentActivity == null){
-                return;
-            }
-
-            FrameLayout layout = (FrameLayout) currentActivity.findViewById(R.id.layout_offline);
+            FrameLayout layout = (FrameLayout) findViewById(R.id.layout_offline);
 
             if(Util.isOnline(context)){
                 layout.setVisibility(View.GONE);
@@ -104,7 +98,6 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     protected void onResume() {
         super.onResume();
-        Wloczykij.setCurrentActivity(this);
         registerReceiver(broadcast, filter);
 
         if (mMap != null) {
@@ -115,20 +108,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onPause(){
         unregisterReceiver(broadcast);
-        clearCurrentActivity();
         super.onPause();
-    }
-
-    @Override
-    protected void onDestroy(){
-        clearCurrentActivity();
-        super.onDestroy();
-    }
-
-    private void clearCurrentActivity(){
-        Activity currActivity = Wloczykij.getCurrentActivity();
-        if (this.equals(currActivity))
-            Wloczykij.setCurrentActivity(null);
     }
 
     private void refreshMap() {
