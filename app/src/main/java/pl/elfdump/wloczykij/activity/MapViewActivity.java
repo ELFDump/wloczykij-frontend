@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,9 +18,12 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -36,7 +40,7 @@ import pl.elfdump.wloczykij.utils.NetworkUtil;
 import pl.elfdump.wloczykij.utils.PlaceUtil;
 import pl.elfdump.wloczykij.utils.Util;
 
-public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener {
+public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener, GoogleMap.OnMyLocationChangeListener {
 
     private static final int MAP_LOCATION_PERMISSION_REQUEST = 1234;
     private static final int PLACE_EDIT = 4321;
@@ -93,6 +97,15 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
+        mMap.setOnMyLocationChangeListener(this);
+
+        // Set starting camera position
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
+            /* position = */ new LatLng(51.759248, 19.455983), // Centrum Łodzi
+            /* zoom = */ 15,
+            /* tilt = */ 90,
+            /* orientation = */ 0
+        )));
 
         refreshMap();
     }
@@ -239,6 +252,16 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 Log.i(Wloczykij.TAG, "Finished editing place " + data.getStringExtra("place"));
                 updateMap();
             }
+        }
+    }
+
+    private boolean locationSet = false;
+
+    @Override
+    public void onMyLocationChange(Location location) {
+        if (!locationSet) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14));
+            locationSet = true;
         }
     }
 }
