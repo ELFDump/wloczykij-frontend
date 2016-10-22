@@ -3,6 +3,7 @@ package pl.elfdump.wloczykij;
 import pl.elfdump.wloczykij.network.api.APIBadRequestException;
 import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
+import pl.elfdump.wloczykij.network.api.models.Tag;
 import pl.elfdump.wloczykij.network.api.models.User;
 import pl.elfdump.wloczykij.utils.UserSettings;
 
@@ -17,6 +18,10 @@ public class Session {
 
     public void updateUserData() throws APIRequestException {
         loggedOnUser = api.sendJsonRequest("GET", api.getEndpointUrl("me"), null, User.class);
+    }
+
+    public void updateData() throws APIRequestException {
+        Wloczykij.api.cache(Tag.class).update();
     }
 
     /**

@@ -171,6 +171,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             protected Boolean doInBackground(Void... params) {
                 try {
                     Wloczykij.session.updateUserData();
+                    Wloczykij.session.updateData();
                     return true;
                 } catch (APIRequestException e) {
                     e.printStackTrace();
