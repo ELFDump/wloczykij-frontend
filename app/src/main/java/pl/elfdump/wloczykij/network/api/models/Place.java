@@ -8,6 +8,7 @@ import pl.elfdump.wloczykij.network.api.APIModel;
 
 public class Place extends APIModel {
     private String name;
+    private String description;
     private String author;
     private String date_created;
     private String date_modified;
@@ -77,4 +78,13 @@ public class Place extends APIModel {
     public void removeTag(String tag) {
         this.tags.remove(tag);
     }
+
+    public String getDescription(){
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
 }
