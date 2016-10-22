@@ -1,14 +1,12 @@
 package pl.elfdump.wloczykij.activity;
 
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -142,11 +140,14 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
             (ButtonAction) findViewById(R.id.rating_super),
         };
 
-        for(ButtonAction button : buttons)
+        for(ButtonAction button : buttons) {
             button.getImageView().clearAnimation();
+            button.getTextView().setTypeface(null, Typeface.NORMAL);
+        }
 
         if (myRating > 0) {
             buttons[myRating - 1].startBounceAnimation();
+            buttons[myRating - 1].getTextView().setTypeface(null, Typeface.BOLD);
         }
     }
 
