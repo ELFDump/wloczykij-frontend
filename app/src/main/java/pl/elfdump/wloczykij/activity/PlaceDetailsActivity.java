@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,7 +14,6 @@ import pl.elfdump.wloczykij.ui.PlaceDetailsItem;
 import pl.elfdump.wloczykij.ui.PlaceDetailsListAdapter;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
-import pl.elfdump.wloczykij.ui.views.ButtonAction;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -72,20 +69,6 @@ public class PlaceDetailsActivity extends SlidingActivity {
             }.execute(photo);
         }
 
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-        //Animation move_from_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_top);
-        //Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
-        Animation bounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
-        // TODO
-        //findViewById(R.id.rating_super).startAnimation(move_from_top);
-        ButtonAction buttonAction = (ButtonAction) findViewById(R.id.rating_good);
-        buttonAction.getImageView().startAnimation(bounce);
-        //findViewById(R.id.rating_ok).startAnimation(move_from_top);
-        //findViewById(R.id.rating_awful).startAnimation(move_from_bottom);
     }
 
     @Override

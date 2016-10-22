@@ -37,6 +37,7 @@
 
     <string name="photo">Zdjęcie</string>
     <string name="name">Nazwa</string>
+    <string name="description">Krótki opis</string>
     <string name="tags">Tagi</string>
     <string name="added_by">Dodał/a:</string>
 
@@ -46,7 +47,11 @@
     <string name="rating_awful">Okropne</string>
 
     <string name="no_description">Bez opisu</string>
+    <string name="share_title">w Włóczykij</string>
 
     <string name="nickname">Nazwa użytkownika</string>
     <string name="go_further">Przejdź dalej</string>
+
+    <string name="com_facebook_loginview_log_in_button_long">Facebook</string>
+    <string name="common_signin_button_text_long">Google</string>
 </resources>
