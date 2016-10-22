@@ -4,7 +4,7 @@
     <string name="app_name_uppercase">WŁÓCZYKIJ</string>
     <string name="app_description">Twoja wycieczka, Twój plan\n Zwiedzaj po swojemu</string>
 
-    <string name="login_with">Zaloguj się używając...</string>
+    <string name="login_with">Zaloguj się używając…</string>
     <string name="sign_out">Wyloguj się</string>
     <string name="username_busy">Wybrana nazwa użytkownika jest zajęta</string>
     <string name="error_occurred">Wystąpił błąd</string>
@@ -24,7 +24,6 @@
 
     <string name="todo">Funkcja jeszcze niedostępna</string>
 
-    <!-- MapView header -->
     <string name="header_explore">Eksploruj</string>
     <string name="header_filter">Filtruj</string>
 
@@ -45,6 +44,9 @@
     <string name="rating_good">Dobre</string>
     <string name="rating_ok">Ok</string>
     <string name="rating_awful">Okropne</string>
+    <string name="no_rating">Brak ocen</string>
+    <string name="avg_rating">Średnia ocena: %.2f</string>
+    <string name="num_rating">Głosów: %d</string>
 
     <string name="no_description">Bez opisu</string>
 

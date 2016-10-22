@@ -134,7 +134,7 @@ public class Place extends APIModel {
         return this.visit.getRating();
     }
 
-    public float getRatingAverage() {
+    public Float getRatingAverage() {
         return rating_avg;
     }
 

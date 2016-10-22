@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.klinker.android.sliding.SlidingActivity;
@@ -60,6 +61,7 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
 
         updateVisitedButton(place.getVisit() != null, false);
         updateRatingButtons(place.getMyRating());
+        updateAverageRatingText(place.getRatingAverage(), place.getRatingCount());
 
         String[] photos = place.getPhotos();
         if (photos.length > 0) {
@@ -146,6 +148,11 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
         if (myRating > 0) {
             buttons[myRating - 1].getImageView().startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce));
         }
+    }
+
+    private void updateAverageRatingText(Float ratingAverage, int ratingCount) {
+        ((TextView) findViewById(R.id.avg_rating)).setText(ratingCount > 0 ? getString(R.string.avg_rating, ratingAverage) : getString(R.string.no_rating));
+        ((TextView) findViewById(R.id.num_rating)).setText(getString(R.string.num_rating, ratingCount));
     }
 
     @Override
