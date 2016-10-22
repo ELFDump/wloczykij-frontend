@@ -122,7 +122,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
 
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                Intent chooserIntent = Intent.createChooser(galleryIntent, "Select image");
+                Intent chooserIntent = Intent.createChooser(galleryIntent, getString(R.string.add_image));
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
 
                 startActivityForResult(chooserIntent, RC_SELECT_IMAGE);
