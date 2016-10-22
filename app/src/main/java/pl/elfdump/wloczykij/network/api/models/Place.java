@@ -9,8 +9,21 @@ import pl.elfdump.wloczykij.network.api.APIModel;
 
 public class Place extends APIModel {
     public static class Visit extends APIModel {
-        String date_visited;
-        int rating;
+        private String date_visited;
+        private int rating;
+
+        // TODO: Convert to Date
+        public String getDateVisited() {
+            return date_visited;
+        }
+
+        public int getRating() {
+            return rating;
+        }
+
+        public void setRating(int rating) {
+            this.rating = rating;
+        }
     }
 
     private String name;
@@ -113,12 +126,12 @@ public class Place extends APIModel {
     // TODO: Convert to Date
     public String getDateVisited() {
         if (this.visit == null) return null;
-        return this.visit.date_visited;
+        return this.visit.getDateVisited();
     }
 
     public int getMyRating() {
         if (this.visit == null) return 0;
-        return this.visit.rating;
+        return this.visit.getRating();
     }
 
     public float getRatingAverage() {

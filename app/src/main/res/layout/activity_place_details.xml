@@ -52,70 +52,77 @@
 
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:background="@color/colorPrimary">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/your_rating"
-                android:id="@+id/textView"
-                android:layout_gravity="center"
-                android:textColor="@color/white"/>
-        </FrameLayout>
-
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="87dp"
-            android:weightSum="1"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical|center_horizontal"
-            android:background="@color/material_grey_300">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/your_rating">
 
-            <pl.elfdump.wloczykij.ui.views.ButtonAction
-                android:id="@+id/rating_super"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:src="@drawable/ic_sentiment_very_satisfied_black_24dp"
-                app:iconSize="45"
-                android:text="@string/rating_super"
-                android:textColor="@color/brightBlueGray"
-                android:gravity="center_vertical"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="@color/colorPrimary">
 
-            <pl.elfdump.wloczykij.ui.views.ButtonAction
-                android:id="@+id/rating_good"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:src="@drawable/ic_sentiment_satisfied_black_24dp"
-                app:iconSize="45"
-                android:text="@string/rating_good"
-                android:textColor="@color/brightBlueGray"
-                android:gravity="center_vertical"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/your_rating"
+                    android:id="@+id/textView"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"/>
+            </FrameLayout>
 
-            <pl.elfdump.wloczykij.ui.views.ButtonAction
-                android:id="@+id/rating_ok"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:src="@drawable/ic_sentiment_neutral_black_24dp"
-                app:iconSize="45"
-                android:text="@string/rating_ok"
-                android:textColor="@color/brightBlueGray"
-                android:gravity="center_vertical"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="87dp"
+                android:weightSum="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical|center_horizontal"
+                android:background="@color/material_grey_300">
 
-            <pl.elfdump.wloczykij.ui.views.ButtonAction
-                android:id="@+id/rating_awful"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:src="@drawable/ic_sentiment_dissatisfied_black_24dp"
-                app:iconSize="45"
-                android:text="@string/rating_awful"
-                android:textColor="@color/brightBlueGray"
-                android:gravity="center_vertical"/>
+                <pl.elfdump.wloczykij.ui.views.ButtonAction
+                    android:id="@+id/rating_super"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:src="@drawable/ic_sentiment_very_satisfied_black_24dp"
+                    app:iconSize="45"
+                    android:text="@string/rating_super"
+                    android:textColor="@color/brightBlueGray"
+                    android:gravity="center_vertical"/>
 
+                <pl.elfdump.wloczykij.ui.views.ButtonAction
+                    android:id="@+id/rating_good"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:src="@drawable/ic_sentiment_satisfied_black_24dp"
+                    app:iconSize="45"
+                    android:text="@string/rating_good"
+                    android:textColor="@color/brightBlueGray"
+                    android:gravity="center_vertical"/>
+
+                <pl.elfdump.wloczykij.ui.views.ButtonAction
+                    android:id="@+id/rating_ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:src="@drawable/ic_sentiment_neutral_black_24dp"
+                    app:iconSize="45"
+                    android:text="@string/rating_ok"
+                    android:textColor="@color/brightBlueGray"
+                    android:gravity="center_vertical"/>
+
+                <pl.elfdump.wloczykij.ui.views.ButtonAction
+                    android:id="@+id/rating_awful"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:src="@drawable/ic_sentiment_dissatisfied_black_24dp"
+                    app:iconSize="45"
+                    android:text="@string/rating_awful"
+                    android:textColor="@color/brightBlueGray"
+                    android:gravity="center_vertical"/>
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
