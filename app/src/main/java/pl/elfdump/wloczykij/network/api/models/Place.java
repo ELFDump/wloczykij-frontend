@@ -8,7 +8,7 @@ import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.network.api.APIModel;
 
 public class Place extends APIModel {
-    public class Visit extends APIModel {
+    public static class Visit extends APIModel {
         String date_visited;
         int rating;
     }
@@ -24,7 +24,7 @@ public class Place extends APIModel {
     private List<String> tags = new LinkedList<>();
     private String visit_url;
     private Visit visit;
-    private float rating_avg;
+    private Float rating_avg;
     private int rating_count;
     private int visit_count;
 
