@@ -27,7 +27,7 @@ public class PlaceUtil {
         put("Pomnik/rzeźba", R.drawable.ic_monument);
         put("Zabytek", R.drawable.ic_antique);
         put("Kościół", R.drawable.ic_church);
-        put("Cmentarz", R.drawable.ic_cemetery;
+        put("Cmentarz", R.drawable.ic_cemetery);
         put("Zamek", R.drawable.ic_castle);
         put("Sport", R.drawable.ic_sport);
         put("Stadion", R.drawable.ic_stadium);
@@ -35,7 +35,7 @@ public class PlaceUtil {
         put("Piłka nożna", R.drawable.ic_soccer);
         put("Piłka ręczna", R.drawable.ic_handball);
         put("Piłka koszykowa", R.drawable.ic_basketball);
-        put("Piłka siatkowa", R.drawable.ic_volleytball);
+        put("Piłka siatkowa", R.drawable.ic_volleyball);
         put("Siłownia", R.drawable.ic_gym);
         put("Basen/pływalnia", R.drawable.ic_swimming1);
         put("Kąpielisko", R.drawable.ic_swimming2);
