@@ -108,7 +108,7 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
         models.add(new PlaceDetailsItem(R.drawable.ic_face_black_24dp, place.getAuthor()));
 
         String tags = "";
-        if (place.getTags().length > 0) {
+        if (!place.getTags().isEmpty()) {
             boolean first = true;
             for (String tag : place.getTags()) {
                 if (!first) tags += ", ";

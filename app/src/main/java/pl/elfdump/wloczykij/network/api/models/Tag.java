@@ -6,6 +6,7 @@ import pl.elfdump.wloczykij.network.api.APIModel;
 
 public class Tag extends APIModel {
     private String name;
+    private String parent;
     private int place_count;
 
     @Nullable
@@ -32,5 +33,9 @@ public class Tag extends APIModel {
 
     public void setPlaceCount(int place_count) {
         this.place_count = place_count;
+    }
+
+    public String getParent() {
+        return parent;
     }
 }

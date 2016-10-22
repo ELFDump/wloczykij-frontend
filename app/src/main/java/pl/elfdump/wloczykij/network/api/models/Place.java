@@ -75,8 +75,8 @@ public class Place extends APIModel {
         return photo_upload;
     }
 
-    public String[] getTags() {
-        return tags.toArray(new String[tags.size()]);
+    public List<String> getTags() {
+        return tags;
     }
 
     public void setTags(String[] tags){
