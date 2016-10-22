@@ -83,6 +83,10 @@ public class ButtonAction extends LinearLayout {
         return imageView;
     }
 
+    public TextView getTextView(){
+        return textView;
+    }
+
     public void startBounceAnimation(){
         imageView.startAnimation(bounce);
     }
