@@ -21,6 +21,7 @@ import pl.elfdump.wloczykij.ui.PlaceDetailsItem;
 import pl.elfdump.wloczykij.ui.PlaceDetailsListAdapter;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
+import pl.elfdump.wloczykij.ui.views.ButtonAction;
 
 import java.util.ArrayList;
 import java.util.Random;
