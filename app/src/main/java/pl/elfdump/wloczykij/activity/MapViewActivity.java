@@ -83,6 +83,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void refreshMap() {
+        Log.d(Wloczykij.TAG, "Start cache update");
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... params) {
