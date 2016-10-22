@@ -15,7 +15,7 @@ public class PlaceUtil {
 
     private static final Map<String, Integer> icons = new HashMap<String, Integer>(){{
         put("Jedzenie", R.drawable.ic_restaurant);
-        put("Kebab", drawable.ic_kebab);
+        put("Kebab", R.drawable.ic_kebab);
         put("Bar", R.drawable.ic_bar);
         put("Pizzeria", R.drawable.ic_pizzeria);
         put("Sushi", R.drawable.ic_sushi);
