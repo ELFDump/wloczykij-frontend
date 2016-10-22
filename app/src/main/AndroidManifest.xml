@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="pl.elfdump.wloczykij">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -13,6 +14,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:replace="android:icon"
         android:name=".Wloczykij">
         <activity android:name=".activity.LoginActivity"
                   android:theme="@style/LoginTheme">
@@ -51,7 +53,10 @@
             android:taskAffinity=""
             android:theme="@style/Theme.Sliding.Light">
         </activity>
-        <activity android:name=".activity.FilterTagsActivity">
+        <activity android:name=".activity.FilterTagsActivity"
+                  android:excludeFromRecents="true"
+                  android:taskAffinity=""
+                  android:theme="@style/Theme.Sliding.Light">
         </activity>
 
         <activity

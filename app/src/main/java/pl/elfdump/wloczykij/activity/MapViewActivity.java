@@ -1,7 +1,11 @@
 package pl.elfdump.wloczykij.activity;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -28,6 +33,7 @@ import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
 import pl.elfdump.wloczykij.utils.MapUtil;
+import pl.elfdump.wloczykij.utils.Util;
 
 public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener {
 
@@ -36,6 +42,26 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
     private GoogleMap mMap;
     private HashMap<Marker, String> markers = new HashMap<>();
+
+    private IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+    private BroadcastReceiver broadcast = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Activity currentActivity = Wloczykij.getCurrentActivity();
+            if(currentActivity == null){
+                return;
+            }
+
+            FrameLayout layout = (FrameLayout) currentActivity.findViewById(R.id.layout_offline);
+
+            if(Util.isOnline(context)){
+                layout.setVisibility(View.GONE);
+            }else{
+                layout.setVisibility(View.VISIBLE);
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +74,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         findViewById(R.id.action_add_place).setOnClickListener(this);
         findViewById(R.id.action_plan_trip).setOnClickListener(this);
         findViewById(R.id.action_refresh).setOnClickListener(this);
+        findViewById(R.id.button_filter).setOnClickListener(this);
 
         mapFragment.getMapAsync(this);
     }
@@ -77,9 +104,31 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     protected void onResume() {
         super.onResume();
+        Wloczykij.setCurrentActivity(this);
+        registerReceiver(broadcast, filter);
+
         if (mMap != null) {
             refreshMap();
         }
+    }
+
+    @Override
+    public void onPause(){
+        unregisterReceiver(broadcast);
+        clearCurrentActivity();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy(){
+        clearCurrentActivity();
+        super.onDestroy();
+    }
+
+    private void clearCurrentActivity(){
+        Activity currActivity = Wloczykij.getCurrentActivity();
+        if (this.equals(currActivity))
+            Wloczykij.setCurrentActivity(null);
     }
 
     private void refreshMap() {
@@ -173,6 +222,11 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             case R.id.action_refresh:
                 ((FloatingActionsMenu) findViewById(R.id.multiple_actions)).collapse();
                 refreshMap();
+                break;
+
+            case R.id.button_filter:
+                Intent intent = new Intent(this, FilterTagsActivity.class);
+                startActivity(intent);
                 break;
         }
     }

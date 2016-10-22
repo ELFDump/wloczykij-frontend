@@ -8,6 +8,7 @@ public class FilterTagsActivity extends SlidingActivity {
 
     @Override
     public void init(Bundle savedInstanceState) {
+        disableHeader();
         setContent(R.layout.activity_filter_tags);
     }
 }
