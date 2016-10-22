@@ -16,10 +16,11 @@ android {
     sourceSets {
         main {
             res.srcDirs = [
-                'src/main/res/layouts/activities',
-                'src/main/res/layouts/content',
-                'src/main/res/layouts',
-                'src/main/res'
+                    'src/main/res/drawables/icons/ui',
+                    'src/main/res/layouts/activities',
+                    'src/main/res/layouts/content',
+                    'src/main/res/layouts',
+                    'src/main/res',
             ]
         }
     }
