@@ -3,6 +3,9 @@ package pl.elfdump.wloczykij.activity;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -13,6 +16,7 @@ import pl.elfdump.wloczykij.ui.PlaceDetailsItem;
 import pl.elfdump.wloczykij.ui.PlaceDetailsListAdapter;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
+import pl.elfdump.wloczykij.ui.views.ButtonAction;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -29,6 +33,12 @@ public class PlaceDetailsActivity extends SlidingActivity {
 
         setTitle(place.getName());
         setImage(R.drawable.background_login); // TODO: Replace with PLEASE WAIT, LOADING image
+
+        setPrimaryColors(
+                ContextCompat.getColor(this, R.color.colorPrimary),
+                ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        );
+
         enableFullscreen();
 
         PlaceDetailsListAdapter adapter = new PlaceDetailsListAdapter(this, generateData());
@@ -61,6 +71,21 @@ public class PlaceDetailsActivity extends SlidingActivity {
                 }
             }.execute(photo);
         }
+
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        //Animation move_from_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_top);
+        //Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
+        Animation bounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+        // TODO
+        //findViewById(R.id.rating_super).startAnimation(move_from_top);
+        ButtonAction buttonAction = (ButtonAction) findViewById(R.id.rating_good);
+        buttonAction.getImageView().startAnimation(bounce);
+        //findViewById(R.id.rating_ok).startAnimation(move_from_top);
+        //findViewById(R.id.rating_awful).startAnimation(move_from_bottom);
     }
 
     @Override
@@ -74,7 +99,12 @@ public class PlaceDetailsActivity extends SlidingActivity {
     private ArrayList<PlaceDetailsItem> generateData() {
         ArrayList<PlaceDetailsItem> models = new ArrayList<>();
 
-        models.add(new PlaceDetailsItem(R.mipmap.ic_launcher, place.getAuthor()));
+        String description = place.getDescription();
+        if(!description.isEmpty()){
+            models.add(new PlaceDetailsItem(R.drawable.ic_info_outline_black_24dp, description));
+        }
+
+        models.add(new PlaceDetailsItem(R.drawable.ic_face_black_24dp, place.getAuthor()));
 
         String tags = "";
         boolean first = true;
@@ -83,7 +113,7 @@ public class PlaceDetailsActivity extends SlidingActivity {
             tags += "#"+tag;
             first = false;
         }
-        models.add(new PlaceDetailsItem(R.drawable.ic_menu_info_details, tags));
+        models.add(new PlaceDetailsItem(R.drawable.ic_local_offer_black_24dp, tags));
 
         return models;
     }

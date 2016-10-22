@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ButtonAction">
+        <attr name="android:text"/>
+        <attr name="android:textColor"/>
+        <attr name="showLabel" format="boolean" />
+        <attr name="iconSize" format="string" />
+        <attr name="src" format="integer" />
+    </declare-styleable>
+</resources>

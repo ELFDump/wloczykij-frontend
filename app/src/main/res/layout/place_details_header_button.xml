@@ -5,26 +5,27 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
         android:paddingBottom="10dp"
-        android:weightSum="1"
-        android:paddingTop="5dp">
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:weightSum="1">
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:id="@+id/imageView"
-            android:src="@drawable/ic_menu_info_details"/>
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:id="@+id/button_action_icon"
+            android:src="@drawable/ic_menu_info_details"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Label"
-            android:id="@+id/textView2"
+            android:id="@+id/button_action_label"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/white"/>
 
