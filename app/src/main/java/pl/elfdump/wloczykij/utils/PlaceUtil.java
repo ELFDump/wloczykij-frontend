@@ -14,8 +14,59 @@ public class PlaceUtil {
     private static final int DEFAULT_ICON = R.mipmap.ic_launcher;
 
     private static final Map<String, Integer> icons = new HashMap<String, Integer>(){{
-        put("Jedzenie", R.drawable.ic_face_white_24dp);
-        put("Zabytek", R.drawable.ic_mail_grey600_24dp);
+        put("Jedzenie", R.drawable.ic_restaurant);
+        put("Kebab", drawable.ic_kebab);
+        put("Bar", R.drawable.ic_bar);
+        put("Pizzeria", R.drawable.ic_pizzeria);
+        put("Sushi", R.drawable.ic_sushi);
+        put("Kawiarnia", R.drawable.ic_cafe);
+        put("Lody", R.drawable.ic_icecream);
+        put("Historia", R.drawable.ic_history);
+        put("Muzeum", R.drawable.ic_museum);
+        put("Skansen", R.drawable.ic_openairmuseum);
+        put("Pomnik/rzeźba", R.drawable.ic_monument);
+        put("Zabytek", R.drawable.ic_antique);
+        put("Kościół", R.drawable.ic_church);
+        put("Cmentarz", R.drawable.ic_cemetery;
+        put("Zamek", R.drawable.ic_castle);
+        put("Sport", R.drawable.ic_sport);
+        put("Stadion", R.drawable.ic_stadium);
+        put("Boisko", R.drawable.ic_field);
+        put("Piłka nożna", R.drawable.ic_soccer);
+        put("Piłka ręczna", R.drawable.ic_handball);
+        put("Piłka koszykowa", R.drawable.ic_basketball);
+        put("Piłka siatkowa", R.drawable.ic_volleytball);
+        put("Siłownia", R.drawable.ic_gym);
+        put("Basen/pływalnia", R.drawable.ic_swimming1);
+        put("Kąpielisko", R.drawable.ic_swimming2);
+        put("Lodowisko", R.drawable.ic_iceskating);
+        put("Kort tenisowy", R.drawable.ic_tennis);
+        put("Ścianka wspinaczkowa", R.drawable.ic_climbing);
+        put("Park linowy", R.drawable.ic_ropespark);
+        put("Park trampolin", R.drawable.ic_sponge);
+        put("Przystań kajakowa", R.drawable.ic_kayaking);
+        put("Strzelnica", R.drawable.ic_shooting);
+        put("Bilard", R.drawable.ic_billiard);
+        put("Kręgielnia", R.drawable.ic_bowling);
+        put("Tenis stołowy", R.drawable.ic_tabletennis);
+        put("Rozrywka", R.drawable.ic_entertainment);
+        put("Teatr", R.drawable.ic_theater);
+        put("Film", R.drawable.ic_cinema);
+        put("Muzyka", R.drawable.ic_music);
+        put("Klub", R.drawable.ic_dancinghall);
+        put("Park rozrywki", R.drawable.ic_themepark);
+        put("Paintball", R.drawable.ic_paintball);
+        put("Park", R.drawable.ic_park);
+        put("Przyroda", R.drawable.ic_nature);
+        put("Zwierzęta", R.drawable.ic_animal);
+        put("Park dinozaurów", R.drawable.ic_dinopark);
+        put("Rośliny", R.drawable.ic_flowers);
+        put("Palmiarnia", R.drawable.ic_palmtree);
+        put("Nauka", R.drawable.ic_science);
+        put("Planetarium", R.drawable.ic_planetarium);
+        put("Sztuka", R.drawable.ic_art);
+        put("Zakupy", R.drawable.ic_shopping);
+
     }};
 
     public static List<Place> filterPlaces(Collection<Place> places, String[] tags){
