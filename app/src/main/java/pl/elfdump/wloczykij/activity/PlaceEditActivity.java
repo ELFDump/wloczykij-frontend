@@ -44,15 +44,19 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
         findViewById(R.id.button_add_image).setOnClickListener(this);
 
         if(state != null){
-            String path = state.getString("filePath");
-            if(path != null){
-                photoFile = new File(path);
-                setThumbnail(path);
+            applySavedState(state);
+        }
+    }
 
-                bitmap = state.getParcelable("thumbnail_bitmap");
-                if(bitmap != null){
-                    setThumbnail(path);
-                }
+    private void applySavedState(Bundle state){
+        String path = state.getString("filePath");
+        if(path != null){
+            photoFile = new File(path);
+            setThumbnail(path);
+
+            bitmap = state.getParcelable("thumbnail_bitmap");
+            if(bitmap != null){
+                setThumbnail(path);
             }
         }
     }
@@ -73,12 +77,16 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
         switch(view.getId()) {
             case R.id.add_place_button:
                 String name = ((EditText) findViewById(R.id.place_name)).getText().toString();
+                String message = null;
 
                 if (photoFile == null) {
-                    Toast.makeText(PlaceEditActivity.this, getString(R.string.photo) + " " + getString(R.string.error_required), Toast.LENGTH_SHORT).show();
-                    return;
+                    message = getString(R.string.photo) + " " + getString(R.string.error_required);
                 }else if(name.isEmpty()){
-                    Toast.makeText(PlaceEditActivity.this, getString(R.string.name) + " " + getString(R.string.error_required_a), Toast.LENGTH_SHORT).show();
+                    message = getString(R.string.name) + " " + getString(R.string.error_required_a);
+                }
+
+                if(message != null){
+                    Toast.makeText(PlaceEditActivity.this, message, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -93,6 +101,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 photoFile = new File(getExternalCacheDir(), "photo" + System.currentTimeMillis() + ".jpg");
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 break;
         }
@@ -102,6 +111,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
+                bitmap = null;
                 setThumbnail(photoFile.getPath());
             } else {
                 findViewById(R.id.add_place_button).setEnabled(true);
@@ -115,7 +125,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
         new AsyncTask<String, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(String... paths) {
-                if(bitmap == null || !photoFile.getPath().equals(paths[0])){
+                if(bitmap == null){
                     bitmap = BitmapFactory.decodeFile(paths[0]);
                 }
 
