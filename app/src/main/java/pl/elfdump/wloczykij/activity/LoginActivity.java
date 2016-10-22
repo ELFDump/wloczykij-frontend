@@ -5,11 +5,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -22,13 +31,21 @@ import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.LoginServiceProvider;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, FacebookCallback<LoginResult> {
     public static final int RC_GOOGLE_SIGN_IN = 9001;
+
     private GoogleApiClient googleApi;
+    private CallbackManager fbCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // FacebookSdk needs to be initialized before LoginButton is created
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        fbCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().logOut();
+
         setContentView(R.layout.activity_login);
 
         // Configure Google API
@@ -42,6 +59,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
             .build();
 
+        LoginButton fbLogin = (LoginButton) findViewById(R.id.facebook_sign_in_button);
+        fbLogin.setReadPermissions("email");
+        fbLogin.registerCallback(fbCallbackManager, this);
+
         findViewById(R.id.google_sign_in_button).setOnClickListener(this);
         findViewById(R.id.submit_nickname).setOnClickListener(this);
     }
@@ -50,13 +71,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart() {
         super.onStart();
 
-        String previousToken = Wloczykij.settings.getToken();
-        if (previousToken == null) {
-            enterPhase(Phase.WELCOME);
-        } else {
-            enterPhase(Phase.IN_PROGRESS);
-            Wloczykij.api.setToken(previousToken);
-            afterLogin();
+        if (currentPhase == null) {
+            String previousToken = Wloczykij.settings.getToken();
+            if (previousToken == null) {
+                enterPhase(Phase.WELCOME);
+            } else {
+                enterPhase(Phase.IN_PROGRESS);
+                Wloczykij.api.setToken(previousToken);
+                afterLogin();
+            }
         }
     }
 
@@ -83,6 +106,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 loginFailure();
             }
         }
+
+        fbCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -91,10 +116,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Toast.makeText(this, connectionResult.toString(), Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+        enterPhase(Phase.IN_PROGRESS);
+        doLogin(LoginServiceProvider.FACEBOOK, loginResult.getAccessToken().getToken());
+        LoginManager.getInstance().logOut();
+    }
+
+    @Override
+    public void onCancel() {
+        loginFailure();
+    }
+
+    @Override
+    public void onError(FacebookException error) {
+        loginFailure(error.toString());
+    }
+
     /**
      * Called to asynchronously authenticate to API using given provider
      */
     private void doLogin(final LoginServiceProvider provider, final String authToken) {
+        Log.d(Wloczykij.TAG, "Do login with "+provider.name()+" "+authToken);
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -154,7 +197,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Called in case of any login failure, causes return to main login screen
      */
     private void loginFailure() {
-        Toast.makeText(this, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show();
+        loginFailure(getString(R.string.error_occurred));
+    }
+
+    /**
+     * Called in case of any login failure, causes return to main login screen
+     * @param text Error message to display
+     */
+    private void loginFailure(String text) {
+        Log.e(Wloczykij.TAG, "Login failure");
+        Thread.dumpStack();
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         enterPhase(Phase.LOGIN_SCREEN);
     }
 
@@ -213,6 +266,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ENTER_MAP
     }
 
+    private Phase currentPhase = null;
+
     private void enterPhase(Phase phase) {
         Animation move_from_top = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_top);
         Animation move_from_bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_from_bottom);
@@ -229,6 +284,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 findViewById(R.id.login_with).setVisibility(View.VISIBLE);
                 findViewById(R.id.login_buttons_layout).setVisibility(View.VISIBLE);
                 findViewById(R.id.google_sign_in_button).setVisibility(View.VISIBLE);
+                findViewById(R.id.facebook_sign_in_button).setVisibility(View.VISIBLE);
                 findViewById(R.id.setup_username_layout).setVisibility(View.GONE);
                 break;
 
@@ -236,6 +292,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 findViewById(R.id.login_with).setVisibility(View.GONE);
                 findViewById(R.id.login_buttons_layout).setVisibility(View.GONE);
                 findViewById(R.id.google_sign_in_button).setVisibility(View.GONE);
+                findViewById(R.id.facebook_sign_in_button).setVisibility(View.GONE);
                 findViewById(R.id.setup_username_layout).setVisibility(View.GONE);
                 break;
 
@@ -245,6 +302,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 findViewById(R.id.login_with).setVisibility(View.GONE);
                 findViewById(R.id.login_buttons_layout).setVisibility(View.GONE);
                 findViewById(R.id.google_sign_in_button).setVisibility(View.GONE);
+                findViewById(R.id.facebook_sign_in_button).setVisibility(View.GONE);
                 findViewById(R.id.setup_username_layout).setVisibility(View.VISIBLE);
                 break;
 
@@ -252,5 +310,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(this, MapViewActivity.class));
                 break;
         }
+        currentPhase = phase;
     }
 }
