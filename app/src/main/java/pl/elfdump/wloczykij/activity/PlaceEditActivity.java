@@ -49,6 +49,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
     private Uri photoUri;
 
     private static final int RC_SELECT_IMAGE = 1888;
+    private static final int MAX_IMAGE_SIZE = 2048;
 
     @Override
     public void init(Bundle state) {
@@ -151,6 +152,26 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
         }
     }
 
+    private Bitmap scaleBitmapToMaxSize(Bitmap bitmap, int maxSize) {
+        if (bitmap.getWidth() <= maxSize && bitmap.getHeight() <= maxSize)
+            return bitmap;
+
+        int new_width = bitmap.getWidth();
+        int new_height = bitmap.getHeight();
+
+        if (new_width > maxSize) {
+            new_height = (int) (new_height * (maxSize / (float) new_width));
+            new_width = maxSize;
+        }
+
+        if (new_height > maxSize) {
+            new_width = (int) (new_width * (maxSize / (float) new_height));
+            new_height = maxSize;
+        }
+
+        return Bitmap.createScaledBitmap(bitmap, new_width, new_height, true);
+    }
+
     private void loadThumbnail(Uri uri){
         new AsyncTask<Uri, Void, Bitmap>() {
             @Override
@@ -161,7 +182,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
                     FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
                     Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
                     parcelFileDescriptor.close();
-                    return bitmap;
+                    return scaleBitmapToMaxSize(bitmap, MAX_IMAGE_SIZE);
                 } catch (IOException e) {
                     e.printStackTrace();
                     return null;
