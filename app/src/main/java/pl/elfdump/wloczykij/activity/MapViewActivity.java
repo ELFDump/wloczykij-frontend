@@ -18,7 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,12 +37,12 @@ import pl.elfdump.wloczykij.network.api.models.Place;
 import pl.elfdump.wloczykij.utils.MapUtil;
 import pl.elfdump.wloczykij.utils.NetworkUtil;
 import pl.elfdump.wloczykij.utils.PlaceUtil;
-import pl.elfdump.wloczykij.utils.Util;
 
-public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener, GoogleMap.OnMyLocationChangeListener {
+public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener, GoogleMap.OnMyLocationChangeListener, GoogleMap.OnMyLocationButtonClickListener {
 
     private static final int MAP_LOCATION_PERMISSION_REQUEST = 1234;
-    private static final int PLACE_EDIT = 4321;
+    private static final int RC_PLACE_EDIT = 4321;
+    private static final int RC_PLACE_DETAILS = 4322;
 
     private GoogleMap mMap;
     private HashMap<Marker, String> markers = new HashMap<>();
@@ -98,11 +97,12 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
         mMap.setOnMyLocationChangeListener(this);
+        mMap.setOnMyLocationButtonClickListener(this);
 
         // Set starting camera position
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
             /* position = */ new LatLng(51.759248, 19.455983), // Centrum Łodzi
-            /* zoom = */ 15,
+            /* zoom = */ 12,
             /* tilt = */ 90,
             /* orientation = */ 0
         )));
@@ -189,11 +189,27 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
+    private CameraPosition prevCameraPosition;
+
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Intent intent = new Intent(this, PlaceDetailsActivity.class);
-        intent.putExtra("place", Wloczykij.api.cache(Place.class).get(markers.get(marker)));
-        startActivity(intent);
+        prevCameraPosition = mMap.getCameraPosition();
+        final Place place = Wloczykij.api.cache(Place.class).get(markers.get(marker));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(MapUtil.getPosition(place), 17.5f), 1500, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                Log.d(Wloczykij.TAG, "Animation finished");
+
+                Intent intent = new Intent(MapViewActivity.this, PlaceDetailsActivity.class);
+                intent.putExtra("place", place);
+                startActivityForResult(intent, RC_PLACE_DETAILS);
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(Wloczykij.TAG, "Animation cancelled");
+            }
+        });
         return true;
     }
 
@@ -241,27 +257,42 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             
             Intent intent = new Intent(this, PlaceEditActivity.class);
             intent.putExtra("place", place);
-            startActivityForResult(intent, PLACE_EDIT);
+            startActivityForResult(intent, RC_PLACE_EDIT);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_EDIT) {
+        if (requestCode == RC_PLACE_EDIT) {
             if (resultCode == RESULT_OK) {
-                Log.i(Wloczykij.TAG, "Finished editing place " + data.getStringExtra("place"));
+                String placeId = data.getStringExtra("place");
+                Log.i(Wloczykij.TAG, "Finished editing place " + placeId);
+                Place place = Wloczykij.api.cache(Place.class).get(placeId);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapUtil.getPosition(place), 17.5f));
                 updateMap();
             }
+        }
+
+        if (requestCode == RC_PLACE_DETAILS) {
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(prevCameraPosition), 1000, null);
         }
     }
 
     private boolean locationSet = false;
+    private Location currentLocation;
 
     @Override
     public void onMyLocationChange(Location location) {
+        currentLocation = location;
         if (!locationSet) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13.5f));
             locationSet = true;
         }
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 17.5f));
+        return true;
     }
 }
