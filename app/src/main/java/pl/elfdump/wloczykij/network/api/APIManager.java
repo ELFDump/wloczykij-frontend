@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.Types;
@@ -22,6 +23,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.utils.JsonSerializer;
 
 public class APIManager {
@@ -154,11 +156,12 @@ public class APIManager {
         return imageCache.get(url);
     }
 
-    public void uploadImage(String url, String mediaType, File file) throws APIRequestException {
+    public void uploadImage(String url, String mediaType, String fileName, @NonNull byte[] fileData) throws APIRequestException {
+        Log.d(Wloczykij.TAG, "Uploading " + fileData.length + " bytes file '" + fileName + "' with mime type '" + mediaType + "' to " + url);
         Request.Builder builder = new Request.Builder()
             .url(url)
-            .method("POST", RequestBody.create(MediaType.parse(mediaType), file))
-            .addHeader("Content-Disposition", "attachment; filename="+file.getName());
+            .method("POST", RequestBody.create(MediaType.parse(mediaType), fileData))
+            .addHeader("Content-Disposition", "attachment; filename="+fileName);
         internalSendRequest(builder);
     }
 

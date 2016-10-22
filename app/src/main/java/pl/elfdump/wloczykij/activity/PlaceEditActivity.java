@@ -1,20 +1,30 @@
 package pl.elfdump.wloczykij.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.*;
 
 import com.klinker.android.sliding.SlidingActivity;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.gujun.android.taggroup.TagGroup;
 import pl.elfdump.wloczykij.R;
@@ -22,15 +32,23 @@ import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
+import pl.elfdump.wloczykij.utils.Util;
 
 public class PlaceEditActivity extends SlidingActivity implements View.OnClickListener {
-
-    private static final int CAMERA_REQUEST = 1888;
-
+    /**
+     * Place instance edited by this activity
+     */
     private Place place;
+    /**
+     * Target file for photo image (only if choosing from camera)
+     */
     private File photoFile;
+    /**
+     * Uri of selected photo (both for camera and gallery)
+     */
+    private Uri photoUri;
 
-    private Bitmap bitmap;
+    private static final int RC_SELECT_IMAGE = 1888;
 
     @Override
     public void init(Bundle state) {
@@ -43,32 +61,25 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
         findViewById(R.id.add_place_button).setOnClickListener(this);
         findViewById(R.id.button_add_image).setOnClickListener(this);
 
-        if(state != null){
-            applySavedState(state);
-        }
-    }
+        if (state != null) {
+            String photoFilePath = state.getString("photoFilePath");
+            photoFile = photoFilePath == null ? null : new File(photoFilePath);
 
-    private void applySavedState(Bundle state){
-        String path = state.getString("filePath");
-        if(path != null){
-            photoFile = new File(path);
-            setThumbnail(path);
-
-            bitmap = state.getParcelable("thumbnail_bitmap");
-            if(bitmap != null){
-                setThumbnail(path);
+            photoUri = state.getParcelable("photoUri");
+            if (photoUri != null) {
+                loadThumbnail(photoUri);
             }
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle state){
-        if(photoFile != null){
-            String filePath = photoFile.getPath();
-            state.putString("filePath", filePath);
-            if(bitmap != null){
-                state.putParcelable("thumbnail_bitmap", bitmap);
-            }
+        if (photoFile != null) {
+            state.putString("photoFilePath", photoFile.getPath());
+        }
+
+        if (photoUri != null) {
+            state.putParcelable("photoUri", photoUri);
         }
     }
 
@@ -77,16 +88,16 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
         switch(view.getId()) {
             case R.id.add_place_button:
                 String name = ((EditText) findViewById(R.id.place_name)).getText().toString();
-                String message = null;
+                String errorMessage = null;
 
-                if (photoFile == null) {
-                    message = getString(R.string.photo) + " " + getString(R.string.error_required);
-                }else if(name.isEmpty()){
-                    message = getString(R.string.name) + " " + getString(R.string.error_required_a);
+                if (photoUri == null) {
+                    errorMessage = getString(R.string.error_photo_required);
+                } else if (name.isEmpty()) {
+                    errorMessage = getString(R.string.error_name_required);
                 }
 
-                if(message != null){
-                    Toast.makeText(PlaceEditActivity.this, message, Toast.LENGTH_SHORT).show();
+                if (errorMessage != null) {
+                    Toast.makeText(PlaceEditActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -98,38 +109,63 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
                 savePlace();
                 break;
             case R.id.button_add_image:
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 photoFile = new File(getExternalCacheDir(), "photo" + System.currentTimeMillis() + ".jpg");
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                List<Intent> cameraIntents = new ArrayList<>();
+                Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                for (ResolveInfo res : getPackageManager().queryIntentActivities(captureIntent, 0)) {
+                    Intent intent = new Intent(captureIntent);
+                    intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+                    intent.setPackage(res.activityInfo.packageName);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    cameraIntents.add(intent);
+                }
 
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                Intent chooserIntent = Intent.createChooser(galleryIntent, "Select image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
+
+                startActivityForResult(chooserIntent, RC_SELECT_IMAGE);
                 break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_REQUEST) {
+        if (requestCode == RC_SELECT_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
-                bitmap = null;
-                setThumbnail(photoFile.getPath());
+                if (data == null || data.getData() == null) {
+                    // Camera
+                    photoUri = Uri.fromFile(photoFile);
+                } else {
+                    // Gallery
+                    photoFile = null;
+                    photoUri = data.getData();
+                }
+
+                Log.d(Wloczykij.TAG, "Selected image URI = " + photoUri.toString());
+                loadThumbnail(photoUri);
             } else {
-                findViewById(R.id.add_place_button).setEnabled(true);
-                photoFile.delete();
                 photoFile = null;
             }
         }
     }
 
-    private void setThumbnail(String path){
-        new AsyncTask<String, Void, Bitmap>() {
+    private void loadThumbnail(Uri uri){
+        new AsyncTask<Uri, Void, Bitmap>() {
             @Override
-            protected Bitmap doInBackground(String... paths) {
-                if(bitmap == null){
-                    bitmap = BitmapFactory.decodeFile(paths[0]);
+            protected Bitmap doInBackground(Uri... paths) {
+                try {
+                    ParcelFileDescriptor parcelFileDescriptor = getContentResolver().openFileDescriptor(paths[0], "r");
+                    assert parcelFileDescriptor != null;
+                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                    Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+                    parcelFileDescriptor.close();
+                    return bitmap;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
                 }
-
-                return bitmap;
             }
 
             @Override
@@ -137,7 +173,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
                 ((ImageView) findViewById(R.id.thumb_add_image)).setImageBitmap(bitmap);
                 findViewById(R.id.button_add_image).setAlpha(0);
             }
-        }.execute(path);
+        }.execute(uri);
     }
 
     private void savePlace() {
@@ -145,13 +181,40 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
             @Override
             protected Boolean doInBackground(Place... params) {
                 try {
+                    InputStream inputStream = getContentResolver().openInputStream(photoUri);
+                    assert inputStream != null;
+                    byte[] fileData = Util.readStreamToByteArray(inputStream);
+                    inputStream.close();
+
+                    String fileMimeType, fileName;
+                    switch (photoUri.getScheme()) {
+                        case "content":
+                            fileMimeType = getContentResolver().getType(photoUri);
+                            fileName =  "photo." + MimeTypeMap.getSingleton().getExtensionFromMimeType(fileMimeType);
+                            break;
+
+                        case "file":
+                            fileName = photoUri.getLastPathSegment();
+                            fileMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                                MimeTypeMap.getFileExtensionFromUrl(fileName));
+                            break;
+
+                        default:
+                            // Shouldn't happen
+                            throw new IOException("Unknown URI scheme");
+                    }
+
                     APIManager api = Wloczykij.api;
                     place = api.cache(Place.class).save(place);
-                    api.uploadImage(place.getPhotoUploadUrl(), "image/jpeg", photoFile);
-                    photoFile.delete();
+                    api.uploadImage(place.getPhotoUploadUrl(), fileMimeType, fileName, fileData);
+
+                    if (photoFile != null) {
+                        photoFile.delete();
+                        photoFile = null;
+                    }
 
                     return true;
-                } catch (APIRequestException e) {
+                } catch (APIRequestException | IOException e) {
                     e.printStackTrace();
                     return false;
                 }
