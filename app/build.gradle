@@ -12,6 +12,18 @@ android {
         versionName "0.1"
         multiDexEnabled true
     }
+
+    sourceSets {
+        main {
+            res.srcDirs = [
+                'src/main/res/layouts/activities',
+                'src/main/res/layouts/content',
+                'src/main/res/layouts',
+                'src/main/res'
+            ]
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -45,6 +57,7 @@ dependencies {
     compile 'com.klinkerapps:sliding-activity:1.4.3'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'me.gujun.android.taggroup:library:1.4@aar'
+    compile 'com.github.traex.expandablelayout:library:1.2.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
