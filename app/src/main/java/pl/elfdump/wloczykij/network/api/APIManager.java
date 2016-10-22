@@ -23,7 +23,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import pl.elfdump.wloczykij.utils.JsonSerializer;
-import pl.elfdump.wloczykij.utils.JsonUtils;
 
 public class APIManager {
     public static class APIError {
@@ -93,7 +92,7 @@ public class APIManager {
                 String responseString = response.body().string();
                 String errorMessage;
                 try {
-                    errorMessage = JsonUtils.deserialize(responseString, APIError.class).toString();
+                    errorMessage = JsonSerializer.deserialize(responseString, APIError.class).toString();
                 } catch (JsonDataException e) {
                     errorMessage = responseString;
                 } catch (NullPointerException e){
@@ -131,14 +130,14 @@ public class APIManager {
     public <T> T sendJsonRequest(String method, String url, @Nullable Object body, Type responseType) throws APIRequestException {
         RequestBody requestBody = null;
         if (body != null) {
-            String json = JsonUtils.serialize(body);
+            String json = JsonSerializer.serialize(body);
             requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         }
 
         String responseJson = sendRequest(method, url, requestBody);
 
         try {
-            return JsonUtils.deserialize(responseJson, responseType);
+            return JsonSerializer.deserialize(responseJson, responseType);
         } catch (JsonDataException e) {
             throw new APIRequestException("Unable to deserialize JSON response: "+responseJson, e);
         }
