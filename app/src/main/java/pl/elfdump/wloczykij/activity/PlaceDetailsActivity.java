@@ -146,7 +146,7 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
             button.getImageView().clearAnimation();
 
         if (myRating > 0) {
-            buttons[myRating - 1].getImageView().startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce));
+            buttons[myRating - 1].startBounceAnimation();
         }
     }
 
