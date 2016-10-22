@@ -1,3 +1,5 @@
 <resources>
     <string name="google_server_client_id" translatable="false">434052730158-8dqkj0f5h1i70v1kna9fqo741r4lr3ra.apps.googleusercontent.com</string>
+    <string name="fb_login_protocol_scheme">fb1311479132209658</string>
+    <string name="facebook_app_id">1311479132209658</string>
 </resources>
