@@ -1,10 +1,18 @@
 package pl.elfdump.wloczykij.network.api.models;
 
+import android.support.annotation.Nullable;
+
 import pl.elfdump.wloczykij.network.api.APIModel;
 
 public class Tag extends APIModel {
     private String name;
     private int place_count;
+
+    @Nullable
+    @Override
+    public String getId() {
+        return getName();
+    }
 
     public Tag(String name) {
         this.name = name;

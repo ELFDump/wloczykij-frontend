@@ -20,13 +20,13 @@ public class APIModelCache<T extends APIModel> {
         Collection<T> allItems = manager.getAll();
         cache.clear();
         for (T item : allItems) {
-            cache.put(item.getResourceUrl(), item);
+            cache.put(item.getId(), item);
         }
     }
 
     public T save(T item) throws APIRequestException {
         item = manager.save(item);
-        cache.put(item.getResourceUrl(), item);
+        cache.put(item.getId(), item);
         return item;
     }
 
@@ -34,12 +34,12 @@ public class APIModelCache<T extends APIModel> {
         return cache.values();
     }
 
-    public T get(String resourceUrl) {
-        return cache.get(resourceUrl);
+    public T get(String id) {
+        return cache.get(id);
     }
 
     public T get(T object) {
         if (object == null) return null;
-        return cache.get(object.getResourceUrl());
+        return cache.get(object.getId());
     }
 }

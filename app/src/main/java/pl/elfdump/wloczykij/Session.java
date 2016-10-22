@@ -4,7 +4,6 @@ import pl.elfdump.wloczykij.network.api.APIBadRequestException;
 import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.User;
-import pl.elfdump.wloczykij.utils.UserSettings;
 
 public class Session {
     public User loggedOnUser;
