@@ -56,7 +56,7 @@
     <string name="no_tags">[brak tagów]</string>
 
     <string name="place_action_visited">Odwiedzone</string>
-    <string name="place_action_not_visited">Nie odwiedzone</string>
+    <string name="place_action_not_visited">Nieodwiedzone</string>
     <string name="place_action_save">Zapisz</string>
     <string name="place_action_share">Udostępnij</string>
     <string name="place_action_report">Zgłoś</string>
