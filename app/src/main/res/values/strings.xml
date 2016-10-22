@@ -31,8 +31,8 @@
     <string name="add_tag">Dodaj tag</string>
     <string name="add_image">Dodaj zdjęcie</string>
 
-    <string name="error_required">jest wymagane</string>
-    <string name="error_required_a">jest wymagana</string>
+    <string name="error_photo_required">Zdjęcie jest wymagane</string>
+    <string name="error_name_required">Nazwa jest wymagana</string>
 
     <string name="photo">Zdjęcie</string>
     <string name="name">Nazwa</string>

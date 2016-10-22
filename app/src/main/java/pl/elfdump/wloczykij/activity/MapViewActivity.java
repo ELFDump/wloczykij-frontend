@@ -32,7 +32,7 @@ import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
 import pl.elfdump.wloczykij.utils.MapUtil;
-import pl.elfdump.wloczykij.utils.Util;
+import pl.elfdump.wloczykij.utils.NetworkUtil;
 
 public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, View.OnClickListener {
 
@@ -48,7 +48,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         public void onReceive(Context context, Intent intent) {
             FrameLayout layout = (FrameLayout) findViewById(R.id.layout_offline);
 
-            if(Util.isOnline(context)){
+            if(NetworkUtil.isOnline(context)){
                 layout.setVisibility(View.GONE);
             }else{
                 layout.setVisibility(View.VISIBLE);
