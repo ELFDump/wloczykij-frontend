@@ -40,6 +40,7 @@
     <string name="tags">Tagi</string>
     <string name="added_by">Dodał/a:</string>
 
+    <string name="your_rating">Twoja ocena</string>
     <string name="rating_super">Super!</string>
     <string name="rating_good">Dobre</string>
     <string name="rating_ok">Ok</string>
@@ -49,4 +50,12 @@
 
     <string name="nickname">Nazwa użytkownika</string>
     <string name="go_further">Przejdź dalej</string>
+
+    <string name="no_tags">[brak tagów]</string>
+
+    <string name="place_action_visited">Odwiedzone</string>
+    <string name="place_action_not_visited">Nie odwiedzone</string>
+    <string name="place_action_save">Zapisz</string>
+    <string name="place_action_share">Udostępnij</string>
+    <string name="place_action_report">Zgłoś</string>
 </resources>

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ListView;
@@ -21,7 +22,7 @@ import pl.elfdump.wloczykij.ui.views.ButtonAction;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PlaceDetailsActivity extends SlidingActivity {
+public class PlaceDetailsActivity extends SlidingActivity implements View.OnClickListener {
 
     private Place place;
     private AsyncTask<String, Void, Bitmap> downloadImageTask;
@@ -44,6 +45,15 @@ public class PlaceDetailsActivity extends SlidingActivity {
         PlaceDetailsListAdapter adapter = new PlaceDetailsListAdapter(this, generateData());
         ListView listView = (ListView) findViewById(R.id.details);
         listView.setAdapter(adapter);
+
+        findViewById(R.id.place_action_visited).setOnClickListener(this);
+        findViewById(R.id.place_action_save).setOnClickListener(this);
+        findViewById(R.id.place_action_share).setOnClickListener(this);
+        findViewById(R.id.place_action_report).setOnClickListener(this);
+        findViewById(R.id.rating_super).setOnClickListener(this);
+        findViewById(R.id.rating_good).setOnClickListener(this);
+        findViewById(R.id.rating_ok).setOnClickListener(this);
+        findViewById(R.id.rating_awful).setOnClickListener(this);
 
         String[] photos = place.getPhotos();
         if (photos.length > 0) {
@@ -72,6 +82,7 @@ public class PlaceDetailsActivity extends SlidingActivity {
             }.execute(photo);
         }
 
+
     }
 
     @Override
@@ -91,7 +102,7 @@ public class PlaceDetailsActivity extends SlidingActivity {
     @Override
     public void finish() {
         if (downloadImageTask != null) {
-            downloadImageTask.cancel(true);
+            downloadImageTask.cancel(false);
         }
         super.finish();
     }
@@ -107,14 +118,34 @@ public class PlaceDetailsActivity extends SlidingActivity {
         models.add(new PlaceDetailsItem(R.drawable.ic_face_black_24dp, place.getAuthor()));
 
         String tags = "";
-        boolean first = true;
-        for (String tag : place.getTags()) {
-            if (!first) tags += ", ";
-            tags += "#"+tag;
-            first = false;
+        if (place.getTags().length > 0) {
+            boolean first = true;
+            for (String tag : place.getTags()) {
+                if (!first) tags += ", ";
+                tags += "#" + tag;
+                first = false;
+            }
+        } else {
+            tags = getString(R.string.no_tags);
         }
         models.add(new PlaceDetailsItem(R.drawable.ic_local_offer_black_24dp, tags));
 
         return models;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.place_action_visited:
+            case R.id.place_action_save:
+            case R.id.place_action_share:
+            case R.id.place_action_report:
+            case R.id.rating_super:
+            case R.id.rating_good:
+            case R.id.rating_ok:
+            case R.id.rating_awful:
+                Toast.makeText(this, getString(R.string.todo), Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }

@@ -24,27 +24,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:src="@drawable/ic_clear_white_24dp"
-                android:text="Nie odwiedzone"
+                android:id="@+id/place_action_visited"
+                android:text="@string/place_action_not_visited"
                 android:layout_gravity="center_vertical"/>
 
             <pl.elfdump.wloczykij.ui.views.ButtonAction
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:src="@drawable/ic_turned_in_not_white_24dp"
-                android:text="Zapisz"/>
+                android:id="@+id/place_action_save"
+                android:text="@string/place_action_save"/>
 
             <pl.elfdump.wloczykij.ui.views.ButtonAction
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:src="@drawable/ic_share_white_24dp"
-                android:text="Udostępnij"
+                android:id="@+id/place_action_share"
+                android:text="@string/place_action_share"
                 android:gravity="center_vertical"/>
 
             <pl.elfdump.wloczykij.ui.views.ButtonAction
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:src="@drawable/ic_error_outline_white_24dp"
-                android:text="Zgłoś"/>
+                android:id="@+id/place_action_report"
+                android:text="@string/place_action_report"/>
 
         </LinearLayout>
 
@@ -57,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Twoja ocena"
+                android:text="@string/your_rating"
                 android:id="@+id/textView"
                 android:layout_gravity="center"
                 android:textColor="@color/white"/>
