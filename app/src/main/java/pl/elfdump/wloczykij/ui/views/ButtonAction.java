@@ -9,6 +9,8 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +27,8 @@ public class ButtonAction extends LinearLayout {
 
     private TextView textView;
     private ImageView imageView;
+
+    private Animation bounce;
 
     public ButtonAction(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -63,6 +67,8 @@ public class ButtonAction extends LinearLayout {
         layoutParams.height = iconSize;
         imageView.setLayoutParams(layoutParams);
 
+        bounce = AnimationUtils.loadAnimation(context, R.anim.bounce);
+
     }
 
     public String getText(){
@@ -75,6 +81,10 @@ public class ButtonAction extends LinearLayout {
 
     public ImageView getImageView(){
         return imageView;
+    }
+
+    public void startBounceAnimation(){
+        imageView.startAnimation(bounce);
     }
 
 }
