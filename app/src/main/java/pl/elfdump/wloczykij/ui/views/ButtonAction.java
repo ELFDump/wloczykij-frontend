@@ -87,4 +87,13 @@ public class ButtonAction extends LinearLayout {
         imageView.startAnimation(bounce);
     }
 
+    public void setText(String text) {
+        this.text = text;
+        textView.setText(text);
+    }
+
+    public void setDrawable(Drawable drawable) {
+        this.drawable = drawable;
+        imageView.setImageDrawable(drawable);
+    }
 }

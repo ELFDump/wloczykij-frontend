@@ -4,7 +4,7 @@
     <string name="app_name_uppercase">WŁÓCZYKIJ</string>
     <string name="app_description">Twoja wycieczka, Twój plan\n Zwiedzaj po swojemu</string>
 
-    <string name="login_with">Zaloguj się używając...</string>
+    <string name="login_with">Zaloguj się używając…</string>
     <string name="sign_out">Wyloguj się</string>
     <string name="username_busy">Wybrana nazwa użytkownika jest zajęta</string>
     <string name="error_occurred">Wystąpił błąd</string>
@@ -24,7 +24,6 @@
 
     <string name="todo">Funkcja jeszcze niedostępna</string>
 
-    <!-- MapView header -->
     <string name="header_explore">Eksploruj</string>
     <string name="header_filter">Filtruj</string>
 
@@ -41,16 +40,28 @@
     <string name="tags">Tagi</string>
     <string name="added_by">Dodał/a:</string>
 
+    <string name="your_rating">Twoja ocena</string>
     <string name="rating_super">Super!</string>
     <string name="rating_good">Dobre</string>
     <string name="rating_ok">Ok</string>
     <string name="rating_awful">Okropne</string>
+    <string name="no_rating">Brak ocen</string>
+    <string name="avg_rating">Średnia ocena: %.2f</string>
+    <string name="num_rating">Głosów: %d</string>
 
     <string name="no_description">Bez opisu</string>
     <string name="share_title">w Włóczykij</string>
 
     <string name="nickname">Nazwa użytkownika</string>
     <string name="go_further">Przejdź dalej</string>
+
+    <string name="no_tags">[brak tagów]</string>
+
+    <string name="place_action_visited">Odwiedzone</string>
+    <string name="place_action_not_visited">Nieodwiedzone</string>
+    <string name="place_action_save">Zapisz</string>
+    <string name="place_action_share">Udostępnij</string>
+    <string name="place_action_report">Zgłoś</string>
 
     <string name="com_facebook_loginview_log_in_button_long">Facebook</string>
     <string name="common_signin_button_text_long">Google</string>

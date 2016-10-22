@@ -12,7 +12,12 @@ public abstract class APIModel implements Serializable {
     private String resourceUrl;
 
     @Nullable
-    public String getResourceUrl() {
+    public final String getResourceUrl() {
         return resourceUrl;
+    }
+
+    @Nullable
+    public String getId() {
+        return getResourceUrl();
     }
 }

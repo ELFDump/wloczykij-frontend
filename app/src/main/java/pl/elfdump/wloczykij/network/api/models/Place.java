@@ -4,9 +4,28 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.network.api.APIModel;
 
 public class Place extends APIModel {
+    public static class Visit extends APIModel {
+        private String date_visited;
+        private int rating;
+
+        // TODO: Convert to Date
+        public String getDateVisited() {
+            return date_visited;
+        }
+
+        public int getRating() {
+            return rating;
+        }
+
+        public void setRating(int rating) {
+            this.rating = rating;
+        }
+    }
+
     private String name;
     private String description;
     private String author;
@@ -16,6 +35,11 @@ public class Place extends APIModel {
     private String[] photos = new String[0];
     private String photo_upload;
     private List<String> tags = new LinkedList<>();
+    private String visit_url;
+    private Visit visit;
+    private Float rating_avg;
+    private int rating_count;
+    private int visit_count;
 
     public String getName() {
         return name;
@@ -87,4 +111,38 @@ public class Place extends APIModel {
         this.description = description;
     }
 
+    public String getVisitUrl() {
+        return visit_url;
+    }
+
+    public Visit getVisit() {
+        return visit;
+    }
+
+    public void setVisit(Visit visit) {
+        this.visit = visit;
+    }
+
+    // TODO: Convert to Date
+    public String getDateVisited() {
+        if (this.visit == null) return null;
+        return this.visit.getDateVisited();
+    }
+
+    public int getMyRating() {
+        if (this.visit == null) return 0;
+        return this.visit.getRating();
+    }
+
+    public Float getRatingAverage() {
+        return rating_avg;
+    }
+
+    public int getRatingCount() {
+        return rating_count;
+    }
+
+    public int getVisitCount() {
+        return visit_count;
+    }
 }
