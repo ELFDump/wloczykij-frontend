@@ -1,43 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.PlaceEditActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="66dp"
             android:background="@color/accent_color"
+            android:orientation="horizontal"
             android:paddingLeft="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/add_title"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/white"/>
+                android:text="@string/add_title"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white" />
         </LinearLayout>
 
         <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            >
+            android:layout_height="fill_parent">
 
             <LinearLayout
-                android:orientation="vertical"
+                android:id="@+id/place_edit_content"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/place_edit_content">
+                android:orientation="vertical">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -45,71 +43,70 @@
                     android:background="@android:color/darker_gray">
 
                     <Button
+                        android:id="@+id/button_add_image"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:text="@string/add_image"
-                        android:id="@+id/button_add_image"
                         android:background="@android:color/darker_gray"
-                        />
+                        android:text="@string/add_image" />
 
                     <ImageView
+                        android:id="@+id/thumb_add_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/thumb_add_image"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop" />
 
                 </FrameLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="20dp">
+                    android:layout_margin="20dp"
+                    android:orientation="vertical">
 
                     <com.rengwuxian.materialedittext.MaterialEditText
                         android:id="@+id/place_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/name"
                         app:met_floatingLabel="highlight"
                         app:met_floatingLabelText="@string/name"
-                        app:met_iconLeft="@mipmap/ic_launcher"
-                        android:hint="@string/name"/>
+                        app:met_iconLeft="@mipmap/ic_launcher" />
 
                     <com.rengwuxian.materialedittext.MaterialEditText
                         android:id="@+id/place_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/description"
                         app:met_floatingLabel="highlight"
                         app:met_floatingLabelText="@string/description"
-                        app:met_iconLeft="@mipmap/ic_launcher"
-                        android:hint="@string/description"/>
+                        app:met_iconLeft="@mipmap/ic_launcher" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/tags"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"/>
+                        android:layout_marginTop="10dp"
+                        android:text="@string/tags"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <ListView
                         android:id="@+id/tag_selector_buttons_row"
                         android:layout_width="fill_parent"
                         android:layout_height="300dp"
                         android:layout_weight="1.70"
+                        android:divider="@null"
+                        android:dividerHeight="0dp"
                         android:scrollbarSize="3dp"
                         android:scrollbarStyle="outsideOverlay"
                         android:scrollbars="vertical"
                         android:scrollingCache="true"
-                        android:smoothScrollbar="true"
-                        android:divider="@null"
-                        android:dividerHeight="0dp"/>
+                        android:smoothScrollbar="true" />
 
                     <Button
+                        android:id="@+id/add_place_button"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dodaj"
-                        android:id="@+id/add_place_button"/>
+                        android:text="Dodaj" />
 
                 </LinearLayout>
 

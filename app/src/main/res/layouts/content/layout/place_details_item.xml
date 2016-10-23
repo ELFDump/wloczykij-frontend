@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:paddingTop="10dp"
-                android:gravity="center_vertical">
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:gravity="center_vertical"
+    android:paddingTop="10dp">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="48dp">
 
         <CheckBox
-            android:focusable="false"
-            android:clickable="false"
+            android:id="@+id/item_checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/item_checkBox"
             android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:clickable="false"
+            android:focusable="false" />
     </FrameLayout>
 
     <TextView
         android:id="@+id/item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="12sp"
-        android:drawableStart="@mipmap/ic_launcher"
-        android:drawablePadding="6dp"
+        android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
-        android:text="test"
+        android:layout_marginStart="8dp"
+        android:drawablePadding="6dp"
+        android:drawableStart="@mipmap/ic_launcher"
         android:gravity="center_vertical"
-        android:layout_centerVertical="true"/>
+        android:text="test"
+        android:textSize="12sp" />
 
 </RelativeLayout>
