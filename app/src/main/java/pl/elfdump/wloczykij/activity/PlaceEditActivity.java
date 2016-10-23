@@ -98,6 +98,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
         switch(view.getId()) {
             case R.id.add_place_button:
                 String name = ((EditText) findViewById(R.id.place_name)).getText().toString();
+                String description = ((EditText) findViewById(R.id.place_description)).getText().toString();
                 String errorMessage = null;
 
                 if (photoUri == null) {
@@ -116,6 +117,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
                 ArrayList<String> selectedTags = tagsSelectorController.getSelectedTags();
 
                 place.setName(name);
+                place.setDescription(description);
                 place.setTags(selectedTags.toArray(new String[selectedTags.size()]));
 
                 savePlace();
