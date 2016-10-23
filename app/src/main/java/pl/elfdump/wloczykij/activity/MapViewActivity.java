@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,13 +28,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
+import pl.elfdump.wloczykij.network.api.models.Tag;
+import pl.elfdump.wloczykij.planner.PathPlanner;
+import pl.elfdump.wloczykij.planner.PlacePlanner;
 import pl.elfdump.wloczykij.utils.MapUtil;
 import pl.elfdump.wloczykij.utils.NetworkUtil;
 import pl.elfdump.wloczykij.utils.PlaceUtil;
@@ -224,7 +236,8 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.action_plan_trip:
-                Toast.makeText(this, getString(R.string.todo), Toast.LENGTH_SHORT).show();
+                ((FloatingActionsMenu) findViewById(R.id.multiple_actions)).collapse();
+                planTrip();
                 break;
 
             case R.id.action_add_place:
@@ -279,20 +292,82 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private boolean locationSet = false;
-    private Location currentLocation;
+    private LatLng currentLocation;
 
     @Override
     public void onMyLocationChange(Location location) {
-        currentLocation = location;
+        currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
         if (!locationSet) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13.5f));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 13.5f));
             locationSet = true;
         }
     }
 
     @Override
     public boolean onMyLocationButtonClick() {
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 17.5f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17.5f));
         return true;
+    }
+
+    private Polyline tripPath;
+
+    private void planTrip() {
+        new AsyncTask<Void, Void, PathPlanner.PlannedPath>() {
+            @Override
+            protected void onPreExecute() {
+                if (tripPath != null) {
+                    tripPath.remove();
+                    tripPath = null;
+                }
+            }
+
+            @Override
+            protected PathPlanner.PlannedPath doInBackground(Void... params) {
+                try {
+                    Collection<Tag> tagObjects = Wloczykij.api.cache(Tag.class).getAll();
+                    List<String> tags = new ArrayList<>(tagObjects.size());
+                    for (Tag tag : tagObjects) {
+                        tags.add(tag.getName());
+                    }
+
+                    List<Place> selectedPlaces = new PlacePlanner()
+                        .setPlaces(Wloczykij.api.cache(Place.class).getAll())
+                        .setStartPoint(currentLocation)
+                        .setIncludedTags(tags) // TODO
+                        .findPlaces(Integer.MAX_VALUE); // TODO
+
+                    if (selectedPlaces.size() == 0) {
+                        Log.w(Wloczykij.TAG, "No places to visit found");
+                        return null;
+                    }
+
+                    PathPlanner.PlannedPath path = new PathPlanner(Wloczykij.httpClient, getString(R.string.google_maps_key))
+                        .setStartPoint(currentLocation)
+                        .addPathPlaces(selectedPlaces)
+                        .plan();
+
+                    return path;
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(PathPlanner.PlannedPath plannedPath) {
+                if (plannedPath == null) {
+                    Toast.makeText(MapViewActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // TODO: Planned trip UI
+
+                Log.d(Wloczykij.TAG, plannedPath.toString());
+                tripPath = mMap.addPolyline(new PolylineOptions()
+                    .addAll(plannedPath.getLine())
+                    .width(5)
+                    .color(Color.RED));
+            }
+        }.execute();
     }
 }

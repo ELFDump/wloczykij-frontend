@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,6 +73,11 @@ public class PathPlanner {
 
     public PathPlanner addPathPlace(Place place) {
         this.pathPlaces.add(place);
+        return this;
+    }
+
+    public PathPlanner addPathPlaces(Collection<Place> selectedPlaces) {
+        this.pathPlaces.addAll(selectedPlaces);
         return this;
     }
 
