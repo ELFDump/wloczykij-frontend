@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 import org.json.JSONException;
 
@@ -115,7 +116,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
             /* position = */ new LatLng(51.759248, 19.455983), // Centrum Łodzi
             /* zoom = */ 12,
-            /* tilt = */ 90,
+            /* tilt = */ 0,
             /* orientation = */ 0
         )));
 
@@ -207,7 +208,25 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     public boolean onMarkerClick(Marker marker) {
         prevCameraPosition = mMap.getCameraPosition();
         final Place place = Wloczykij.api.cache(Place.class).get(markers.get(marker));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(MapUtil.getPosition(place), 17.5f), 1500, new GoogleMap.CancelableCallback() {
+
+        VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+        LatLng bottomLatLng = new LatLng(
+            (visibleRegion.nearLeft.latitude + visibleRegion.nearRight.latitude)/2,
+            (visibleRegion.nearLeft.longitude + visibleRegion.nearRight.longitude)/2
+        );
+
+        float angle = (float) Math.toDegrees(Math.atan2(
+            place.getLng() - bottomLatLng.longitude,
+            place.getLat() - bottomLatLng.latitude
+        ));
+        Log.d(Wloczykij.TAG, "camera angle = " + angle);
+        CameraPosition newCameraPosition = new CameraPosition(
+            MapUtil.getPosition(place),
+            17.5f,
+            90.0f,
+            angle
+        );
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition), 1500, new GoogleMap.CancelableCallback() {
             @Override
             public void onFinish() {
                 Log.d(Wloczykij.TAG, "Animation finished");
