@@ -69,6 +69,9 @@ public class PlaceUtil {
         put("Planetarium", R.drawable.ic_planetarium);
         put("Sztuka", R.drawable.ic_art);
         put("Zakupy", R.drawable.ic_shopping);
+        put("Dla dorosłych", R.drawable.ic_adults);
+        put("Dla dzieci", R.drawable.ic_kids);
+        put("Dla całej rodziny", R.drawable.ic_family);
 
     }};
 
