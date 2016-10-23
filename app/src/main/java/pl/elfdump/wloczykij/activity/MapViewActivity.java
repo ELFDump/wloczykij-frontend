@@ -210,14 +210,22 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         final Place place = Wloczykij.api.cache(Place.class).get(markers.get(marker));
 
         VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+        LatLng topLatLng = new LatLng(
+            (visibleRegion.farLeft.latitude + visibleRegion.farRight.latitude)/2,
+            (visibleRegion.farLeft.longitude + visibleRegion.farRight.longitude)/2
+        );
         LatLng bottomLatLng = new LatLng(
             (visibleRegion.nearLeft.latitude + visibleRegion.nearRight.latitude)/2,
             (visibleRegion.nearLeft.longitude + visibleRegion.nearRight.longitude)/2
         );
+        LatLng targetLatLng = new LatLng(
+            (topLatLng.latitude + 3*bottomLatLng.latitude)/4,
+            (topLatLng.longitude + 3*bottomLatLng.longitude)/4
+        );
 
         float angle = (float) Math.toDegrees(Math.atan2(
-            place.getLng() - bottomLatLng.longitude,
-            place.getLat() - bottomLatLng.latitude
+            place.getLng() - targetLatLng.longitude,
+            place.getLat() - targetLatLng.latitude
         ));
         Log.d(Wloczykij.TAG, "camera angle = " + angle);
         CameraPosition newCameraPosition = new CameraPosition(
