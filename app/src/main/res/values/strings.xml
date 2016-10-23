@@ -23,6 +23,7 @@
     <string name="place_save_error">Wystąpił błąd podczas zapisywania punktu. Spróbuj ponownie później.</string>
 
     <string name="todo">Funkcja jeszcze niedostępna</string>
+    <string name="todo_wip">Funkcjonalność w trakcie prac</string>
 
     <string name="header_explore">Eksploruj</string>
     <string name="header_filter">Filtruj</string>

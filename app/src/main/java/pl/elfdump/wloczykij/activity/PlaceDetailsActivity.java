@@ -82,7 +82,7 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
                     if (bitmap != null) {
                         setImage(bitmap);
                     } else {
-                        Toast.makeText(PlaceDetailsActivity.this, getString(R.string.image_load_error), Toast.LENGTH_LONG).show();
+                        Toast.makeText(PlaceDetailsActivity.this, R.string.image_load_error, Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute(photo);
@@ -166,7 +166,7 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
             case R.id.place_action_save:
             case R.id.place_action_share:
             case R.id.place_action_report:
-                Toast.makeText(this, getString(R.string.todo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.todo, Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.rating_super:

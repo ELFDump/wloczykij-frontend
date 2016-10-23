@@ -89,6 +89,8 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         findViewById(R.id.action_plan_trip).setOnClickListener(this);
         findViewById(R.id.action_refresh).setOnClickListener(this);
         findViewById(R.id.button_filter).setOnClickListener(this);
+        findViewById(R.id.button_saved_places).setOnClickListener(this);
+        findViewById(R.id.button_settings).setOnClickListener(this);
 
         mapFragment.getMapAsync(this);
     }
@@ -161,7 +163,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                     Log.i(Wloczykij.TAG, "Updated place cache from server");
                     updateMap();
                 } else {
-                    Toast.makeText(MapViewActivity.this, getString(R.string.map_load_error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MapViewActivity.this, R.string.map_load_error, Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();
@@ -272,7 +274,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             case R.id.action_add_place:
                 addingPlace = true;
                 ((FloatingActionsMenu) findViewById(R.id.multiple_actions)).collapse();
-                Toast.makeText(this, getString(R.string.place_add_click_map), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.place_add_click_map, Toast.LENGTH_LONG).show();
                 break;
 
             case R.id.action_refresh:
@@ -281,8 +283,14 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 break;
 
             case R.id.button_filter:
+                Toast.makeText(this, R.string.todo_wip, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, FilterTagsActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.button_saved_places:
+            case R.id.button_settings:
+                Toast.makeText(this, R.string.todo, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -341,6 +349,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     private Polyline tripPath;
 
     private void planTrip() {
+        Toast.makeText(this, R.string.todo_wip, Toast.LENGTH_SHORT).show();
         new AsyncTask<Void, Void, PathPlanner.PlannedPath>() {
             @Override
             protected void onPreExecute() {
