@@ -64,6 +64,8 @@
     <string name="place_action_share">Udostępnij</string>
     <string name="place_action_report">Zgłoś</string>
 
+    <string name="current_location_not_available">Nie udało się określić twojej lokalizacji</string>
+
     <string name="com_facebook_loginview_log_in_button">Facebook</string>
     <string name="com_facebook_loginview_log_in_button_long">Facebook</string>
     <string name="common_signin_button_text">Google</string>

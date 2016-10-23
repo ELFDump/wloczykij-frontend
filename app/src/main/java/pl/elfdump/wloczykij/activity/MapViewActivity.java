@@ -342,6 +342,11 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
     @Override
     public boolean onMyLocationButtonClick() {
+        if (currentLocation == null) {
+            Toast.makeText(this, R.string.current_location_not_available, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17.5f));
         return true;
     }
@@ -349,6 +354,11 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     private Polyline tripPath;
 
     private void planTrip() {
+        if (currentLocation == null) {
+            Toast.makeText(this, R.string.current_location_not_available, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Toast.makeText(this, R.string.todo_wip, Toast.LENGTH_SHORT).show();
         new AsyncTask<Void, Void, PathPlanner.PlannedPath>() {
             @Override
