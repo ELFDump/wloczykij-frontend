@@ -102,11 +102,12 @@
                         android:text="@string/tags"
                         android:layout_marginBottom="10dp"/>
 
-                    <me.gujun.android.taggroup.TagGroup
-                        android:id="@+id/tag_group"
-                        style="@style/TagGroup"
-                        app:atg_isAppendMode="true"
-                        atg_inputHint="@string/add_tag"/>
+                    <ListView
+                        android:id="@+id/tag_selector_buttons_row"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:divider="@null"
+                        android:dividerHeight="0dp"/>
                 </LinearLayout>
 
                 <LinearLayout

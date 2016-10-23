@@ -26,7 +26,7 @@
                 app:src="@drawable/ic_clear_white_24dp"
                 android:id="@+id/place_action_visited"
                 android:text="@string/place_action_not_visited"
-                android:layout_gravity="center_vertical"/>
+                />
 
             <pl.elfdump.wloczykij.ui.views.ButtonAction
                 android:layout_width="wrap_content"

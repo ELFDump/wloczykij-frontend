@@ -6,14 +6,16 @@ import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.models.Place;
 import pl.elfdump.wloczykij.network.api.models.Tag;
+import pl.elfdump.wloczykij.ui.PlaceDetailsItem;
+import pl.elfdump.wloczykij.ui.TagsGroupItem;
 
 import java.util.*;
 
 public class PlaceUtil {
 
-    private static final int DEFAULT_ICON = R.mipmap.ic_launcher;
+    public static final int DEFAULT_ICON = R.drawable.ic_blank;
 
-    private static final Map<String, Integer> icons = new HashMap<String, Integer>(){{
+    public static final Map<String, Integer> icons = new HashMap<String, Integer>(){{
         put("Jedzenie", R.drawable.ic_restaurant);
         put("Kebab", R.drawable.ic_kebab);
         put("Bar", R.drawable.ic_bar);
@@ -115,7 +117,21 @@ public class PlaceUtil {
         return BitmapDescriptorFactory.fromResource(icon);
     }
 
-    private static Tag findParentWithIcon(Tag current){
+    public static Tag findTopLevel(Tag current){
+        while(current.getParent() != null){
+            String last = current.getName();
+            current = Wloczykij.api.cache(Tag.class).get(current.getParent());
+
+            if(current == null){
+                current = Wloczykij.api.cache(Tag.class).get(last);
+                break;
+            }
+        }
+
+        return current;
+    }
+
+    public static Tag findParentWithIcon(Tag current){
         while(current.getParent() != null){
             current = Wloczykij.api.cache(Tag.class).get(current.getParent());
 

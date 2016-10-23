@@ -32,6 +32,7 @@ import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
+import pl.elfdump.wloczykij.ui.TagsSelectorController;
 import pl.elfdump.wloczykij.utils.ImageUtil;
 import pl.elfdump.wloczykij.utils.Util;
 
@@ -49,6 +50,8 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
      */
     private Uri photoUri;
 
+    private TagsSelectorController tagsSelectorController;
+
     private static final int RC_SELECT_IMAGE = 1888;
     private static final int MAX_IMAGE_SIZE = 2048;
 
@@ -59,6 +62,11 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
 
         disableHeader();
         enableFullscreen();
+
+        ListView listView = (ListView) findViewById(R.id.tag_selector_buttons_row);
+
+        tagsSelectorController = new TagsSelectorController(listView);
+        tagsSelectorController.loadData();
 
         findViewById(R.id.add_place_button).setOnClickListener(this);
         findViewById(R.id.button_add_image).setOnClickListener(this);
@@ -106,7 +114,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
                 findViewById(R.id.add_place_button).setEnabled(false);
 
                 place.setName(name);
-                place.setTags(((TagGroup) findViewById(R.id.tag_group)).getTags());
+                //place.setTags(((TagGroup) findViewById(R.id.tag_group)).getTags());
 
                 savePlace();
                 break;
