@@ -27,7 +27,7 @@ import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.utils.JsonSerializer;
 
 public class APIManager {
-    public static class APIError {
+    private static class APIError {
         String detail;
         @Override
         public String toString() {
@@ -35,7 +35,7 @@ public class APIManager {
         }
     }
 
-    public static class APIToken {
+    private static class APIToken {
         String token;
         @Override
         public String toString() {
@@ -43,12 +43,13 @@ public class APIManager {
         }
     }
 
-    private OkHttpClient httpClient = new OkHttpClient();
-    private String serverUrl;
+    private final OkHttpClient httpClient;
+    private final String serverUrl;
     private String token = null;
     private Map<String, String> endpoints;
 
-    public APIManager(String serverUrl) {
+    public APIManager(OkHttpClient httpClient, String serverUrl) {
+        this.httpClient = httpClient;
         this.serverUrl = serverUrl;
     }
 

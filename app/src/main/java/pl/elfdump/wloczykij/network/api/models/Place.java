@@ -79,36 +79,43 @@ public class Place extends APIModel {
         return tags;
     }
 
-    public void setTags(String[] tags){
+    public Place setTags(String[] tags){
         this.tags = Arrays.asList(tags);
+        return this;
     }
 
-    public void setName(String name) {
+    public Place setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public void setLat(double lat) {
+    public Place setLat(double lat) {
         this.coords[0] = lat;
+        return this;
     }
 
-    public void setLng(double lng) {
+    public Place setLng(double lng) {
         this.coords[1] = lng;
+        return this;
     }
 
-    public void addTag(String tag) {
+    public Place addTag(String tag) {
         this.tags.add(tag);
+        return this;
     }
 
-    public void removeTag(String tag) {
+    public Place removeTag(String tag) {
         this.tags.remove(tag);
+        return this;
     }
 
     public String getDescription(){
         return description;
     }
 
-    public void setDescription(String description){
+    public Place setDescription(String description){
         this.description = description;
+        return this;
     }
 
     public String getVisitUrl() {
@@ -119,8 +126,9 @@ public class Place extends APIModel {
         return visit;
     }
 
-    public void setVisit(Visit visit) {
+    public Place setVisit(Visit visit) {
         this.visit = visit;
+        return this;
     }
 
     // TODO: Convert to Date
@@ -144,5 +152,10 @@ public class Place extends APIModel {
 
     public int getVisitCount() {
         return visit_count;
+    }
+
+    @Override
+    public String toString() {
+        return name + " [" + coords[0] + ", " + coords[1] + "]";
     }
 }
