@@ -31,7 +31,7 @@ public class TestPathPlanner {
 
     @Test
     public void testPathPlanner() throws IOException, JSONException {
-        LatLng startPoint = new LatLng(51.759248, 19.455983);
+        LatLng centrumLodzi = new LatLng(51.759248, 19.455983);
 
         Place pokojDamiana = new Place()
             .setName("Pokój Damiana")
@@ -44,7 +44,7 @@ public class TestPathPlanner {
             .setLng(19.486769);
 
         PathPlanner.PlannedPath path = new PathPlanner(httpClient, "AIzaSyAoFjPXQuPGrPPdDweh1giyooctH6olD14")
-            .setStartPoint(startPoint)
+            .setStartPoint(centrumLodzi)
             .addPathPlace(pokojDamiana)
             .addPathPlace(test)
             .plan();
@@ -52,6 +52,6 @@ public class TestPathPlanner {
         System.out.println(path);
 
         assertNotNull(path);
-        assertEquals(path.getPlaceList().length, 2);
+        assertEquals(2, path.getPlaceList().length);
     }
 }

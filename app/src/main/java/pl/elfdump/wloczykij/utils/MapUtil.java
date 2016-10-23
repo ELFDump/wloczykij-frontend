@@ -1,5 +1,7 @@
 package pl.elfdump.wloczykij.utils;
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -11,6 +13,23 @@ public class MapUtil {
 
     public static LatLng getPosition(Place place){
         return new LatLng(place.getLat(), place.getLng());
+    }
+
+    public static double getDistance(LatLng p1, LatLng p2) {
+        // TODO: You cannot use this in unit tests :/
+        // float[] results = new float[1];
+        // Location.distanceBetween(p1.latitude, p1.longitude, p2.latitude, p2.longitude, results);
+        // return results[0];
+        double l1 = Math.toRadians(p1.latitude);
+        double l2 = Math.toRadians(p2.latitude);
+        double g1 = Math.toRadians(p1.longitude);
+        double g2 = Math.toRadians(p2.longitude);
+
+        double dist = Math.acos(Math.sin(l1) * Math.sin(l2) + Math.cos(l1) * Math.cos(l2) * Math.cos(g1 - g2));
+        if (dist < 0)
+            dist = dist + Math.PI;
+
+        return dist * 6378100;
     }
 
     // http://wptrafficanalyzer.in/blog/route-between-two-locations-with-waypoints-in-google-map-android-api-v2/
