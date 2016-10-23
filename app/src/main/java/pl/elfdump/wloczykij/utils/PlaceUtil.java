@@ -65,6 +65,7 @@ public class PlaceUtil {
         put("Rośliny", R.drawable.ic_flowers);
         put("Palmiarnia", R.drawable.ic_palmtree);
         put("Nauka", R.drawable.ic_science);
+        put("Eksperymentarium", R.drawable.ic_laboratory);
         put("Planetarium", R.drawable.ic_planetarium);
         put("Sztuka", R.drawable.ic_art);
         put("Zakupy", R.drawable.ic_shopping);
