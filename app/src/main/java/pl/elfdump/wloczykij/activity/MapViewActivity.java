@@ -37,10 +37,7 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
@@ -58,9 +55,11 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     private static final int MAP_LOCATION_PERMISSION_REQUEST = 1234;
     private static final int RC_PLACE_EDIT = 4321;
     private static final int RC_PLACE_DETAILS = 4322;
+    private static final int RC_FILTER_UPDATE = 4323;
 
     private GoogleMap mMap;
     private HashMap<Marker, String> markers = new HashMap<>();
+    private ArrayList<String> filterVisibleTags = null;
 
     private IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
     private BroadcastReceiver broadcast = new BroadcastReceiver(){
@@ -92,7 +91,18 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         findViewById(R.id.button_saved_places).setOnClickListener(this);
         findViewById(R.id.button_settings).setOnClickListener(this);
 
+        if (savedInstanceState != null) {
+            filterVisibleTags = savedInstanceState.getStringArrayList("filterVisibleTags");
+        }
+
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle state){
+        if(filterVisibleTags != null){
+            state.putStringArrayList("filterVisibleTags", filterVisibleTags);
+        }
     }
 
     @Override
@@ -174,6 +184,11 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         // Add new markers
         for (Place p : Wloczykij.api.cache(Place.class).getAll()) {
+            Log.d("TEST", p.getName() + ":" + (filterVisibleTags != null) + ":" + (filterVisibleTags != null ? Collections.disjoint(p.getTags(), filterVisibleTags) : "WSTEPNE"));
+            if(filterVisibleTags != null && !Collections.disjoint(p.getTags(), filterVisibleTags)){
+                continue;
+            }
+
             if (!markers.containsValue(p.getResourceUrl())) {
                 Marker marker = mMap.addMarker(new MarkerOptions().position(MapUtil.getPosition(p)).title(p.getName()));
                 marker.setIcon(PlaceUtil.getMatchingIcon(p));
@@ -188,6 +203,12 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 marker.remove();
                 markers.remove(marker);
             } else {
+                Log.d("TEST", p.getName() + ":" + (filterVisibleTags != null) + ":" + (filterVisibleTags != null ? Collections.disjoint(p.getTags(), filterVisibleTags) : "WSTEPNE"));
+
+                if(filterVisibleTags != null && !Collections.disjoint(p.getTags(), filterVisibleTags)){
+                    continue;
+                }
+
                 marker.setPosition(MapUtil.getPosition(p));
                 marker.setIcon(PlaceUtil.getMatchingIcon(p));
                 marker.setTitle(p.getName());
@@ -285,7 +306,8 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             case R.id.button_filter:
                 Toast.makeText(this, R.string.todo_wip, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, FilterTagsActivity.class);
-                startActivity(intent);
+                intent.putExtra("filter", filterVisibleTags);
+                startActivityForResult(intent, RC_FILTER_UPDATE);
                 break;
 
             case R.id.button_saved_places:
@@ -325,6 +347,17 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         if (requestCode == RC_PLACE_DETAILS) {
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(prevCameraPosition), 1000, null);
+        }
+
+        if (requestCode == RC_FILTER_UPDATE){
+            if (resultCode == RESULT_OK) {
+                Log.d("TEST", "a");
+                filterVisibleTags = data.getStringArrayListExtra("selectedTags");
+                for(String s : filterVisibleTags){
+                    Log.d("AAA", s);
+                }
+                updateMap();
+            }
         }
     }
 

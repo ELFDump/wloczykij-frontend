@@ -56,7 +56,7 @@ public class PlaceDetailsListAdapter extends ArrayAdapter<PlaceDetailsItem> {
 
         titleView.setText(modelsArrayList.get(position).getTitle() + " [" + String.valueOf(position) + "]"); // TODO: ID for debugging only
         checkBox.setVisibility((modelsArrayList.get(position).hasCheckBox() ? View.VISIBLE : View.GONE));
-        checkBox.setChecked(this.checked[position]);
+        checkBox.setChecked(modelsArrayList.get(position).isChecked());
 
         if(modelsArrayList.get(position).getType() == PlaceDetailsItem.ITEM_CHILD){ //
             rowView.setPadding(100, 0, 0, 0);

@@ -1,5 +1,6 @@
 package pl.elfdump.wloczykij.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -23,9 +24,15 @@ public class FilterTagsActivity extends SlidingActivity {
         disableHeader();
         setContent(R.layout.activity_filter_tags);
 
+        ArrayList<String> previousFilter = null;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            previousFilter = extras.getStringArrayList("filter");
+        }
+
         ListView listView = (ListView) findViewById(R.id.tag_selector_buttons_row);
 
-        tagsSelectorController = new TagsSelectorController(listView);
+        tagsSelectorController = new TagsSelectorController(listView, previousFilter);
         tagsSelectorController.loadData();
 
         if (state != null) {
@@ -43,9 +50,17 @@ public class FilterTagsActivity extends SlidingActivity {
     }
 
     @Override
-    public void onStop(){
+    public void onPause(){
+        Intent intent = new Intent();
+        Log.d("TEST", "SADASDASD");
+        intent.putStringArrayListExtra("selectedTags", tagsSelectorController.getSelectedTags());
+        for(String s : tagsSelectorController.getSelectedTags()){
+            Log.d("AA", s);
+        }
 
-        super.onStop();
+        setResult(RESULT_OK, intent);
+
+        super.onPause();
     }
 
 }

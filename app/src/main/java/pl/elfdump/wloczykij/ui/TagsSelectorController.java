@@ -1,5 +1,6 @@
 package pl.elfdump.wloczykij.ui;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,11 +21,13 @@ public class TagsSelectorController {
 
     private ListView listView;
     private ArrayList<PlaceDetailsItem> data;
+    private ArrayList<String> previousFilter;
 
     private PlaceDetailsListAdapter adapter;
 
-    public TagsSelectorController(final ListView listView) {
+    public TagsSelectorController(final ListView listView, ArrayList<String> filter) {
         this.listView = listView;
+        this.previousFilter = filter;
 
         // Interaction with checkbox is disabled to get selection based on element index rather than checkbox id
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -68,6 +71,7 @@ public class TagsSelectorController {
         ArrayList<String> selectedTags = new ArrayList<>();
 
         for(PlaceDetailsItem item : data){
+            Log.d("TEST", item.getTitle() + "WTF" + item.isChecked());
             if(item.isChecked()){
                 selectedTags.add(item.getTitle());
             }
@@ -115,11 +119,17 @@ public class TagsSelectorController {
         for (Map.Entry<String, TagsGroupItem> entry : tagsGroupItems.entrySet()) {
             PlaceDetailsItem group = createPlaceDetailsItem(entry.getKey());
             sortedList.add(group);
+            if(previousFilter == null || previousFilter.contains(group.getTitle())){
+                group.setChecked(true);
+            }
 
             for(PlaceDetailsItem item : entry.getValue().getItems()){
                 item.setType(PlaceDetailsItem.ITEM_CHILD);
                 group.childs.add(item);
                 sortedList.add(item);
+                if(previousFilter == null || previousFilter.contains(item.getTitle())){
+                    item.setChecked(true);
+                }
             }
         }
 

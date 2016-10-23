@@ -65,7 +65,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
 
         ListView listView = (ListView) findViewById(R.id.tag_selector_buttons_row);
 
-        tagsSelectorController = new TagsSelectorController(listView);
+        tagsSelectorController = new TagsSelectorController(listView, new ArrayList<String>());
         tagsSelectorController.loadData();
 
         findViewById(R.id.add_place_button).setOnClickListener(this);
