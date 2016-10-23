@@ -182,13 +182,18 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     private void updateMap() {
         Log.d(Wloczykij.TAG, "Update map markers");
 
-        // Add new markers
+        Map<String, Place> filteredPlaces = new HashMap<>();
+        if (filterVisibleTags == null) Thread.dumpStack();
         for (Place p : Wloczykij.api.cache(Place.class).getAll()) {
-            Log.d("TEST", p.getName() + ":" + (filterVisibleTags != null) + ":" + (filterVisibleTags != null ? Collections.disjoint(p.getTags(), filterVisibleTags) : "WSTEPNE"));
-            if(filterVisibleTags != null && !Collections.disjoint(p.getTags(), filterVisibleTags)){
+            if(filterVisibleTags != null && Collections.disjoint(p.getTags(), filterVisibleTags)) {
+                Log.d(Wloczykij.TAG, "Filter "+p.toString()+" out");
                 continue;
             }
+            filteredPlaces.put(p.getId(), p);
+        }
 
+        // Add new markers
+        for (Place p : filteredPlaces.values()) {
             if (!markers.containsValue(p.getResourceUrl())) {
                 Marker marker = mMap.addMarker(new MarkerOptions().position(MapUtil.getPosition(p)).title(p.getName()));
                 marker.setIcon(PlaceUtil.getMatchingIcon(p));
@@ -197,18 +202,15 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         // Update/remove existing markers
-        for (Marker marker : markers.keySet()) {
-            Place p = Wloczykij.api.cache(Place.class).get(markers.get(marker));
+        Iterator<Map.Entry<Marker, String>> iter = markers.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<Marker, String> entry = iter.next();
+            Marker marker = entry.getKey();
+            Place p = filteredPlaces.get(entry.getValue());
             if (p == null) {
                 marker.remove();
-                markers.remove(marker);
+                iter.remove();
             } else {
-                Log.d("TEST", p.getName() + ":" + (filterVisibleTags != null) + ":" + (filterVisibleTags != null ? Collections.disjoint(p.getTags(), filterVisibleTags) : "WSTEPNE"));
-
-                if(filterVisibleTags != null && !Collections.disjoint(p.getTags(), filterVisibleTags)){
-                    continue;
-                }
-
                 marker.setPosition(MapUtil.getPosition(p));
                 marker.setIcon(PlaceUtil.getMatchingIcon(p));
                 marker.setTitle(p.getName());
@@ -304,7 +306,6 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 break;
 
             case R.id.button_filter:
-                Toast.makeText(this, R.string.todo_wip, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, FilterTagsActivity.class);
                 intent.putExtra("filter", filterVisibleTags);
                 startActivityForResult(intent, RC_FILTER_UPDATE);
@@ -349,13 +350,11 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(prevCameraPosition), 1000, null);
         }
 
-        if (requestCode == RC_FILTER_UPDATE){
+        if (requestCode == RC_FILTER_UPDATE) {
             if (resultCode == RESULT_OK) {
-                Log.d("TEST", "a");
                 filterVisibleTags = data.getStringArrayListExtra("selectedTags");
-                for(String s : filterVisibleTags){
-                    Log.d("AAA", s);
-                }
+                Log.d(Wloczykij.TAG, "Got new filters, update map");
+                Log.d(Wloczykij.TAG, filterVisibleTags.toString());
                 updateMap();
             }
         }

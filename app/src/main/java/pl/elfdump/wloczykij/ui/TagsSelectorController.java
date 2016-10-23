@@ -71,7 +71,6 @@ public class TagsSelectorController {
         ArrayList<String> selectedTags = new ArrayList<>();
 
         for(PlaceDetailsItem item : data){
-            Log.d("TEST", item.getTitle() + "WTF" + item.isChecked());
             if(item.isChecked()){
                 selectedTags.add(item.getTitle());
             }

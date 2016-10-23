@@ -50,17 +50,12 @@ public class FilterTagsActivity extends SlidingActivity {
     }
 
     @Override
-    public void onPause(){
+    public void finish() {
         Intent intent = new Intent();
-        Log.d("TEST", "SADASDASD");
         intent.putStringArrayListExtra("selectedTags", tagsSelectorController.getSelectedTags());
-        for(String s : tagsSelectorController.getSelectedTags()){
-            Log.d("AA", s);
-        }
-
         setResult(RESULT_OK, intent);
 
-        super.onPause();
+        super.finish();
     }
 
 }
