@@ -195,7 +195,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     public boolean onMarkerClick(Marker marker) {
         prevCameraPosition = mMap.getCameraPosition();
         final Place place = Wloczykij.api.cache(Place.class).get(markers.get(marker));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(MapUtil.getPosition(place), 17.5f), 1500, new GoogleMap.CancelableCallback() {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(MapUtil.getPosition(place), 17.5f), 1000, new GoogleMap.CancelableCallback() {
             @Override
             public void onFinish() {
                 Log.d(Wloczykij.TAG, "Animation finished");
