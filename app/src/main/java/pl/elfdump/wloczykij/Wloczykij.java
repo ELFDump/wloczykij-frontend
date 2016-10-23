@@ -4,13 +4,15 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import okhttp3.OkHttpClient;
 import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.utils.UserSettings;
 
 public class Wloczykij extends Application {
     public static final String TAG = "Wloczykij";
 
-    public static APIManager api = new APIManager("http://api.wloczykij.eu:8000/");
+    public static OkHttpClient httpClient = new OkHttpClient();
+    public static APIManager api = new APIManager(httpClient, "http://api.wloczykij.eu:8000/");
     public static Session session = new Session(api);
     public static UserSettings settings;
 
