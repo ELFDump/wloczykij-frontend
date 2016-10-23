@@ -64,6 +64,8 @@
     <string name="place_action_share">Udostępnij</string>
     <string name="place_action_report">Zgłoś</string>
 
+    <string name="title_filter_places">Filtruj miejsca</string>
+
     <string name="current_location_not_available">Nie udało się określić twojej lokalizacji</string>
 
     <string name="com_facebook_loginview_log_in_button">Facebook</string>
