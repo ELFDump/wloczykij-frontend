@@ -113,8 +113,10 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
 
                 findViewById(R.id.add_place_button).setEnabled(false);
 
+                ArrayList<String> selectedTags = tagsSelectorController.getSelectedTags();
+
                 place.setName(name);
-                //place.setTags(((TagGroup) findViewById(R.id.tag_group)).getTags());
+                place.setTags(selectedTags.toArray(new String[selectedTags.size()]));
 
                 savePlace();
                 break;

@@ -10,7 +10,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="fill_parent">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -28,41 +28,43 @@
                 android:textColor="@color/white"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:background="@android:color/darker_gray">
-
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:text="@string/add_image"
-                    android:id="@+id/button_add_image"
-                    android:background="@android:color/darker_gray"
-                    />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/thumb_add_image"
-                    android:scaleType="centerCrop"/>
-
-            </FrameLayout>
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            >
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="20dp">
+                android:layout_height="fill_parent"
+                android:id="@+id/place_edit_content">
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="110dp"
+                    android:background="@android:color/darker_gray">
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:text="@string/add_image"
+                        android:id="@+id/button_add_image"
+                        android:background="@android:color/darker_gray"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/thumb_add_image"
+                        android:scaleType="centerCrop"/>
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp">
 
                     <com.rengwuxian.materialedittext.MaterialEditText
                         android:id="@+id/place_name"
@@ -73,12 +75,6 @@
                         app:met_iconLeft="@mipmap/ic_launcher"
                         android:hint="@string/name"/>
 
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
                     <com.rengwuxian.materialedittext.MaterialEditText
                         android:id="@+id/place_description"
                         android:layout_width="match_parent"
@@ -87,45 +83,38 @@
                         app:met_floatingLabelText="@string/description"
                         app:met_iconLeft="@mipmap/ic_launcher"
                         android:hint="@string/description"/>
-                </FrameLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="@string/tags"
-                        android:layout_marginBottom="10dp"/>
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"/>
 
                     <ListView
                         android:id="@+id/tag_selector_buttons_row"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:layout_height="300dp"
+                        android:layout_weight="1.70"
+                        android:scrollbarSize="3dp"
+                        android:scrollbarStyle="outsideOverlay"
+                        android:scrollbars="vertical"
+                        android:scrollingCache="true"
+                        android:smoothScrollbar="true"
                         android:divider="@null"
                         android:dividerHeight="0dp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp">
 
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="Dodaj"
                         android:id="@+id/add_place_button"/>
+
                 </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 </RelativeLayout>
