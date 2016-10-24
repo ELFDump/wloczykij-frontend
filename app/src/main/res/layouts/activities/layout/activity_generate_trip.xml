@@ -126,6 +126,17 @@
                 android:text="@string/trip_generate" />
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/matching_not_found_error"
+            android:id="@+id/matching_not_found_error"
+            android:layout_marginLeft="10dp"
+            android:textColor="@android:color/black"
+            android:textAlignment="center"
+            android:visibility="gone" />
+
         <ListView
             android:id="@+id/tag_selector_buttons_row"
             android:layout_width="fill_parent"
