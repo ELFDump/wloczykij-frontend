@@ -78,6 +78,13 @@
     <string name="title_saved_places">Zapisane miejsca</string>
     <string name="title_plan_trip">Zaplanuj wycieczkę</string>
 
+    <string name="trip_generate_check_settings">Wycieczka generowana jest na podstawie twoich zainteresowań.</string>
+    <string name="trip_goto_settings">Przejdź do ustawień zainteresowań</string>
+    <string name="trip_include_already_visited">Uwzględnij już odwiedzone</string>
+    <string name="trip_hide_restaurants">Ukryj restauracje</string>
+    <string name="trip_add_place">Dodaj</string>
+    <string name="trip_generate">Wyświetl na mapie</string>
+
     <string name="current_location_not_available">Nie udało się określić twojej lokalizacji</string>
 
     <string name="com_facebook_loginview_log_in_button">Facebook</string>
