@@ -18,7 +18,6 @@
         tools:replace="android:icon">
         <activity
             android:name=".activity.LoginActivity"
-            android:noHistory="true"
             android:theme="@style/LoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
