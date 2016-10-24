@@ -18,7 +18,6 @@
         tools:replace="android:icon">
         <activity
             android:name=".activity.LoginActivity"
-            android:noHistory="true"
             android:theme="@style/LoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,8 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MapViewActivity"
-            android:launchMode="singleTask"/>
+            android:name=".activity.MapViewActivity"/>
         <activity
             android:name=".activity.PlaceDetailsActivity"
             android:excludeFromRecents="true"
@@ -71,7 +69,6 @@
             android:name=".activity.GenerateTripActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=""
-            android:launchMode="singleTask"
             android:theme="@style/Theme.Sliding.Light"/>
 
 

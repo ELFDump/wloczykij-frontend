@@ -99,12 +99,21 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         mapFragment.getMapAsync(this);
+
+        if (getCallingActivity() != null) {
+            findViewById(R.id.multiple_actions).setVisibility(View.GONE);
+            findViewById(R.id.toolbar).setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Wloczykij.session.reloginIfNeeded(this);
+
+        if (getCallingActivity() != null) {
+            Toast.makeText(this, R.string.place_add_click_map, Toast.LENGTH_LONG).show();
+        }
     }
 
     private Polyline tripPath;
@@ -187,6 +196,9 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void refreshMap() {
+        if (getCallingActivity() != null)
+            return;
+
         Log.d(Wloczykij.TAG, "Start cache update");
         new AsyncTask<Void, Void, Boolean>() {
             @Override
@@ -213,6 +225,9 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void updateMap() {
+        if (getCallingActivity() != null)
+            return;
+
         Log.d(Wloczykij.TAG, "Update map markers");
 
         Map<String, Place> filteredPlaces = new HashMap<>();
@@ -312,11 +327,6 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
-    }
-
     private boolean addingPlace = false;
 
     @Override
@@ -325,6 +335,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             case R.id.action_plan_trip:
                 ((FloatingActionsMenu) findViewById(R.id.multiple_actions)).collapse();
                 Intent planTripIntent = new Intent(this, GenerateTripActivity.class);
+                planTripIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 planTripIntent.putExtra("startPoint", currentLocation);
                 startActivity(planTripIntent);
                 break;
@@ -370,6 +381,13 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             Intent intent = new Intent(this, PlaceEditActivity.class);
             intent.putExtra("place", place);
             startActivityForResult(intent, RC_PLACE_EDIT);
+        }
+
+        if (getCallingActivity() != null) {
+            Intent intent = new Intent();
+            intent.putExtra("position", coords);
+            setResult(RESULT_OK, intent);
+            finish();
         }
     }
 

@@ -1,8 +1,11 @@
 package pl.elfdump.wloczykij.activity;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import pl.elfdump.wloczykij.R;
@@ -33,6 +37,7 @@ import pl.elfdump.wloczykij.utils.PlaceUtil;
 public class GenerateTripActivity extends SlidingActivity implements View.OnClickListener {
 
     private static final int RC_ADD_PLACE = 4444;
+    private static final int RC_SELECT_START_POS = 4445;
 
     private TagsSelectorController tagsSelectorController;
 
@@ -77,7 +82,8 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
                 break;
 
             case R.id.trip_change_starting_pos:
-                Toast.makeText(this, R.string.todo, Toast.LENGTH_SHORT).show(); // TODO
+                Intent intent = new Intent(this, MapViewActivity.class);
+                startActivityForResult(intent, RC_SELECT_START_POS);
                 break;
         }
     }
@@ -89,6 +95,14 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
                 String placeId = data.getStringExtra("place");
                 Log.d(Wloczykij.TAG, "Add " + placeId);
                 addedManually.add(placeId);
+                updatePlaces();
+            }
+        }
+
+        if (requestCode == RC_SELECT_START_POS) {
+            if (resultCode == RESULT_OK) {
+                startPoint = data.getParcelableExtra("position");
+                Log.d(Wloczykij.TAG, "New start point: " + startPoint);
                 updatePlaces();
             }
         }
@@ -123,8 +137,26 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
         return tagsSelectorController.getSelectedTags();
     }
 
+    private String getAddress(LatLng position) {
+        String out = String.format("[%.6f, %.6f]", position.latitude, position.longitude);
+        try {
+            List<Address> addresses = new Geocoder(this).getFromLocation(position.latitude, position.longitude, 1);
+            Address address = addresses.get(0);
+            ArrayList<String> addressFragments = new ArrayList<>();
+
+            for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                addressFragments.add(address.getAddressLine(i));
+            }
+
+            out = TextUtils.join(", ", addressFragments);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return out;
+    }
+
     private void updatePlaces() {
-        String posStr = startPoint != null ? startPoint.toString() : "-"; // TODO
+        String posStr = startPoint != null ? getAddress(startPoint) : "-"; // TODO
         ((TextView) findViewById(R.id.trip_starting_pos)).setText(getString(R.string.trip_starting_pos, posStr));
 
         if (startPoint != null) {
@@ -165,6 +197,7 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
                     Toast.makeText(GenerateTripActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(GenerateTripActivity.this, MapViewActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     intent.putParcelableArrayListExtra("plannedPath", path.getLine());
                     startActivity(intent);
                 }
