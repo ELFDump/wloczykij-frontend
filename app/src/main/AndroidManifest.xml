@@ -16,8 +16,10 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon"
         android:name=".Wloczykij">
-        <activity android:name=".activity.LoginActivity"
-                  android:theme="@style/LoginTheme">
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/LoginTheme"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

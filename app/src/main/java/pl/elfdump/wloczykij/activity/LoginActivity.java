@@ -308,7 +308,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case ENTER_MAP:
-                startActivity(new Intent(this, MapViewActivity.class));
+                if (getCallingActivity() == null) {
+                    startActivity(new Intent(this, MapViewActivity.class));
+                } else {
+                    setResult(RESULT_OK);
+                    finish();
+                }
                 break;
         }
         currentPhase = phase;

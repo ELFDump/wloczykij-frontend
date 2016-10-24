@@ -99,6 +99,12 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Wloczykij.session.reloginIfNeeded(this);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle state){
         if(filterVisibleTags != null){
             state.putStringArrayList("filterVisibleTags", filterVisibleTags);
@@ -183,7 +189,6 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         Log.d(Wloczykij.TAG, "Update map markers");
 
         Map<String, Place> filteredPlaces = new HashMap<>();
-        if (filterVisibleTags == null) Thread.dumpStack();
         for (Place p : Wloczykij.api.cache(Place.class).getAll()) {
             if(filterVisibleTags != null && Collections.disjoint(p.getTags(), filterVisibleTags)) {
                 Log.d(Wloczykij.TAG, "Filter "+p.toString()+" out");

@@ -1,5 +1,10 @@
 package pl.elfdump.wloczykij;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.util.Log;
+
+import pl.elfdump.wloczykij.activity.LoginActivity;
 import pl.elfdump.wloczykij.network.api.APIBadRequestException;
 import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
@@ -7,11 +12,12 @@ import pl.elfdump.wloczykij.network.api.models.Tag;
 import pl.elfdump.wloczykij.network.api.models.User;
 
 public class Session {
+    private static final int RC_LOGIN = 1111;
     public User loggedOnUser;
 
     private APIManager api;
 
-    public Session(APIManager api) {
+    Session(APIManager api) {
         this.api = api;
     }
 
@@ -21,6 +27,13 @@ public class Session {
 
     public void updateData() throws APIRequestException {
         Wloczykij.api.cache(Tag.class).update();
+    }
+
+    public void reloginIfNeeded(Activity activity) {
+        if (loggedOnUser == null) {
+            Intent intent = new Intent(activity, LoginActivity.class);
+            activity.startActivityForResult(intent, RC_LOGIN);
+        }
     }
 
     /**
