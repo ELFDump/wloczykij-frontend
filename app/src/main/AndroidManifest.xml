@@ -52,7 +52,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="api.wloczykij.eu" android:scheme="http" android:port="8000" />
+                <data android:host="api.wloczykij.eu" android:scheme="http" android:port="8000" android:pathPrefix="/places/" />
             </intent-filter>
         </activity>
         <activity

@@ -45,6 +45,8 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
         );
 
         enableFullscreen();
+
+        Wloczykij.session.reloginIfNeeded(this);
     }
 
     @Override
