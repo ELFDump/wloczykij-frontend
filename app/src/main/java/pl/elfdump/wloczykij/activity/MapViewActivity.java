@@ -422,8 +422,8 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                     List<Place> selectedPlaces = new PlacePlanner()
                         .setPlaces(Wloczykij.api.cache(Place.class).getAll())
                         .setStartPoint(currentLocation)
-                        .setIncludedTags(tags) // TODO
-                        .findPlaces(Integer.MAX_VALUE); // TODO
+                        .setIncludedTags(Wloczykij.session.loggedOnUser.getFollowedTags())
+                        .findPlaces();
 
                     if (selectedPlaces.size() == 0) {
                         Log.w(Wloczykij.TAG, "No places to visit found");

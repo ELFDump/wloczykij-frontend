@@ -36,7 +36,7 @@ public class TestPlacePlanner {
             .setPlaces(places)
             .addIncludedTag("Zabytek")
             .setStartPoint(startPoint)
-            .findPlaces(1);
+            .findPlaces();
 
         assertNotNull(selectedPlaces);
         assertEquals(1, selectedPlaces.size());

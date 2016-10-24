@@ -14,14 +14,15 @@ import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.utils.Util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlaceDetailsListAdapter extends ArrayAdapter<PlaceDetailsItem> {
 
     private final Context context;
-    private final ArrayList<PlaceDetailsItem> modelsArrayList;
+    private final List<PlaceDetailsItem> modelsArrayList;
     private boolean[] checked;
 
-    public PlaceDetailsListAdapter(Context context, ArrayList<PlaceDetailsItem> modelsArrayList) {
+    public PlaceDetailsListAdapter(Context context, List<PlaceDetailsItem> modelsArrayList) {
         super(context, R.layout.place_details_item, modelsArrayList);
 
         this.context = context;

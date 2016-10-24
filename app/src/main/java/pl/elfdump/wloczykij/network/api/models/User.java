@@ -35,8 +35,8 @@ public class User extends APIModel implements Cloneable{
         this.username = username;
     }
 
-    public String[] getFollowedTags() {
-        return followed_tags.toArray(new String[followed_tags.size()]);
+    public List<String> getFollowedTags() {
+        return followed_tags;
     }
 
     public void setFollowedTags(String[] tags){

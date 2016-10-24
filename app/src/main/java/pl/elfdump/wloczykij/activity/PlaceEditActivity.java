@@ -243,7 +243,7 @@ public class PlaceEditActivity extends SlidingActivity implements View.OnClickLi
             @Override
             protected void onPostExecute(Boolean success) {
                 if (success) {
-                    Toast.makeText(PlaceEditActivity.this, R.string.place_saved, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlaceEditActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
                     Intent result = new Intent();
                     result.putExtra("place", place.getResourceUrl());
                     setResult(Activity.RESULT_OK, result);

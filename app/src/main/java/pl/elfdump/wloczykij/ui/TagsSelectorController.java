@@ -1,18 +1,22 @@
 package pl.elfdump.wloczykij.ui;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.models.Tag;
 import pl.elfdump.wloczykij.utils.PlaceUtil;
 import pl.elfdump.wloczykij.utils.Util;
-
-import java.util.*;
 
 /**
  * Handles tag selector list (clicks, selections) and generates list of tags
@@ -20,12 +24,12 @@ import java.util.*;
 public class TagsSelectorController {
 
     private ListView listView;
-    private ArrayList<PlaceDetailsItem> data;
-    private ArrayList<String> previousFilter;
+    private List<PlaceDetailsItem> data;
+    private List<String> previousFilter;
 
     private PlaceDetailsListAdapter adapter;
 
-    public TagsSelectorController(final ListView listView, ArrayList<String> filter) {
+    public TagsSelectorController(final ListView listView, List<String> filter) {
         this.listView = listView;
         this.previousFilter = filter;
 
@@ -56,14 +60,14 @@ public class TagsSelectorController {
         loadData(generateData());
     }
 
-    private void loadData(ArrayList<PlaceDetailsItem> data){
+    private void loadData(List<PlaceDetailsItem> data){
         this.data = data;
 
         adapter = new PlaceDetailsListAdapter(listView.getContext(), data);
         listView.setAdapter(adapter);
     }
 
-    public ArrayList<PlaceDetailsItem> getData(){
+    public List<PlaceDetailsItem> getData(){
         return data;
     }
 
@@ -80,7 +84,7 @@ public class TagsSelectorController {
     }
 
     // Apply previous selections after ListView scrolling
-    public void applySelections(ArrayList<String> selections){
+    public void applySelections(List<String> selections){
         for(int index = 0; index < data.size(); index++){
             if(selections.contains(data.get(index).getTitle())){
                 data.get(index).setChecked(true);
@@ -89,7 +93,7 @@ public class TagsSelectorController {
         }
     }
 
-    private ArrayList<PlaceDetailsItem> generateData(){
+    private List<PlaceDetailsItem> generateData(){
 
         Collection<Tag> availableTags = Wloczykij.api.cache(Tag.class).getAll();
         Map<String, TagsGroupItem> tagsGroupItems = new HashMap<>();

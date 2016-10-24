@@ -38,7 +38,7 @@ public class PlacePlanner {
         return this;
     }
 
-    public List<Place> findPlaces(int amount) {
+    public List<Place> findPlaces() {
         // TODO: Think about this algorithm, it probably requires a bit of tweaking
         Map<Place, Float> selectedPlaces = new HashMap<>();
         for (Place place : places) {
@@ -55,11 +55,6 @@ public class PlacePlanner {
             }
         }
 
-        List<Place> selectedPlacesList = Util.sortMapKeysByValues(selectedPlaces);
-        if (selectedPlacesList.size() <= amount) {
-            return selectedPlacesList;
-        } else {
-            return new ArrayList<>(selectedPlacesList.subList(0, amount+1));
-        }
+        return Util.sortMapKeysByValues(selectedPlaces);
     }
 }
