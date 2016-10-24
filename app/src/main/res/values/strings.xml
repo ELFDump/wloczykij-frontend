@@ -84,6 +84,8 @@
     <string name="trip_hide_restaurants">Ukryj restauracje</string>
     <string name="trip_add_place">Dodaj</string>
     <string name="trip_generate">Wyświetl na mapie</string>
+    <string name="trip_starting_pos">Pozycja startowa: %s</string>
+    <string name="trip_starting_pos_change">Zmień</string>
 
     <string name="current_location_not_available">Nie udało się określić twojej lokalizacji</string>
 

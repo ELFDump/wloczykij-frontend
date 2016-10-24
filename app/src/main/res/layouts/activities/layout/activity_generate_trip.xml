@@ -6,9 +6,9 @@
     tools:context="pl.elfdump.wloczykij.activity.GenerateTripActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:weightSum="1">
 
         <FrameLayout
@@ -29,69 +29,92 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/material_grey_300"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:background="@color/material_grey_300">
 
             <Button
+                android:id="@+id/trip_goto_settings"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/trip_goto_settings"
-                android:id="@+id/trip_goto_settings"
-                android:layout_gravity="bottom|center|right" />
+                android:layout_gravity="bottom|center|right"
+                android:text="@string/trip_goto_settings" />
         </FrameLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:background="@color/material_grey_300"
-            android:paddingBottom="10dp">
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
+                android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/settings"
-                android:id="@+id/textView6"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:textAlignment="center" />
+                android:text="@string/settings"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/trip_starting_pos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/trip_starting_pos"
+                    android:textColor="@android:color/black" />
+
+                <Button
+                    android:id="@+id/trip_change_starting_pos"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="84dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:text="@string/trip_starting_pos_change"
+                    android:textSize="10sp" />
+            </FrameLayout>
 
             <Switch
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/trip_include_already_visited"
                 android:id="@+id/trip_include_visited"
-                android:layout_gravity="center_horizontal" />
-
-            <Switch
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/trip_hide_restaurants"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/trip_include_already_visited" />
+
+            <Switch
                 android:id="@+id/trip_hide_restaurants"
-                android:layout_gravity="center_horizontal" />
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/trip_hide_restaurants" />
+
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <Button
+                android:id="@+id/trip_add_place"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="106dp"
                 android:layout_height="wrap_content"
-                android:text="@string/trip_add_place"
-                android:id="@+id/trip_add_place" />
+                android:text="@string/trip_add_place" />
 
             <Button
+                android:id="@+id/trip_generate"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/trip_generate"
-                android:id="@+id/trip_generate" />
+                android:text="@string/trip_generate" />
         </LinearLayout>
 
         <ListView
