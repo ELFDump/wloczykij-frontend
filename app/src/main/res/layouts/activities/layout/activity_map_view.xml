@@ -15,7 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="34dp"
             android:background="#424e9e"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/button_explore"

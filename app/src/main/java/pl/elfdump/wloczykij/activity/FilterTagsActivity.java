@@ -2,16 +2,10 @@ package pl.elfdump.wloczykij.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 import com.klinker.android.sliding.SlidingActivity;
 import pl.elfdump.wloczykij.R;
-import pl.elfdump.wloczykij.Wloczykij;
-import pl.elfdump.wloczykij.network.api.models.Tag;
-import pl.elfdump.wloczykij.ui.PlaceDetailsItem;
-import pl.elfdump.wloczykij.ui.TagsGroupItem;
 import pl.elfdump.wloczykij.ui.TagsSelectorController;
-import pl.elfdump.wloczykij.utils.PlaceUtil;
 
 import java.util.*;
 

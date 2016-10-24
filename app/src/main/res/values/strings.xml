@@ -67,6 +67,13 @@
 
     <string name="title_filter_places">Filtruj miejsca</string>
 
+    <string name="settings">Ustawienia</string>
+    <string name="save_settings">Zapisz</string>
+    <string name="distance_impact">Wpływ odległości na wybór miejsca</string>
+    <string name="distance_impact_desc">Im większa wartość tym odległość ma większe znaczenie</string>
+    <string name="settings_interests">Zainteresowania</string>
+    <string name="settings_interests_desc">Lista twoich zainteresowań wykorzystywana jest do jak najlepszego dopasowania trasy. Zaznacz kategorie, które cię interesują</string>
+
     <string name="current_location_not_available">Nie udało się określić twojej lokalizacji</string>
 
     <string name="com_facebook_loginview_log_in_button">Facebook</string>

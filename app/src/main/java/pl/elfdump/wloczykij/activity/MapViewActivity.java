@@ -318,8 +318,11 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 break;
 
             case R.id.button_saved_places:
-            case R.id.button_settings:
                 Toast.makeText(this, R.string.todo, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.button_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 break;
         }
     }
