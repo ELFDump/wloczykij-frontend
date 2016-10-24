@@ -48,7 +48,7 @@
     <string name="rating_ok">Ok</string>
     <string name="rating_awful">Okropne</string>
     <string name="no_rating">Brak ocen</string>
-    <string name="avg_rating">Średnia ocena: %.2f</string>
+    <string name="avg_rating">Ocena:</string>
     <string name="num_rating">Głosów: %d</string>
 
     <string name="no_description">Bez opisu</string>

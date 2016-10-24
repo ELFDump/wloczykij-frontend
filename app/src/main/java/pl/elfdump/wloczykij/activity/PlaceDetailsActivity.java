@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -179,7 +180,7 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
     }
 
     private void updateAverageRatingText(Float ratingAverage, int ratingCount) {
-        ((TextView) findViewById(R.id.avg_rating)).setText(ratingCount > 0 ? getString(R.string.avg_rating, ratingAverage) : getString(R.string.no_rating));
+        ((RatingBar) findViewById(R.id.starts_rating)).setRating(ratingCount > 0 ? ratingAverage : 0);
         ((TextView) findViewById(R.id.num_rating)).setText(getString(R.string.num_rating, ratingCount));
     }
 
