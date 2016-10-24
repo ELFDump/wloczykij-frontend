@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +21,10 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +33,7 @@ import java.util.Set;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.models.Place;
+import pl.elfdump.wloczykij.network.api.models.Tag;
 import pl.elfdump.wloczykij.planner.PathPlanner;
 import pl.elfdump.wloczykij.planner.PlacePlanner;
 import pl.elfdump.wloczykij.ui.PlaceDetailsItem;
@@ -56,6 +62,8 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
         findViewById(R.id.trip_goto_settings).setOnClickListener(this);
         findViewById(R.id.trip_add_place).setOnClickListener(this);
         findViewById(R.id.trip_generate).setOnClickListener(this);
+        findViewById(R.id.trip_include_visited).setOnClickListener(this);
+        findViewById(R.id.trip_hide_restaurants).setOnClickListener(this);
 
         assert getIntent() != null;
         startPoint = getIntent().getParcelableExtra("startPoint");
@@ -84,6 +92,11 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
             case R.id.trip_change_starting_pos:
                 Intent intent = new Intent(this, MapViewActivity.class);
                 startActivityForResult(intent, RC_SELECT_START_POS);
+                break;
+
+            case R.id.trip_include_visited:
+            case R.id.trip_hide_restaurants:
+                updatePlaces();
                 break;
         }
     }
@@ -141,14 +154,16 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
         String out = String.format("[%.6f, %.6f]", position.latitude, position.longitude);
         try {
             List<Address> addresses = new Geocoder(this).getFromLocation(position.latitude, position.longitude, 1);
-            Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<>();
+            if (addresses.size() > 0) {
+                Address address = addresses.get(0);
+                ArrayList<String> addressFragments = new ArrayList<>();
 
-            for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                    addressFragments.add(address.getAddressLine(i));
+                }
+
+                out = TextUtils.join(", ", addressFragments);
             }
-
-            out = TextUtils.join(", ", addressFragments);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -156,12 +171,34 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
     }
 
     private void updatePlaces() {
-        String posStr = startPoint != null ? getAddress(startPoint) : "-"; // TODO
+        String posStr = startPoint != null ? getAddress(startPoint) : "-";
         ((TextView) findViewById(R.id.trip_starting_pos)).setText(getString(R.string.trip_starting_pos, posStr));
 
+        boolean includeVisited = ((Switch) findViewById(R.id.trip_include_visited)).isChecked();
+        boolean hideFood = ((Switch) findViewById(R.id.trip_hide_restaurants)).isChecked();
+        Log.d(Wloczykij.TAG, includeVisited+" "+hideFood);
+
         if (startPoint != null) {
+            List<Place> places = new LinkedList<>(Wloczykij.api.cache(Place.class).getAll());
+            Iterator<Place> iter = places.iterator();
+            while (iter.hasNext()) {
+                Place place = iter.next();
+                if (!includeVisited && place.getVisit() != null) {
+                    iter.remove();
+                } else if (hideFood) {
+                    for (String tagId : place.getTags()) {
+                        Tag tag = Wloczykij.api.cache(Tag.class).get(tagId);
+                        Tag rootTag = PlaceUtil.findTopLevel(tag);
+                        if (rootTag.getName().equals("Jedzenie")) {
+                            iter.remove();
+                            break;
+                        }
+                    }
+                }
+            }
+
             suggestedPlaces = new PlacePlanner()
-                .setPlaces(Wloczykij.api.cache(Place.class).getAll())
+                .setPlaces(places)
                 .setIncludedTags(Wloczykij.session.loggedOnUser.getFollowedTags())
                 .setStartPoint(startPoint)
                 .findPlaces();
