@@ -89,7 +89,7 @@ public class PlaceUtil {
         return filtered;
     }
 
-    public static BitmapDescriptor getMatchingIcon(Place place){
+    public static int getMatchingIcon(Place place) {
         List<String> tags = place.getTags();
         Collection<Tag> availableTags = Wloczykij.api.cache(Tag.class).getAll();
 
@@ -118,7 +118,7 @@ public class PlaceUtil {
             icon = icons.get(categoryTag.getName());
         }
 
-        return BitmapDescriptorFactory.fromResource(icon);
+        return icon;
     }
 
     public static Tag findTopLevel(Tag current){

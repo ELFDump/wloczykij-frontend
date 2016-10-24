@@ -29,6 +29,12 @@ public class TagsSelectorController {
 
     private PlaceDetailsListAdapter adapter;
 
+    public interface ClickListener {
+        void onListItemClick(int index);
+    }
+
+    private ClickListener clickListener;
+
     public TagsSelectorController(final ListView listView, List<String> filter) {
         this.listView = listView;
         this.previousFilter = filter;
@@ -41,6 +47,10 @@ public class TagsSelectorController {
                 checkBox.setChecked(!checkBox.isChecked());
 
                 data.get(i).setChecked(checkBox.isChecked());
+
+                if (clickListener != null) {
+                    clickListener.onListItemClick(i);
+                }
             }
         });
 
@@ -60,11 +70,15 @@ public class TagsSelectorController {
         loadData(generateData());
     }
 
-    private void loadData(List<PlaceDetailsItem> data){
+    public void loadData(List<PlaceDetailsItem> data){
         this.data = data;
 
         adapter = new PlaceDetailsListAdapter(listView.getContext(), data);
         listView.setAdapter(adapter);
+    }
+
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     public List<PlaceDetailsItem> getData(){

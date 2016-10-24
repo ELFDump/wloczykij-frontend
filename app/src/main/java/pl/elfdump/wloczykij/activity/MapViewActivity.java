@@ -20,11 +20,11 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -38,7 +38,13 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
@@ -206,7 +212,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         for (Place p : filteredPlaces.values()) {
             if (!markers.containsValue(p.getResourceUrl())) {
                 Marker marker = mMap.addMarker(new MarkerOptions().position(MapUtil.getPosition(p)).title(p.getName()));
-                marker.setIcon(PlaceUtil.getMatchingIcon(p));
+                marker.setIcon(BitmapDescriptorFactory.fromResource(PlaceUtil.getMatchingIcon(p)));
                 markers.put(marker, p.getResourceUrl());
             }
         }
@@ -222,7 +228,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 iter.remove();
             } else {
                 marker.setPosition(MapUtil.getPosition(p));
-                marker.setIcon(PlaceUtil.getMatchingIcon(p));
+                marker.setIcon(BitmapDescriptorFactory.fromResource(PlaceUtil.getMatchingIcon(p)));
                 marker.setTitle(p.getName());
             }
         }
