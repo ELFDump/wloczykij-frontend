@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -272,7 +273,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 Log.d(Wloczykij.TAG, "Animation finished");
 
                 Intent intent = new Intent(MapViewActivity.this, PlaceDetailsActivity.class);
-                intent.putExtra("place", place);
+                intent.setData(Uri.parse(place.getId()));
                 startActivityForResult(intent, RC_PLACE_DETAILS);
             }
 

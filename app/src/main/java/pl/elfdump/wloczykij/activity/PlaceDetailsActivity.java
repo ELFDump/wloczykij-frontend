@@ -1,7 +1,9 @@
 package pl.elfdump.wloczykij.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -15,6 +17,7 @@ import com.klinker.android.sliding.SlidingActivity;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIManager;
+import pl.elfdump.wloczykij.network.api.models.User;
 import pl.elfdump.wloczykij.ui.PlaceDetailsItem;
 import pl.elfdump.wloczykij.ui.PlaceDetailsListAdapter;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
@@ -32,17 +35,29 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
     @Override
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.activity_place_details);
-        place = (Place) getIntent().getSerializableExtra("place");
 
-        setTitle(place.getName());
+        setTitle(getIntent().getData().toString());
         setImage(R.drawable.background_login); // TODO: Replace with PLEASE WAIT, LOADING image
 
         setPrimaryColors(
-                ContextCompat.getColor(this, R.color.colorPrimary),
-                ContextCompat.getColor(this, R.color.colorPrimaryDark)
+            ContextCompat.getColor(this, R.color.colorPrimary),
+            ContextCompat.getColor(this, R.color.colorPrimaryDark)
         );
 
         enableFullscreen();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (place == null) {
+            place = Wloczykij.api.cache(Place.class).get(getIntent().getData().toString());
+            if (place == null)
+                return;
+        }
+
+        setTitle(place.getName());
 
         PlaceDetailsListAdapter adapter = new PlaceDetailsListAdapter(this, generateData());
         ListView listView = (ListView) findViewById(R.id.details);
@@ -164,9 +179,15 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
                 break;
 
             case R.id.place_action_save:
-            case R.id.place_action_share:
-            case R.id.place_action_report:
                 Toast.makeText(this, R.string.todo, Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.place_action_share:
+                sharePlace();
+                break;
+
+            case R.id.place_action_report:
+                reportPlace();
                 break;
 
             case R.id.rating_super:
@@ -182,6 +203,33 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
                 changeRating(1);
                 break;
         }
+    }
+
+    private void reportPlace() {
+        Intent emailIntent = new Intent(android.content.Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{ Wloczykij.REPORT_EMAIL_ADDRESS });
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Zgłaszanie punktu - " + place.getName());
+        User user = Wloczykij.session.loggedOnUser;
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+            "ID: " + place.getId() + "\n" +
+            "Nazwa: " + place.getName() + "\n" +
+            "Powód:\n" +
+            "(proszę wpisać tutaj powód zgłoszenia)\n" +
+            "\n" +
+            user.getUsername() + "\n" +
+            user.getFirstName() + " " + user.getLastName()
+        );
+        startActivity(Intent.createChooser(emailIntent, getString(R.string.place_action_report)));
+    }
+
+    private void sharePlace() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, place.getName());
+        sendIntent.putExtra(Intent.EXTRA_TEXT, place.getId());
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getString(R.string.place_action_share)));
     }
 
     private void changeVisited(boolean visited) {

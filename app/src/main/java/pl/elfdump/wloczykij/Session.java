@@ -8,6 +8,7 @@ import pl.elfdump.wloczykij.activity.LoginActivity;
 import pl.elfdump.wloczykij.network.api.APIBadRequestException;
 import pl.elfdump.wloczykij.network.api.APIManager;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
+import pl.elfdump.wloczykij.network.api.models.Place;
 import pl.elfdump.wloczykij.network.api.models.Tag;
 import pl.elfdump.wloczykij.network.api.models.User;
 
@@ -27,6 +28,7 @@ public class Session {
 
     public void updateData() throws APIRequestException {
         Wloczykij.api.cache(Tag.class).update();
+        Wloczykij.api.cache(Place.class).update();
     }
 
     public void reloginIfNeeded(Activity activity) {
