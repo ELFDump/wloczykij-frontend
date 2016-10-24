@@ -208,6 +208,12 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
     }
 
     private void generateAndShowOnMap() {
+        List<String> selectedPlaces = getSelectedPlacesList();
+        if (selectedPlaces.size() == 0) {
+            Toast.makeText(this, R.string.no_points_selected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         new AsyncTask<List<String>, Void, PathPlanner.PlannedPath>() {
             @Override
             protected void onPreExecute() {
@@ -239,7 +245,7 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
                     startActivity(intent);
                 }
             }
-        }.execute(getSelectedPlacesList());
+        }.execute(selectedPlaces);
     }
 }
 

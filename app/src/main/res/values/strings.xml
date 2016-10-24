@@ -94,6 +94,8 @@
     <string name="common_signin_button_text">Google</string>
     <string name="common_signin_button_text_long">Google</string>
 
+    <string name="no_points_selected">Trasa nie zawiera żadnych punktów</string>
+
     <string name="about">Informacje o autorach</string>
     <string name="about_author_title">Autorzy:</string>
     <string name="authors">Adam Zambrzycki - Programista, Grafik\n
