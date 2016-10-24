@@ -51,15 +51,17 @@ public class PlaceDetailsListAdapter extends ArrayAdapter<PlaceDetailsItem> {
         });
 
         Drawable img = ContextCompat.getDrawable(context, modelsArrayList.get(position).getIcon());
-        img.setBounds( 0, 0, 100, 100 );
+
+        int size = (int) Util.dpToPixel(35, context);
+        img.setBounds( 0, 0, size, size);
         titleView.setCompoundDrawables(img, null, null, null);
 
-        titleView.setText(modelsArrayList.get(position).getTitle() + " [" + String.valueOf(position) + "]"); // TODO: ID for debugging only
+        titleView.setText(modelsArrayList.get(position).getTitle());
         checkBox.setVisibility((modelsArrayList.get(position).hasCheckBox() ? View.VISIBLE : View.GONE));
         checkBox.setChecked(modelsArrayList.get(position).isChecked());
 
         if(modelsArrayList.get(position).getType() == PlaceDetailsItem.ITEM_CHILD){ //
-            rowView.setPadding(100, 0, 0, 0);
+            rowView.setPadding(size, 0, 0, 0);
         }else{
             rowView.setPadding(0, 0, 0, 0);
         }
