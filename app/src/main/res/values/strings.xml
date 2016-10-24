@@ -96,17 +96,14 @@
 
     <string name="about">Informacje o autorach</string>
     <string name="about_author_title">Autorzy:</string>
-    <string name="authors">
-        Adam Zambrzycki - Programista, Grafik\n
+    <string name="authors">Adam Zambrzycki - Programista, Grafik\n
         Damian Płóciennik - PR, okazjonalny programista, sprzątaczka\n
         Krzysztof Haładyn - Programista\n
     </string>
     <string name="about_map_icons">
         Map Icons Collection\n
         Creative Commons 3.0 BY-SA\n
-        more details about usage terms\n
         Author: Nicolas Mollet\n
-        Please credit:\n
         Maps Icons Collection https://mapicons.mapsmarker.com
     </string>
 </resources>
