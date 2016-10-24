@@ -318,8 +318,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     startActivity(intent);
                 } else {
                     setResult(RESULT_OK);
-                    finish();
                 }
+                finish();
                 break;
         }
         currentPhase = phase;
