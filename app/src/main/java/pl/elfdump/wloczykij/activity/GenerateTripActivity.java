@@ -205,6 +205,8 @@ public class GenerateTripActivity extends SlidingActivity implements View.OnClic
         }
 
         tagsSelectorController.loadData(generateData());
+
+        findViewById(R.id.matching_not_found_error).setVisibility(addedManually.size() + suggestedPlaces.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
     private void generateAndShowOnMap() {
