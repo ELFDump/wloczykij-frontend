@@ -40,6 +40,7 @@ public class Place extends APIModel {
     private Float rating_avg;
     private int rating_count;
     private int visit_count;
+    private String save_url;
 
     public String getName() {
         return name;
@@ -153,6 +154,11 @@ public class Place extends APIModel {
     public int getVisitCount() {
         return visit_count;
     }
+
+    public String getSaveUrl() {
+        return save_url;
+    }
+
 
     @Override
     public String toString() {

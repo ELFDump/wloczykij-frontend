@@ -13,6 +13,7 @@ public class User extends APIModel implements Cloneable{
     private String last_name;
     private boolean first_login;
     private List<String> followed_tags = new LinkedList<>();
+    private List<String> saved_places = new LinkedList<>();
 
     public String getUsername() {
         return username;
@@ -48,6 +49,10 @@ public class User extends APIModel implements Cloneable{
 
     public void removeFollowedTag(String tag) {
         this.followed_tags.remove(tag);
+    }
+
+    public List<String> getSavedPlaces() {
+        return saved_places;
     }
 
     @Override

@@ -146,7 +146,7 @@ public class APIManager {
         }
     }
 
-    public Map<String, Bitmap> imageCache = new HashMap<>();
+    private Map<String, Bitmap> imageCache = new HashMap<>();
 
     public Bitmap downloadImage(String url) throws APIRequestException {
         if (!imageCache.containsKey(url)) {

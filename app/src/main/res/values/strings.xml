@@ -61,6 +61,7 @@
     <string name="place_action_visited">Odwiedzone</string>
     <string name="place_action_not_visited">Nieodwiedzone</string>
     <string name="place_action_save">Zapisz</string>
+    <string name="place_action_saved">Zapisano</string>
     <string name="place_action_share">Udostępnij</string>
     <string name="place_action_report">Zgłoś</string>
 

@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.klinker.android.sliding.SlidingActivity;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIManager;
@@ -74,9 +78,10 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
         findViewById(R.id.rating_ok).setOnClickListener(this);
         findViewById(R.id.rating_awful).setOnClickListener(this);
 
-        updateVisitedButton(place.getVisit() != null, false);
+        updateVisitedButton(place.getVisit() != null);
         updateRatingButtons(place.getMyRating());
         updateAverageRatingText(place.getRatingAverage(), place.getRatingCount());
+        updateSaved(isSaved());
 
         String[] photos = place.getPhotos();
         if (photos.length > 0) {
@@ -140,13 +145,18 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
         return models;
     }
 
-    private void updateVisitedButton(boolean visited, boolean animate) {
+    private void updateVisitedButton(boolean visited) {
         ButtonAction button = (ButtonAction) findViewById(R.id.place_action_visited);
         button.setText(getString(visited ? R.string.place_action_not_visited : R.string.place_action_visited));
         button.setDrawable(ActivityCompat.getDrawable(this, visited ? R.drawable.ic_clear_white_24dp : R.drawable.ic_done_white_24dp));
 
-        // TODO: animate
         findViewById(R.id.your_rating).setVisibility(visited ? View.VISIBLE : View.GONE);
+    }
+
+    private void updateSaved(boolean saved) {
+        ButtonAction button = (ButtonAction) findViewById(R.id.place_action_save);
+        button.setText(getString(saved ? R.string.place_action_saved : R.string.place_action_save));
+        button.setDrawable(ActivityCompat.getDrawable(this, saved ? R.drawable.ic_turned_in_white_24dp : R.drawable.ic_turned_in_not_white_24dp));
     }
 
     private void updateRatingButtons(int myRating) {
@@ -181,7 +191,7 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
                 break;
 
             case R.id.place_action_save:
-                Toast.makeText(this, R.string.todo, Toast.LENGTH_SHORT).show();
+                changeSaved(!isSaved());
                 break;
 
             case R.id.place_action_share:
@@ -261,7 +271,7 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
                 if (!success) {
                     Toast.makeText(PlaceDetailsActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 }
-                updateVisitedButton(place.getVisit() != null, true);
+                updateVisitedButton(place.getVisit() != null);
                 updateRatingButtons(place.getMyRating());
             }
         }.execute(visited);
@@ -294,5 +304,43 @@ public class PlaceDetailsActivity extends SlidingActivity implements View.OnClic
                 updateRatingButtons(place.getMyRating());
             }
         }.execute(rating);
+    }
+
+    private boolean isSaved() {
+        return Wloczykij.session.loggedOnUser.getSavedPlaces().contains(place.getId());
+    }
+
+    private void changeSaved(boolean saved) {
+        if (saved == isSaved())
+            return;
+
+        new AsyncTask<Boolean, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Boolean... params) {
+                try {
+                    if (params[0]) {
+                        Wloczykij.api.sendRequest("PUT", place.getSaveUrl(), RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{}"));
+                        Wloczykij.session.loggedOnUser.getSavedPlaces().add(place.getId());
+                    } else {
+                        Wloczykij.api.sendRequest("DELETE", place.getSaveUrl(), null);
+                        Wloczykij.session.loggedOnUser.getSavedPlaces().remove(place.getId());
+                    }
+                    return true;
+                } catch (APIRequestException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if (!success) {
+                    Toast.makeText(PlaceDetailsActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                updateSaved(isSaved());
+            }
+        }.execute(saved);
     }
 }
