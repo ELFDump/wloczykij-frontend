@@ -35,24 +35,16 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import pl.elfdump.wloczykij.R;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.Place;
-import pl.elfdump.wloczykij.network.api.models.Tag;
-import pl.elfdump.wloczykij.planner.PathPlanner;
-import pl.elfdump.wloczykij.planner.PlacePlanner;
 import pl.elfdump.wloczykij.utils.MapUtil;
 import pl.elfdump.wloczykij.utils.NetworkUtil;
 import pl.elfdump.wloczykij.utils.PlaceUtil;
@@ -69,7 +61,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     private ArrayList<String> filterVisibleTags = null;
 
     private IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-    private BroadcastReceiver broadcast = new BroadcastReceiver(){
+    private BroadcastReceiver broadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             FrameLayout layout = (FrameLayout) findViewById(R.id.layout_offline);
@@ -115,9 +107,33 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         Wloczykij.session.reloginIfNeeded(this);
     }
 
+    private Polyline tripPath;
+
     @Override
-    public void onSaveInstanceState(Bundle state){
-        if(filterVisibleTags != null){
+    protected void onNewIntent(Intent intent) {
+        ArrayList<LatLng> plannedPath = intent.getParcelableArrayListExtra("plannedPath");
+        if (plannedPath != null) {
+            if (tripPath != null) {
+                tripPath.remove();
+                tripPath = null;
+            }
+
+            tripPath = mMap.addPolyline(new PolylineOptions()
+                .addAll(plannedPath)
+                .width(5)
+                .color(Color.RED));
+
+            LatLngBounds.Builder b = new LatLngBounds.Builder();
+            for (LatLng pos : plannedPath)
+                b.include(pos);
+            LatLngBounds bounds = b.build();
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        if (filterVisibleTags != null) {
             state.putStringArrayList("filterVisibleTags", filterVisibleTags);
         }
     }
@@ -165,7 +181,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         unregisterReceiver(broadcast);
         super.onPause();
     }
@@ -240,6 +256,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             if (grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                assert ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
                 mMap.setMyLocationEnabled(true);
             }
         }
@@ -308,8 +325,8 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             case R.id.action_plan_trip:
                 ((FloatingActionsMenu) findViewById(R.id.multiple_actions)).collapse();
                 Intent planTripIntent = new Intent(this, GenerateTripActivity.class);
+                planTripIntent.putExtra("startPoint", currentLocation);
                 startActivity(planTripIntent);
-                //planTrip();
                 break;
 
             case R.id.action_add_place:
@@ -403,79 +420,5 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17.5f));
         return true;
-    }
-
-    private Polyline tripPath;
-
-    private void planTrip() {
-        if (currentLocation == null) {
-            Toast.makeText(this, R.string.current_location_not_available, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Toast.makeText(this, R.string.todo_wip, Toast.LENGTH_SHORT).show();
-        new AsyncTask<Void, Void, PathPlanner.PlannedPath>() {
-            @Override
-            protected void onPreExecute() {
-                if (tripPath != null) {
-                    tripPath.remove();
-                    tripPath = null;
-                }
-            }
-
-            @Override
-            protected PathPlanner.PlannedPath doInBackground(Void... params) {
-                try {
-                    Collection<Tag> tagObjects = Wloczykij.api.cache(Tag.class).getAll();
-                    List<String> tags = new ArrayList<>(tagObjects.size());
-                    for (Tag tag : tagObjects) {
-                        tags.add(tag.getName());
-                    }
-
-                    List<Place> selectedPlaces = new PlacePlanner()
-                        .setPlaces(Wloczykij.api.cache(Place.class).getAll())
-                        .setStartPoint(currentLocation)
-                        .setIncludedTags(Wloczykij.session.loggedOnUser.getFollowedTags())
-                        .findPlaces();
-
-                    if (selectedPlaces.size() == 0) {
-                        Log.w(Wloczykij.TAG, "No places to visit found");
-                        return null;
-                    }
-
-                    PathPlanner.PlannedPath path = new PathPlanner(Wloczykij.httpClient, getString(R.string.google_maps_key))
-                        .setStartPoint(currentLocation)
-                        .addPathPlaces(selectedPlaces)
-                        .plan();
-
-                    return path;
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(PathPlanner.PlannedPath plannedPath) {
-                if (plannedPath == null) {
-                    Toast.makeText(MapViewActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // TODO: Planned trip UI
-
-                Log.d(Wloczykij.TAG, plannedPath.toString());
-                tripPath = mMap.addPolyline(new PolylineOptions()
-                    .addAll(plannedPath.getLine())
-                    .width(5)
-                    .color(Color.RED));
-
-                LatLngBounds.Builder b = new LatLngBounds.Builder();
-                for (LatLng pos : plannedPath.getLine())
-                    b.include(pos);
-                LatLngBounds bounds = b.build();
-                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
-            }
-        }.execute();
     }
 }

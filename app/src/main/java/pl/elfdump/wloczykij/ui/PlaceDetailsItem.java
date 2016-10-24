@@ -12,6 +12,7 @@ public class PlaceDetailsItem {
 
     public List<PlaceDetailsItem> childs = new ArrayList<>();
 
+    private String id = null;
     private int icon;
     private String title;
     private boolean showCheckBox;
@@ -64,6 +65,16 @@ public class PlaceDetailsItem {
 
     public void setChecked(boolean isChecked){
         this.isChecked = isChecked;
+    }
+
+    public String getId() {
+        if (id == null)
+            return title;
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

@@ -1,5 +1,6 @@
 package pl.elfdump.wloczykij.network.api;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -41,5 +42,13 @@ public class APIModelCache<T extends APIModel> {
     public T get(T object) {
         if (object == null) return null;
         return cache.get(object.getId());
+    }
+
+    public List<T> getMultiple(List<String> ids) {
+        List<T> list = new ArrayList<>(ids.size());
+        for (String id : ids) {
+            list.add(get(id));
+        }
+        return list;
     }
 }

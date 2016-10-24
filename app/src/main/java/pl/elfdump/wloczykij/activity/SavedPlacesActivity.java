@@ -50,8 +50,15 @@ public class SavedPlacesActivity extends SlidingActivity implements TagsSelector
     @Override
     public void onListItemClick(int index) {
         String placeId = Wloczykij.session.loggedOnUser.getSavedPlaces().get(index);
-        Intent intent = new Intent(this, PlaceDetailsActivity.class);
-        intent.setData(Uri.parse(placeId));
-        startActivity(intent);
+        if (getCallingActivity() == null) {
+            Intent intent = new Intent(this, PlaceDetailsActivity.class);
+            intent.setData(Uri.parse(placeId));
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent();
+            intent.putExtra("place", placeId);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 }

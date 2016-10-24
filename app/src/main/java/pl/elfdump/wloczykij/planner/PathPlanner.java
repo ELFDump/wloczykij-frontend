@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -32,9 +33,9 @@ public class PathPlanner {
 
     public class PlannedPath {
         private final Place[] placeList;
-        private final List<LatLng> line;
+        private final ArrayList<LatLng> line;
 
-        PlannedPath(Place[] placeList, List<LatLng> line) {
+        PlannedPath(Place[] placeList, ArrayList<LatLng> line) {
             this.placeList = placeList;
             this.line = line;
         }
@@ -43,7 +44,7 @@ public class PathPlanner {
             return placeList;
         }
 
-        public List<LatLng> getLine() {
+        public ArrayList<LatLng> getLine() {
             return line;
         }
 
@@ -116,7 +117,7 @@ public class PathPlanner {
             if (response.code() != 200) throw new IOException("HTTP error " + response.code());
             JSONObject responseJson = new JSONObject(response.body().string());
             JSONObject route = responseJson.getJSONArray("routes").getJSONObject(0);
-            List<LatLng> line = MapUtil.decodePoly(route.getJSONObject("overview_polyline").getString("points"));
+            ArrayList<LatLng> line = MapUtil.decodePoly(route.getJSONObject("overview_polyline").getString("points"));
             JSONArray waypointOrder = route.getJSONArray("waypoint_order");
             Place[] placeList = new Place[waypointOrder.length()];
             for(int i = 0; i < waypointOrder.length(); i++) {

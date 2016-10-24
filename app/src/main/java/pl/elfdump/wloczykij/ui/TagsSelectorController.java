@@ -90,7 +90,7 @@ public class TagsSelectorController {
 
         for(PlaceDetailsItem item : data){
             if(item.isChecked()){
-                selectedTags.add(item.getTitle());
+                selectedTags.add(item.getId());
             }
         }
 
@@ -100,7 +100,7 @@ public class TagsSelectorController {
     // Apply previous selections after ListView scrolling
     public void applySelections(List<String> selections){
         for(int index = 0; index < data.size(); index++){
-            if(selections.contains(data.get(index).getTitle())){
+            if(selections.contains(data.get(index).getId())){
                 data.get(index).setChecked(true);
                 ((CheckBox) (Util.getViewByPosition(index, listView).findViewById(R.id.item_checkBox))).setChecked(true);
             }
@@ -136,7 +136,7 @@ public class TagsSelectorController {
         for (Map.Entry<String, TagsGroupItem> entry : tagsGroupItems.entrySet()) {
             PlaceDetailsItem group = createPlaceDetailsItem(entry.getKey());
             sortedList.add(group);
-            if(previousFilter == null || previousFilter.contains(group.getTitle())){
+            if(previousFilter == null || previousFilter.contains(group.getId())){
                 group.setChecked(true);
             }
 
@@ -144,7 +144,7 @@ public class TagsSelectorController {
                 item.setType(PlaceDetailsItem.ITEM_CHILD);
                 group.childs.add(item);
                 sortedList.add(item);
-                if(previousFilter == null || previousFilter.contains(item.getTitle())){
+                if(previousFilter == null || previousFilter.contains(item.getId())){
                     item.setChecked(true);
                 }
             }
