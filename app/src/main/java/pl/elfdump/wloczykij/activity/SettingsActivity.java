@@ -1,19 +1,17 @@
 package pl.elfdump.wloczykij.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.klinker.android.sliding.SlidingActivity;
 
-import java.util.Arrays;
 import java.util.List;
 
 import pl.elfdump.wloczykij.R;
-import pl.elfdump.wloczykij.Session;
 import pl.elfdump.wloczykij.Wloczykij;
 import pl.elfdump.wloczykij.network.api.APIRequestException;
 import pl.elfdump.wloczykij.network.api.models.User;
@@ -31,6 +29,7 @@ public class SettingsActivity extends SlidingActivity implements View.OnClickLis
         setContent(R.layout.activity_settings);
 
         findViewById(R.id.save).setOnClickListener(this);
+        findViewById(R.id.goto_abouts).setOnClickListener(this);
 
         ListView listView = (ListView) findViewById(R.id.tag_selector_buttons_row);
 
@@ -43,6 +42,11 @@ public class SettingsActivity extends SlidingActivity implements View.OnClickLis
         switch(v.getId()) {
             case R.id.save:
                 save();
+                break;
+
+            case R.id.goto_abouts:
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
                 break;
         }
     }

@@ -92,6 +92,12 @@
                 android:text="@string/save_settings"
                 android:id="@+id/save" />
 
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:text="@string/about"
+                android:id="@+id/goto_abouts" />
+
         </LinearLayout>
 
     </LinearLayout>
