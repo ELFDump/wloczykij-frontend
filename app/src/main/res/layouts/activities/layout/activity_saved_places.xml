@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pl.elfdump.wloczykij.activity.SavedPlacesActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_weight="0.02"
+            android:background="@color/colorPrimaryDark" >
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/title_saved_places"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+        </FrameLayout>
+
+        <ListView
+            android:id="@+id/tag_selector_buttons_row"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:scrollbarSize="3dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"
+            android:scrollingCache="true"
+            android:smoothScrollbar="true" />
+
+    </LinearLayout>
+
+</RelativeLayout>

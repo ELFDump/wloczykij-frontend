@@ -9,13 +9,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".Wloczykij"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:icon"
-        android:name=".Wloczykij">
+        tools:replace="android:icon">
         <activity
             android:name=".activity.LoginActivity"
             android:noHistory="true"
@@ -49,9 +49,15 @@
             android:theme="@style/Theme.Sliding.Light">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="api.wloczykij.eu" android:scheme="http" android:port="8000" android:pathPrefix="/places/" />
+
+                <data
+                    android:host="api.wloczykij.eu"
+                    android:pathPrefix="/places/"
+                    android:port="8000"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity
@@ -69,8 +75,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
@@ -79,6 +87,16 @@
             android:excludeFromRecents="true"
             android:taskAffinity=""
             android:theme="@style/Theme.Sliding.Light" />
+        <activity
+            android:name=".activity.SavedPlacesActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding.Light" />
+        <activity
+            android:name=".activity.GenerateTripActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding.Light"/>
     </application>
 
 </manifest>

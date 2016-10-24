@@ -75,6 +75,9 @@
     <string name="settings_interests">Zainteresowania</string>
     <string name="settings_interests_desc">Lista twoich zainteresowań wykorzystywana jest do jak najlepszego dopasowania trasy. Zaznacz kategorie, które cię interesują</string>
 
+    <string name="title_saved_places">Zapisane miejsca</string>
+    <string name="title_plan_trip">Zaplanuj wycieczkę</string>
+
     <string name="current_location_not_available">Nie udało się określić twojej lokalizacji</string>
 
     <string name="com_facebook_loginview_log_in_button">Facebook</string>

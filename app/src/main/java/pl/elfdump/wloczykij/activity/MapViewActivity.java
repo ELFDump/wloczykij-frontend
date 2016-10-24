@@ -301,7 +301,9 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         switch (v.getId()) {
             case R.id.action_plan_trip:
                 ((FloatingActionsMenu) findViewById(R.id.multiple_actions)).collapse();
-                planTrip();
+                Intent planTripIntent = new Intent(this, GenerateTripActivity.class);
+                startActivity(planTripIntent);
+                //planTrip();
                 break;
 
             case R.id.action_add_place:
@@ -322,7 +324,8 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
                 break;
 
             case R.id.button_saved_places:
-                Toast.makeText(this, R.string.todo, Toast.LENGTH_SHORT).show();
+                Intent savedPlacesIntent = new Intent(this, SavedPlacesActivity.class);
+                startActivity(savedPlacesIntent);
                 break;
             case R.id.button_settings:
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
