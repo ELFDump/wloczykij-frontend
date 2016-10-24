@@ -96,6 +96,10 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
             filterVisibleTags = savedInstanceState.getStringArrayList("filterVisibleTags");
         }
 
+        if (getIntent() != null && getIntent().getBooleanExtra("firstLogin", false)) {
+            startActivity(new Intent(this, SettingsActivity.class));
+        }
+
         mapFragment.getMapAsync(this);
     }
 

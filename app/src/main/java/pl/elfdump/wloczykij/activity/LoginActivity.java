@@ -162,6 +162,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }.execute();
     }
 
+    private boolean isFirstLogin = false;
+
     /**
      * Called successfully authenticating to the API
      */
@@ -182,7 +184,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected void onPostExecute(Boolean success) {
                 if (success) {
-                    if (Wloczykij.session.loggedOnUser.isFirstLogin()) {
+                    isFirstLogin = Wloczykij.session.loggedOnUser.isFirstLogin();
+                    if (isFirstLogin) {
+                        ((MaterialEditText) findViewById(R.id.login_username)).setText(Wloczykij.session.loggedOnUser.getUsername());
                         enterPhase(Phase.SET_USERNAME_ANIMATED);
                     } else {
                         enterPhase(Phase.ENTER_MAP);
@@ -309,7 +313,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             case ENTER_MAP:
                 if (getCallingActivity() == null) {
-                    startActivity(new Intent(this, MapViewActivity.class));
+                    Intent intent = new Intent(this, MapViewActivity.class);
+                    intent.putExtra("firstLogin", isFirstLogin);
+                    startActivity(intent);
                 } else {
                     setResult(RESULT_OK);
                     finish();
