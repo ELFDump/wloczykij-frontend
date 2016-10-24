@@ -59,9 +59,11 @@
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <FrameLayout
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:weightSum="1">
 
                 <TextView
                     android:id="@+id/trip_starting_pos"
@@ -69,16 +71,23 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/trip_starting_pos"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:layout_weight="0.98" />
 
                 <Button
                     android:id="@+id/trip_change_starting_pos"
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="84dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="34dp"
-                    android:layout_gravity="center_vertical|right"
                     android:text="@string/trip_starting_pos_change"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    android:gravity="right" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
             </FrameLayout>
 
             <Switch
