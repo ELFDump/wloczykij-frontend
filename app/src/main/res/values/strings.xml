@@ -99,9 +99,9 @@
 
     <string name="about">Informacje o autorach</string>
     <string name="about_author_title">Autorzy:</string>
-    <string name="authors">Adam Zambrzycki - Programista, Grafik\n
-        Damian Płóciennik - PR, okazjonalny programista, sprzątaczka\n
-        Krzysztof Haładyn - Programista\n
+    <string name="authors">Adam Zambrzycki - programista, grafik\n
+Damian Płóciennik - Public Relations, pomoc programistyczna, osoba do kontaktu\n
+Krzystof Haładyn - programista
     </string>
     <string name="about_map_icons">
         Map Icons Collection\n
